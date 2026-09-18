@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "mms_weapons",
+  "version": "${version}",
+  "name": "MMS Weapons",
+  "description": "Melee and ranged weapon compat for MMSLive01. Per-item combat tuning, throwable pikes, the mace smash on hammers, tuna swing sounds, and Expanded Weaponry longbow tuning.",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "info.mudbourn.mmsweapons.MmsWeapons"
+    ],
+    "client": [
+      "info.mudbourn.mmsweapons.client.MmsWeaponsClient"
+    ]
+  },
+  "mixins": [
+    "mms_weapons.throwable.mixins.json",
+    "mms_weapons.expandedweaponry.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*",
+    "basicweapons": "*",
+    "expanded_weaponry": "*",
+    "weaponsexpanded": "*",
+    "enderscape": "*",
+    "aerialhell": "*",
+    "bountiful-fish": "*",
+    "mutantmonsters": "*",
+    "bettercombat": "*"
+  },
+  "suggests": {
+    "sounds": "*",
+    "frostiful": "*"
+  }
+}

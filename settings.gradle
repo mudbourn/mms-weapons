@@ -1,0 +1,12 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.fabricmc.net/' }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+// mms-weapons has no intra-project dependencies, so there is nothing to
+// includeBuild here. The file exists so the toolchain and repo layout match the
+// other mms mods; mms-repos.py and the release workflow read sibling deps from
+// includeBuild lines, and their absence is what marks this mod as a leaf.

@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    { "id": "expanded_weaponry:wooden_hammer", "required": false },
+    { "id": "expanded_weaponry:stone_hammer", "required": false },
+    { "id": "expanded_weaponry:copper_hammer", "required": false },
+    { "id": "expanded_weaponry:iron_hammer", "required": false },
+    { "id": "expanded_weaponry:golden_hammer", "required": false },
+    { "id": "expanded_weaponry:diamond_hammer", "required": false },
+    { "id": "expanded_weaponry:netherite_hammer", "required": false }
+  ]
+}

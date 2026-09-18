@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "info.mudbourn.mmsweapons.mixin.throwable",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ItemThrowMixin",
+    "ItemMaceSmashMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

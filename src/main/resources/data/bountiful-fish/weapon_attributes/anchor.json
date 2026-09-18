@@ -1,0 +1,69 @@
+{
+  "attributes": {
+    "range_bonus": 2.0,
+    "two_handed": true,
+    "pose": "bettercombat:pose_two_handed_heavy",
+    "category": "anchor",
+    "attacks": [
+      {
+        "hitbox": "FORWARD_BOX",
+        "damage_multiplier": 0.875,
+        "angle": 180,
+        "upswing": 0.25,
+        "animation": "bettercombat:two_handed_slash_horizontal_right",
+        "swing_sound": {
+          "id": "bountiful-fish:metal_clang"
+        }
+      },
+      {
+        "hitbox": "FORWARD_BOX",
+        "damage_multiplier": 0.9375,
+        "angle": 180,
+        "upswing": 0.25,
+        "animation": "bettercombat:two_handed_slash_horizontal_left",
+        "swing_sound": {
+          "id": "bountiful-fish:metal_clang"
+        }
+      },
+      {
+        "hitbox": "FORWARD_BOX",
+        "damage_multiplier": 1.0,
+        "angle": 360,
+        "upswing": 0.25,
+        "animation": "bettercombat:two_handed_spin",
+        "swing_sound": {
+          "id": "bountiful-fish:metal_clang"
+        }
+      },
+      {
+        "hitbox": "FORWARD_BOX",
+        "damage_multiplier": 1.0625,
+        "angle": 160,
+        "upswing": 0.25,
+        "animation": "bettercombat:two_handed_slam",
+        "swing_sound": {
+          "id": "bettercombat:anchor_slam",
+          "randomness": 0
+        }
+      },
+      {
+        "hitbox": "FORWARD_BOX",
+        "damage_multiplier": 0.875,
+        "upswing": 0.25,
+        "animation": "bettercombat:two_handed_stab_left",
+        "swing_sound": {
+          "id": "bountiful-fish:metal_clang"
+        }
+      },
+      {
+        "hitbox": "FORWARD_BOX",
+        "damage_multiplier": 0.875,
+        "upswing": 0.25,
+        "animation": "bettercombat:two_handed_stab_right",
+        "swing_sound": {
+          "id": "bountiful-fish:metal_clang"
+        }
+      }
+    ]
+  }
+}

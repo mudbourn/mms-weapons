@@ -1,0 +1,33 @@
+{
+  "stone_impact": {
+    "category": "player",
+    "subtitle": "subtitles.mms_weapons.stone_impact",
+    "sounds": [
+      "mms_weapons:stone_impact1",
+      "mms_weapons:stone_impact2",
+      "mms_weapons:stone_impact3"
+    ]
+  },
+  "swing_right": {
+    "category": "player",
+    "subtitle": "subtitles.mms_weapons.tuna_swing",
+    "sounds": [
+      "mms_weapons:swing_right"
+    ]
+  },
+  "swing_left": {
+    "category": "player",
+    "subtitle": "subtitles.mms_weapons.tuna_swing",
+    "sounds": [
+      "mms_weapons:swing_left",
+      "mms_weapons:swing_left2"
+    ]
+  },
+  "slam": {
+    "category": "player",
+    "subtitle": "subtitles.mms_weapons.tuna_slam",
+    "sounds": [
+      "mms_weapons:slam"
+    ]
+  }
+}

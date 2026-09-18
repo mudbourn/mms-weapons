@@ -1,0 +1,6 @@
+{
+  "replace": false,
+  "values": [
+    { "id": "#mms_weapons:mace_smash_weapons", "required": false }
+  ]
+}
