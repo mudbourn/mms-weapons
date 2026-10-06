@@ -47,7 +47,8 @@ public abstract class ArrowHeadshotMixin {
             Vec3 start = self.position().subtract(motion);
             Vec3 end = self.position().add(motion);
             if (HeadshotBoxes.hitsHead(living, start, end, HEAD_GROW)) {
-                amount *= HEADSHOT_MULTIPLIER;
+                float boosted = amount * HEADSHOT_MULTIPLIER;
+                return HeadshotBoxes.hurtAsHeadshot(target, () -> original.call(target, source, boosted));
             }
         }
         return original.call(target, source, amount);

@@ -2,6 +2,8 @@ package info.mudbourn.mmsweapons.headshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BooleanSupplier;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
@@ -58,7 +60,25 @@ public final class HeadshotBoxes {
         BOXES.put(EntityType.WITHER_SKELETON, basic(10.0, 10.0, 28.0));
     }
 
+    private static Entity headshotVictim;
+
     private HeadshotBoxes() {
+    }
+
+    // Runs a hurt call on the target flagged as a headshot, so damage readouts can tell it apart.
+    public static boolean hurtAsHeadshot(Entity target, BooleanSupplier hurt) {
+        Entity previous = headshotVictim;
+        headshotVictim = target;
+        try {
+            return hurt.getAsBoolean();
+        } finally {
+            headshotVictim = previous;
+        }
+    }
+
+    // Whether the hurt call now running on the target is a headshot.
+    public static boolean isHeadshot(Entity target) {
+        return headshotVictim == target;
     }
 
     public static HeadshotBox get(EntityType<?> type) {

@@ -28,7 +28,7 @@ import java.util.Map;
  *
  * <p>Five changes, all requested for MMS:
  * <ul>
- *   <li>Anchor and large tuna swing on a 1.8-second cooldown.</li>
+ *   <li>Anchor swings on a 2.35-second cooldown, large tuna on 1.8.</li>
  *   <li>Large tuna gets a small knockback bonus over a plain weapon.</li>
  *   <li>Basic Weapons glaives gain shield blocking.</li>
  *   <li>The endersoul hand swings faster than an Expanded Weaponry dagger.</li>
@@ -48,10 +48,16 @@ public final class WeaponTuning {
     private static final double BASE_ATTACK_SPEED = 4.0;
 
     /**
-     * Swing speed for the anchor and the large tuna, as an {@code ADD_VALUE}
-     * delta off the player's base — 0.55 attacks/sec, or a 1.8-second cooldown.
+     * Swing speed for the large tuna, as an {@code ADD_VALUE} delta off the
+     * player's base — 0.55 attacks/sec, or a 1.8-second cooldown.
      */
     private static final double HEAVY_SWING_ATTACK_SPEED = -3.45;
+
+    /**
+     * Swing speed for the anchor — 0.4255 attacks/sec, or a 2.35-second
+     * cooldown, matching MMS Arsenal's Dragon Slayer and Crucible.
+     */
+    private static final double ANCHOR_ATTACK_SPEED = -3.5745;
 
     /** Knockback bonus on the large tuna. Vanilla weapons sit at 0. */
     private static final double TUNA_KNOCKBACK_BONUS = 0.5;
@@ -139,7 +145,8 @@ public final class WeaponTuning {
                 }
 
                 rebuilt.add(Attributes.ATTACK_SPEED,
-                        new AttributeModifier(SWING_COOLDOWN_ID, HEAVY_SWING_ATTACK_SPEED,
+                        new AttributeModifier(SWING_COOLDOWN_ID,
+                                is(item, ANCHOR) ? ANCHOR_ATTACK_SPEED : HEAVY_SWING_ATTACK_SPEED,
                                 AttributeModifier.Operation.ADD_VALUE),
                         EquipmentSlotGroup.MAINHAND);
 
