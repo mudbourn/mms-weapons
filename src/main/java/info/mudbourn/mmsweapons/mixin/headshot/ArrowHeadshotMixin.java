@@ -28,7 +28,7 @@ public abstract class ArrowHeadshotMixin {
         Identifier.fromNamespaceAndPath("mms_weapons", "headshot_bows")
     );
     @Unique
-    private static final float HEADSHOT_MULTIPLIER = 3.0F;
+    private static final float HEADSHOT_MULTIPLIER = 2.0F;
     @Unique
     private static final double HEAD_GROW = 0.15;
 
