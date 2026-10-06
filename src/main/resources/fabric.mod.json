@@ -15,6 +15,7 @@
   },
   "mixins": [
     "mms_weapons.throwable.mixins.json",
+    "mms_weapons.headshot.mixins.json",
     "mms_weapons.expandedweaponry.mixins.json",
     {
       "config": "mms_weapons.swing.client.mixins.json",

@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "info.mudbourn.mmsweapons.mixin.headshot",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ArrowHeadshotMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
