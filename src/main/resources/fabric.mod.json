@@ -15,7 +15,11 @@
   },
   "mixins": [
     "mms_weapons.throwable.mixins.json",
-    "mms_weapons.expandedweaponry.mixins.json"
+    "mms_weapons.expandedweaponry.mixins.json",
+    {
+      "config": "mms_weapons.swing.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "depends": {
     "fabricloader": ">=0.16.0",

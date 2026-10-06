@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    { "id": "bountiful-fish:anchor", "required": false },
+    { "id": "bountiful-fish:large_tuna", "required": false }
+  ]
+}

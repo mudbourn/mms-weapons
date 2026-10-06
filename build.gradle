@@ -26,6 +26,7 @@ dependencies {
     modCompileOnly files("libs/kielsons-api-0.8.1.jar")
     // The longbow draw-sound mixin reuses the Sounds mod's configured bow sound.
     modCompileOnly files("libs/sounds-2.4.23+edge+1.21.11-fabric.jar")
+    modCompileOnly "maven.modrinth:better-combat:${project.better_combat_version}"
 }
 
 tasks.withType(JavaCompile).configureEach {

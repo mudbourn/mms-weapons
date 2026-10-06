@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "info.mudbourn.mmsweapons.mixin.swing",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "SwingDurationMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
