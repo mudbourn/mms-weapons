@@ -17,7 +17,7 @@ public class MmsWeapons implements ModInitializer {
         // Tuna swing/slam sound events, referenced by Better Combat weapon_attributes
         MmsSounds.register();
 
-        // Anchor/tuna swing cooldown, tuna knockback, glaive blocking, longbow damage
+        // Anchor/tuna swing cooldown, anchor and tuna knockback, glaive blocking, longbow damage
         WeaponTuning.register();
 
         // Thrown-weapon projectile. Registered unconditionally: the entity type

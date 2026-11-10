@@ -29,7 +29,7 @@ import java.util.Map;
  * <p>Five changes, all requested for MMS:
  * <ul>
  *   <li>Anchor swings on a 2.35-second cooldown, large tuna on 1.8.</li>
- *   <li>Large tuna gets a small knockback bonus over a plain weapon.</li>
+ *   <li>Large tuna gets a small knockback bonus over a plain weapon, the anchor a large one.</li>
  *   <li>Basic Weapons glaives, katanas, longswords and greatswords gain shield blocking.</li>
  *   <li>The endersoul hand swings faster than an Expanded Weaponry dagger.</li>
  *   <li>The longbow hits for 12 instead of 8.5.</li>
@@ -61,6 +61,9 @@ public final class WeaponTuning {
 
     /** Knockback bonus on the large tuna. Vanilla weapons sit at 0. */
     private static final double TUNA_KNOCKBACK_BONUS = 0.5;
+
+    /** Knockback bonus on the anchor, so its swings throw victims as hard as they hit. */
+    private static final double ANCHOR_KNOCKBACK_BONUS = 1.5;
 
     /** Player base attack damage, bare-handed. */
     private static final double BASE_ATTACK_DAMAGE = 1.0;
@@ -150,9 +153,10 @@ public final class WeaponTuning {
                                 AttributeModifier.Operation.ADD_VALUE),
                         EquipmentSlotGroup.MAINHAND);
 
-                if (is(item, LARGE_TUNA)) {
+                if (is(item, LARGE_TUNA) || is(item, ANCHOR)) {
                     rebuilt.add(Attributes.ATTACK_KNOCKBACK,
-                            new AttributeModifier(KNOCKBACK_ID, TUNA_KNOCKBACK_BONUS,
+                            new AttributeModifier(KNOCKBACK_ID,
+                                    is(item, ANCHOR) ? ANCHOR_KNOCKBACK_BONUS : TUNA_KNOCKBACK_BONUS,
                                     AttributeModifier.Operation.ADD_VALUE),
                             EquipmentSlotGroup.MAINHAND);
                 }

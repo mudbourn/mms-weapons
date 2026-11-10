@@ -12,6 +12,9 @@ import org.lwjgl.glfw.GLFW;
 // Watches the crouch key every tick, taps shorter than a tick included, and cancels a held focus skill the moment it is pressed.
 public final class FocusCancelClient {
 
+    // Whether the server has been told about the current lock.
+    private static boolean serverLocked;
+
     private FocusCancelClient() {
     }
 
@@ -40,9 +43,15 @@ public final class FocusCancelClient {
             player.stopUsingItem();
             ClientPlayNetworking.send(new FocusSkill.CancelPayload());
             FocusSkill.lock();
+            serverLocked = true;
         }
         if (!FocusSkill.locked()) {
             return;
+        }
+        if (!serverLocked && client.getConnection() != null) {
+            // A crouching right click locks only the client, so the server is locked too and cannot start the skill once the crouch ends.
+            ClientPlayNetworking.send(new FocusSkill.CancelPayload());
+            serverLocked = true;
         }
         if (useKeyPhysicallyHeld(client)) {
             // Keep the game's right click released for as long as the button is really held, so nothing restarts.
@@ -52,6 +61,7 @@ public final class FocusCancelClient {
             }
         } else {
             FocusSkill.unlock();
+            serverLocked = false;
             if (client.getConnection() != null) {
                 ClientPlayNetworking.send(new FocusSkill.ReleasePayload());
             }

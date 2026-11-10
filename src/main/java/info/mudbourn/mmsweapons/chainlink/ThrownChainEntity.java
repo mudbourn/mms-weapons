@@ -9,6 +9,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -34,6 +35,12 @@ public class ThrownChainEntity extends Projectile {
     private static final double REEL_SPEED = 1.6;
     private static final double CATCH_DISTANCE = 1.5;
     private static final int MAX_LIFETIME = 200;
+    private static final float REEL_DAMAGE = 10.0F;
+    private static final double REEL_PULL = 0.9;
+    private static final double HIT_PUSH = 1.2;
+    private static final double LIFT = 0.3;
+    // Knockback resistance is only honoured up to this much, so heavy mobs still get dragged.
+    private static final double MAX_RESIST = 0.8;
 
     private final Set<Integer> struck = new HashSet<>();
     private ItemStack weapon = ItemStack.EMPTY;
@@ -116,7 +123,7 @@ public class ThrownChainEntity extends Projectile {
         if (!this.level().isClientSide()) {
             AABB sweep = this.getBoundingBox().inflate(0.6);
             for (Entity hit : this.level().getEntities(this, sweep, this::canHitEntity)) {
-                this.strike(hit, 6.0F, toOwner.normalize().scale(0.5));
+                this.strike(hit, REEL_DAMAGE, toOwner.normalize().scale(REEL_PULL));
             }
         }
     }
@@ -128,7 +135,7 @@ public class ThrownChainEntity extends Projectile {
 
     @Override
     protected void onHitEntity(EntityHitResult result) {
-        this.strike(result.getEntity(), 6.0F + 10.0F * this.charge, this.getDeltaMovement().normalize().scale(0.8));
+        this.strike(result.getEntity(), 6.0F + 10.0F * this.charge, this.getDeltaMovement().normalize().scale(HIT_PUSH));
         this.startReeling();
     }
 
@@ -146,7 +153,13 @@ public class ThrownChainEntity extends Projectile {
         this.struck.add(target.getId());
         Entity owner = this.getOwner();
         if (target.hurtServer(server, this.damageSources().trident(this, owner == null ? this : owner), damage)) {
-            target.push(push.x, 0.25, push.z);
+            double scale = 1.0;
+            if (target instanceof LivingEntity living) {
+                // Undoes most of the target's knockback resistance so weight barely slows the chain.
+                scale = 1.0 / (1.0 - Math.min(MAX_RESIST, living.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
+            }
+            target.push(push.x * scale, LIFT, push.z * scale);
+            target.hurtMarked = true;
             this.playSound(SoundEvents.CHAIN_HIT, 1.0F, 0.7F);
         }
     }

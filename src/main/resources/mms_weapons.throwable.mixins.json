@@ -6,7 +6,8 @@
     "ItemThrowMixin",
     "ItemMaceSmashMixin",
     "SickleThrowMixin",
-    "ThrowChargePoseMixin"
+    "ThrowChargePoseMixin",
+    "ThrowUseAnimationMixin"
   ],
   "injectors": {
     "defaultRequire": 1
