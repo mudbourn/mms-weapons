@@ -1,0 +1,6 @@
+{
+  "parent": "weaponsexpanded:item/large_blade",
+  "textures": {
+    "layer0": "weaponsexpanded:item/golden_longsword"
+  }
+}

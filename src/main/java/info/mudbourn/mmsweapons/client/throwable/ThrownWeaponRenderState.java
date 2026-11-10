@@ -18,4 +18,7 @@ public class ThrownWeaponRenderState extends EntityRenderState {
     public final ItemStackRenderState item = new ItemStackRenderState();
     public float xRot;
     public float yRot;
+    public boolean heavy;
+    /** Whether the weapon is stuck in a block. */
+    public boolean inGround;
 }

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "info.mudbourn.mmsweapons.client.mixin.focus",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "HandSmokeMixin",
+    "ItemLayerSmokeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

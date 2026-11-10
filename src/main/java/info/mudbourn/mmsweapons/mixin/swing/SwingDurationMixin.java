@@ -4,6 +4,7 @@ import net.bettercombat.BetterCombatMod;
 import net.bettercombat.client.AttackInteractor;
 import net.bettercombat.logic.PlayerAttackHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
@@ -22,6 +23,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SwingDurationMixin {
 
     private static final float MAX_SWING_TICKS = 12.0F;
+
+    // The anchor plays a little longer than the other capped weapons so its heft reads.
+    private static final float MAX_ANCHOR_SWING_TICKS = 15.0F;
+
+    private static final Identifier ANCHOR = Identifier.fromNamespaceAndPath("bountiful-fish", "anchor");
 
     private static final TagKey<Item> CAPPED_SWING = TagKey.create(
         Registries.ITEM,
@@ -46,7 +52,8 @@ public abstract class SwingDurationMixin {
     private float mmsWeapons$capSwing(Player player) {
         float cooldown = PlayerAttackHelper.getAttackCooldownTicksCapped(player);
         if (player.getMainHandItem().is(CAPPED_SWING)) {
-            return Math.min(cooldown, MAX_SWING_TICKS);
+            boolean anchor = BuiltInRegistries.ITEM.getKey(player.getMainHandItem().getItem()).equals(ANCHOR);
+            return Math.min(cooldown, anchor ? MAX_ANCHOR_SWING_TICKS : MAX_SWING_TICKS);
         }
         return cooldown;
     }

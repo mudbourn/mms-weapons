@@ -3,7 +3,7 @@
   "id": "mms_weapons",
   "version": "${version}",
   "name": "MMS Weapons",
-  "description": "Melee and ranged weapon compat for MMSLive01. Per-item combat tuning, throwable pikes, the mace smash on hammers, tuna swing sounds, and Expanded Weaponry longbow tuning.",
+  "description": "Melee and ranged weapon compat for MMSLive01. Per-item combat tuning, throwable pikes and sickles, the Bountiful Fish anchor chain throw, the focus barrage, the mace smash on hammers, tuna swing sounds, Expanded Weaponry longbow tuning, and 3D models for other mods' weapons.",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -15,10 +15,20 @@
   },
   "mixins": [
     "mms_weapons.throwable.mixins.json",
+    "mms_weapons.chainlink.mixins.json",
+    "mms_weapons.focus.mixins.json",
     "mms_weapons.headshot.mixins.json",
     "mms_weapons.expandedweaponry.mixins.json",
     {
       "config": "mms_weapons.swing.client.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "mms_weapons.chainlink.client.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "mms_weapons.focus.client.mixins.json",
       "environment": "client"
     }
   ],
@@ -34,7 +44,10 @@
     "aerialhell": "*",
     "bountiful-fish": "*",
     "mutantmonsters": "*",
-    "bettercombat": "*"
+    "bettercombat": "*",
+    "mms_render_common": "*",
+    "mms_combat": "*",
+    "mms_arsenal": "*"
   },
   "suggests": {
     "sounds": "*",

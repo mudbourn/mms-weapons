@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "info.mudbourn.mmsweapons.mixin.focus",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ShieldYieldMixin",
+    "BarrageUseMixin",
+    "FocusDamageMixin",
+    "FocusBarMixin",
+    "ParryReblockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

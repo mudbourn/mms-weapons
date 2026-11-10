@@ -52,7 +52,14 @@ public final class MmsSounds {
 
     private MmsSounds() {}
 
+    /** The focus barrage's sword cut, played once per swing. */
+    public static final Identifier BARRAGE_SWING_ID =
+            Identifier.fromNamespaceAndPath("mms_weapons", "barrage_swing");
+
+    public static final SoundEvent BARRAGE_SWING = SoundEvent.createVariableRangeEvent(BARRAGE_SWING_ID);
+
     public static void register() {
+        Registry.register(BuiltInRegistries.SOUND_EVENT, BARRAGE_SWING_ID, BARRAGE_SWING);
         Registry.register(BuiltInRegistries.SOUND_EVENT, STONE_IMPACT_ID, STONE_IMPACT);
         Registry.register(BuiltInRegistries.SOUND_EVENT, SWING_LEFT_ID, SWING_LEFT);
         Registry.register(BuiltInRegistries.SOUND_EVENT, SWING_RIGHT_ID, SWING_RIGHT);

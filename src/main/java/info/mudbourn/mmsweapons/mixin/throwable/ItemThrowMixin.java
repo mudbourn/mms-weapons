@@ -100,7 +100,7 @@ public abstract class ItemThrowMixin {
     private static boolean mmsWeapons$throwWeapon(ItemStack stack, Level level, Player player, int timeLeft) {
         Item item = stack.getItem();
         int charge = 72000 - timeLeft;
-        if (charge < MmsThrowables.THROW_THRESHOLD_TIME) {
+        if (charge < MmsThrowables.throwThreshold(stack)) {
             return false;
         }
 
@@ -119,18 +119,18 @@ public abstract class ItemThrowMixin {
         player.awardStat(Stats.ITEM_USED.get(item));
 
         if (level instanceof ServerLevel serverLevel) {
-            stack.hurtWithoutBreaking(1, player);
+            stack.hurtWithoutBreaking(MmsThrowables.throwDurabilityCost(stack), player);
             if (riptide == 0.0F) {
                 ItemStack thrown = stack.consumeAndReturn(1, player);
                 ThrownWeaponEntity weapon = Projectile.spawnProjectileFromRotation(
                         ThrownWeaponEntity::new, serverLevel, thrown, player,
-                        0.0F, MmsThrowables.PROJECTILE_SHOOT_POWER, 1.0F);
-                weapon.setChargeScale(MmsThrowables.chargeScale(charge));
+                        0.0F, MmsThrowables.shootPower(thrown), 1.0F);
+                weapon.setChargeScale(MmsThrowables.chargeScale(thrown, charge));
                 if (player.hasInfiniteMaterials()) {
                     weapon.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                 }
 
-                level.playSound(null, weapon, throwSound.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
+                level.playSound(null, weapon, throwSound.value(), SoundSource.PLAYERS, 1.0F, MmsThrowables.throwPitch(thrown));
                 return true;
             }
         }

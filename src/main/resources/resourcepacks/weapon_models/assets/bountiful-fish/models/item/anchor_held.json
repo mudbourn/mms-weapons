@@ -1,0 +1,76 @@
+{
+  "texture_size": [
+    128,
+    128
+  ],
+  "textures": {
+    "particle": "bountiful-fish:item/anchor"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "translation": [
+        0,
+        -4,
+        -0.5
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "rotation": [
+        -20,
+        0,
+        0
+      ]
+    },
+    "thirdperson_lefthand": {
+      "translation": [
+        0,
+        -4,
+        -0.5
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ],
+      "rotation": [
+        -20,
+        0,
+        0
+      ]
+    },
+    "firstperson_righthand": {
+      "translation": [
+        3,
+        -4,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    "firstperson_lefthand": {
+      "translation": [
+        3,
+        -4,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
+    },
+    "ground": {
+      "scale": [
+        0.1,
+        0.1,
+        0.1
+      ]
+    }
+  }
+}

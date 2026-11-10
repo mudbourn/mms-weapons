@@ -82,6 +82,9 @@ public class ThrownWeaponEntity extends AbstractArrow {
         super(MmsThrowables.THROWN_WEAPON, owner, level, stack, null);
         this.entityData.set(ID_LOYALTY, this.getLoyaltyFromItem(stack));
         this.entityData.set(ID_WEAPON, stack.copy());
+        // AbstractArrow caches its ground-hit sound in its constructor, before the weapon is set,
+        // so every throw got the trident thunk. Pick it again now that we know if it is a hammer.
+        this.setSoundEvent(this.getDefaultHitGroundSoundEvent());
     }
 
     @Override
@@ -189,7 +192,23 @@ public class ThrownWeaponEntity extends AbstractArrow {
 
         this.deflect(ProjectileDeflection.REVERSE, target, this.owner, false);
         this.setDeltaMovement(this.getDeltaMovement().multiply(0.02, 0.2, 0.02));
-        this.playSound(SoundEvents.TRIDENT_HIT, 1.0F, 1.0F);
+        // Heavy weapons sound like Hurl's thrown mace: an air smash on a mob, a heavy ground smash on a block.
+        this.playSound(this.isHeavy() ? SoundEvents.MACE_SMASH_AIR : SoundEvents.TRIDENT_HIT, 1.0F, 1.0F);
+    }
+
+    /** Whether the weapon is stuck in a block, synched so the renderer can see it. */
+    public boolean stuckInGround() {
+        return this.isInGround();
+    }
+
+    /** Whether the weapon in flight is heavy, read from the synched stack so both sides agree. */
+    public boolean isHeavy() {
+        return MmsThrowables.isHeavy(this.getRenderedWeapon());
+    }
+
+    @Override
+    protected double getDefaultGravity() {
+        return MmsThrowables.gravity(this.getRenderedWeapon());
     }
 
     /** Channeling's lightning strike hangs off this. */
@@ -230,7 +249,7 @@ public class ThrownWeaponEntity extends AbstractArrow {
 
     @Override
     protected SoundEvent getDefaultHitGroundSoundEvent() {
-        return SoundEvents.TRIDENT_HIT_GROUND;
+        return this.isHeavy() ? SoundEvents.MACE_SMASH_GROUND_HEAVY : SoundEvents.TRIDENT_HIT_GROUND;
     }
 
     @Override

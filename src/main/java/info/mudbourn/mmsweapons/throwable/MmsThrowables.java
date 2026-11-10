@@ -3,10 +3,12 @@ package info.mudbourn.mmsweapons.throwable;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import info.mudbourn.mmsweapons.throwable.sickle.ThrownSickleEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobCategory;
@@ -15,6 +17,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.Map;
 
 /**
  * Registry and shared rules for weapons MMS makes throwable.
@@ -74,6 +78,20 @@ public final class MmsThrowables {
                             .updateInterval(20)
                             .build(THROWN_WEAPON_KEY));
 
+    private static final ResourceKey<EntityType<?>> THROWN_SICKLE_KEY =
+            ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath("mms_weapons", "thrown_sickle"));
+
+    /** The thrown sickle, for any sickle whose item id ends in "_sickle". */
+    public static final EntityType<ThrownSickleEntity> THROWN_SICKLE =
+            Registry.register(
+                    BuiltInRegistries.ENTITY_TYPE,
+                    THROWN_SICKLE_KEY,
+                    EntityType.Builder.<ThrownSickleEntity>of(ThrownSickleEntity::new, MobCategory.MISC)
+                            .sized(0.5F, 0.5F)
+                            .clientTrackingRange(4)
+                            .updateInterval(20)
+                            .build(THROWN_SICKLE_KEY));
+
     /** Minimum ticks a throw has to be wound up before it will release. */
     public static final int THROW_THRESHOLD_TIME = 10;
 
@@ -86,6 +104,37 @@ public final class MmsThrowables {
 
     /** Launch speed. A trident leaves the hand at 2.5; a pike is longer and heavier. */
     public static final float PROJECTILE_SHOOT_POWER = 2.3F;
+
+    /** Launch speed of Hurl's mace, the heavy end hammer weights scale toward. */
+    private static final float MACE_SHOOT_POWER = 0.95F;
+
+    /** Extra wind-up, in ticks, a weight-1 weapon needs over a pike. */
+    private static final int WEIGHT_THRESHOLD_TICKS = 6;
+
+    /** Extra ticks to full charge a weight-1 weapon needs over a pike. */
+    private static final int WEIGHT_CHARGE_TICKS = 10;
+
+    /** Extra durability a weight-1 throw costs over a pike's one point. */
+    private static final int WEIGHT_DURABILITY_COST = 2;
+
+    /** Arrow gravity, what a pike falls at. */
+    private static final double BASE_GRAVITY = 0.05;
+
+    /** Extra gravity a weight-1 weapon falls with. */
+    private static final double WEIGHT_GRAVITY = 0.03;
+
+    /** Hammer weight by material, 0 a pike and 1 the mace: netherite coats diamond, gold sits near diamond, the rest lighten down to wood. */
+    private static final Map<String, Float> HAMMER_WEIGHTS = Map.of(
+            "netherite", 0.85F,
+            "diamond", 0.8F,
+            "golden", 0.75F,
+            "iron", 0.6F,
+            "copper", 0.5F,
+            "stone", 0.4F,
+            "wooden", 0.25F);
+
+    /** Hammer weight for a material missing from the table, iron's. */
+    private static final float DEFAULT_HAMMER_WEIGHT = 0.6F;
 
     /** Called from the mod initializer purely to force the class — and the registration — to load. */
     public static void register() {
@@ -135,10 +184,52 @@ public final class MmsThrowables {
         return base + (fullDraw - base) * t;
     }
 
-    /** Fraction of full draw, 0 at {@link #THROW_THRESHOLD_TIME}, 1 at {@link #FULL_CHARGE_TIME}. */
-    public static float chargeScale(int charge) {
-        float span = FULL_CHARGE_TIME - THROW_THRESHOLD_TIME;
-        float t = (charge - THROW_THRESHOLD_TIME) / span;
+    /** Hammers, the mace-smash weapons, throw worse than pikes by their material weight. */
+    public static boolean isHeavy(ItemStack stack) {
+        return stack.is(MACE_SMASH_WEAPONS);
+    }
+
+    /** How heavy a throw this weapon is, 0 for a pike up to 1 for Hurl's mace. */
+    public static float weight(ItemStack stack) {
+        if (!isHeavy(stack)) {
+            return 0.0F;
+        }
+        String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
+        int split = path.indexOf('_');
+        String material = split < 0 ? path : path.substring(0, split);
+        return HAMMER_WEIGHTS.getOrDefault(material, DEFAULT_HAMMER_WEIGHT);
+    }
+
+    /** Minimum wind-up, in ticks, before this weapon will release. */
+    public static int throwThreshold(ItemStack stack) {
+        return THROW_THRESHOLD_TIME + Math.round(weight(stack) * WEIGHT_THRESHOLD_TICKS);
+    }
+
+    /** Launch speed for this weapon. */
+    public static float shootPower(ItemStack stack) {
+        return Mth.lerp(weight(stack), PROJECTILE_SHOOT_POWER, MACE_SHOOT_POWER);
+    }
+
+    /** Durability one throw of this weapon costs. */
+    public static int throwDurabilityCost(ItemStack stack) {
+        return 1 + Math.round(weight(stack) * WEIGHT_DURABILITY_COST);
+    }
+
+    /** Gravity this weapon falls with in flight. */
+    public static double gravity(ItemStack stack) {
+        return BASE_GRAVITY + weight(stack) * WEIGHT_GRAVITY;
+    }
+
+    /** Throw sound pitch, lower for heavier weapons the way Hurl pitches its mace throw down. */
+    public static float throwPitch(ItemStack stack) {
+        return 1.0F - weight(stack) * 0.4F;
+    }
+
+    /** Fraction of full draw for this weapon, 0 at its threshold and 1 at full charge. */
+    public static float chargeScale(ItemStack stack, int charge) {
+        int threshold = throwThreshold(stack);
+        int full = FULL_CHARGE_TIME + Math.round(weight(stack) * WEIGHT_CHARGE_TICKS);
+        float t = (charge - threshold) / (float) (full - threshold);
         return Math.max(0.0F, Math.min(1.0F, t));
     }
 }

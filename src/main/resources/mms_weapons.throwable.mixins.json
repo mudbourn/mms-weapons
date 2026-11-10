@@ -4,7 +4,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ItemThrowMixin",
-    "ItemMaceSmashMixin"
+    "ItemMaceSmashMixin",
+    "SickleThrowMixin",
+    "ThrowChargePoseMixin"
   ],
   "injectors": {
     "defaultRequire": 1

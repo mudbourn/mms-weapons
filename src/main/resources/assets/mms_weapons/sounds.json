@@ -29,5 +29,12 @@
     "sounds": [
       "mms_weapons:slam"
     ]
+  },
+  "barrage_swing": {
+    "category": "player",
+    "subtitle": "subtitles.mms_weapons.barrage_swing",
+    "sounds": [
+      "mms_weapons:barrage_swing"
+    ]
   }
 }

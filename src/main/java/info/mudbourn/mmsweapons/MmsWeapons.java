@@ -1,5 +1,9 @@
 package info.mudbourn.mmsweapons;
 
+import info.mudbourn.mmsweapons.chainlink.Chainlink;
+import info.mudbourn.mmsweapons.focus.Barrage;
+import info.mudbourn.mmsweapons.focus.Focus;
+import info.mudbourn.mmsweapons.focus.FocusSkill;
 import info.mudbourn.mmsweapons.throwable.MmsThrowables;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
@@ -21,6 +25,14 @@ public class MmsWeapons implements ModInitializer {
         // or a saved projectile comes back as an unknown entity.
         MmsThrowables.register();
 
-        LOG.info("MMS Weapons loaded — weapon tuning, throwable melee, mace smash, longbow tuning.");
+        // Chain throw for the Bountiful Fish anchor.
+        Chainlink.register();
+
+        // Focus and the barrage for weapons with no right click, guard breaks, throw interrupts, shield priority.
+        Focus.register();
+        Barrage.register();
+        FocusSkill.register();
+
+        LOG.info("MMS Weapons loaded — weapon tuning, throwable melee, anchor chain throw, focus barrage, mace smash, longbow tuning.");
     }
 }

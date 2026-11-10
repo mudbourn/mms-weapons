@@ -30,7 +30,7 @@ import java.util.Map;
  * <ul>
  *   <li>Anchor swings on a 2.35-second cooldown, large tuna on 1.8.</li>
  *   <li>Large tuna gets a small knockback bonus over a plain weapon.</li>
- *   <li>Basic Weapons glaives gain shield blocking.</li>
+ *   <li>Basic Weapons glaives, katanas, longswords and greatswords gain shield blocking.</li>
  *   <li>The endersoul hand swings faster than an Expanded Weaponry dagger.</li>
  *   <li>The longbow hits for 12 instead of 8.5.</li>
  * </ul>
@@ -220,9 +220,20 @@ public final class WeaponTuning {
         return current == null ? ItemAttributeModifiers.EMPTY : current;
     }
 
-    /** Items given vanilla shield blocking: every glaive, plus the large tuna. */
+    /** Items given vanilla shield blocking: glaives, katanas, longswords, greatswords and the large tuna. */
     private static boolean blocksAttacks(Item item) {
-        return isGlaive(item) || is(item, LARGE_TUNA);
+        return isGlaive(item) || isBlockingSword(item) || is(item, LARGE_TUNA);
+    }
+
+    /** Weapons Expanded katanas and longswords, plus Expanded Weaponry greatswords, matched by id suffix. */
+    private static boolean isBlockingSword(Item item) {
+        Identifier id = BuiltInRegistries.ITEM.getKey(item);
+        String path = id.getPath();
+        return switch (id.getNamespace()) {
+            case "weaponsexpanded" -> path.endsWith("_katana") || path.endsWith("_longsword");
+            case "expanded_weaponry" -> path.endsWith("_greatsword");
+            default -> false;
+        };
     }
 
     private static boolean isHeavySwinger(Item item) {

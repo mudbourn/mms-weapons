@@ -1,5 +1,11 @@
 {
   "subtitles.mms_weapons.stone_impact": "Stone strikes",
   "subtitles.mms_weapons.tuna_swing": "Fish swishes",
-  "subtitles.mms_weapons.tuna_slam": "Fish slams"
+  "subtitles.mms_weapons.tuna_slam": "Fish slams",
+  "entity.mms_weapons.thrown_chain": "Chained Weapon",
+  "tooltip.mms_weapons.focus": "Focus: %s / %s",
+  "subtitles.mms_weapons.barrage_swing": "Barrage slashes",
+  "tooltip.mms_weapons.blockable": "Blockable",
+  "tooltip.mms_weapons.throwable": "Throwable",
+  "tooltip.mms_weapons.chain_throw": "Chain Throw"
 }

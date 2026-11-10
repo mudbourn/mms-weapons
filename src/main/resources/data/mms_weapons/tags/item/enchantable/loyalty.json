@@ -1,0 +1,33 @@
+{
+  "values": [
+    "#minecraft:enchantable/trident",
+    {
+      "id": "weaponsexpanded:wooden_sickle",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:stone_sickle",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:copper_sickle",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:iron_sickle",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:golden_sickle",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:diamond_sickle",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:netherite_sickle",
+      "required": false
+    }
+  ]
+}

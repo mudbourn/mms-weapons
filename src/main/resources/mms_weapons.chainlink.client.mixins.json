@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "info.mudbourn.mmsweapons.client.mixin.chainlink",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ChainlinkAttackMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
