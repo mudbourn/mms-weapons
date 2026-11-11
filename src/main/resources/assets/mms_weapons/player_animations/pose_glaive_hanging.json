@@ -111,7 +111,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "pitch": -0.802
+                    "pitch": 0.918
                 }
             },
             {
@@ -119,7 +119,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "pitch": -0.802
+                    "pitch": 0.918
                 }
             },
             {
@@ -127,7 +127,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "yaw": -0.042
+                    "yaw": 0.078
                 }
             },
             {
@@ -135,7 +135,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "yaw": -0.042
+                    "yaw": 0.078
                 }
             },
             {
@@ -143,7 +143,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "roll": -0.042
+                    "roll": 0.158
                 }
             },
             {
@@ -151,7 +151,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "roll": -0.042
+                    "roll": 0.158
                 }
             },
             {
@@ -159,7 +159,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "x": -0.4
+                    "x": -0.2
                 }
             },
             {
@@ -167,7 +167,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "x": -0.4
+                    "x": -0.2
                 }
             },
             {
@@ -175,7 +175,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "y": 4.7
+                    "y": 1.9
                 }
             },
             {
@@ -183,7 +183,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "y": 4.7
+                    "y": 1.9
                 }
             },
             {
@@ -191,7 +191,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "z": 3.4
+                    "z": -1.1
                 }
             },
             {
@@ -199,7 +199,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "z": 3.4
+                    "z": -1.1
                 }
             }
         ]
