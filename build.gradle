@@ -50,11 +50,30 @@ java {
 }
 
 processResources {
-    // declare the version as an input so bumping gradle.properties
-    // invalidates the task (expand values are not tracked automatically)
     inputs.property "mod_version", project.mod_version
     filesMatching("fabric.mod.json") {
         expand "version": project.mod_version
+    }
+    // inline each pose file's top "vars" block into its "$name" references
+    filesMatching("assets/*/player_animations/*.json") {
+        def vars = [:]
+        def inVars = false
+        filter { line ->
+            if (line.trim() == '"vars": {') {
+                inVars = true
+                return null
+            }
+            if (inVars) {
+                if (line.trim().startsWith("}")) {
+                    inVars = false
+                    return null
+                }
+                def m = line =~ /"(\w+)":\s*(-?[\d.]+)/
+                vars[m[0][1]] = m[0][2]
+                return null
+            }
+            line.replaceAll(/"\$(\w+)"/) { all, name -> vars[name] }
+        }
     }
 }
 

@@ -9,7 +9,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -39,8 +38,6 @@ public class ThrownChainEntity extends Projectile {
     private static final double REEL_PULL = 0.9;
     private static final double HIT_PUSH = 1.2;
     private static final double LIFT = 0.3;
-    // Knockback resistance is only honoured up to this much, so heavy mobs still get dragged.
-    private static final double MAX_RESIST = 0.8;
 
     private final Set<Integer> struck = new HashSet<>();
     private ItemStack weapon = ItemStack.EMPTY;
@@ -153,12 +150,8 @@ public class ThrownChainEntity extends Projectile {
         this.struck.add(target.getId());
         Entity owner = this.getOwner();
         if (target.hurtServer(server, this.damageSources().trident(this, owner == null ? this : owner), damage)) {
-            double scale = 1.0;
-            if (target instanceof LivingEntity living) {
-                // Undoes most of the target's knockback resistance so weight barely slows the chain.
-                scale = 1.0 / (1.0 - Math.min(MAX_RESIST, living.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
-            }
-            target.push(push.x * scale, LIFT, push.z * scale);
+            // Same launch for every mob, replacing vanilla knockback and ignoring weight
+            target.setDeltaMovement(push.x, LIFT, push.z);
             target.hurtMarked = true;
             this.playSound(SoundEvents.CHAIN_HIT, 1.0F, 0.7F);
         }

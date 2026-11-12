@@ -1,4 +1,18 @@
 {
+    "vars": {
+        "armX": -5.0,
+        "armY": 6.5,
+        "armZ": 0.0,
+        "armPitch": -2.7,
+        "armYaw": 0.25,
+        "armRoll": -0.1,
+        "itemPitch": 0.918,
+        "itemYaw": 0.078,
+        "itemRoll": 0.158,
+        "itemX": 0,
+        "itemY": -3,
+        "itemZ": -6
+    },
     "name": "pose_glaive_hanging",
     "author": "mudbourn",
     "description": "The hanging one handed pose with the glaive slid forward so the hand grips the back of its handle",
@@ -15,7 +29,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "x": -5.0
+                    "x": "$armX"
                 }
             },
             {
@@ -23,7 +37,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "x": -5.0
+                    "x": "$armX"
                 }
             },
             {
@@ -31,7 +45,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "y": 6.5
+                    "y": "$armY"
                 }
             },
             {
@@ -39,7 +53,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "y": 6.5
+                    "y": "$armY"
                 }
             },
             {
@@ -47,7 +61,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "z": 0.0
+                    "z": "$armZ"
                 }
             },
             {
@@ -55,7 +69,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "z": 0.0
+                    "z": "$armZ"
                 }
             },
             {
@@ -63,7 +77,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "pitch": -2.7
+                    "pitch": "$armPitch"
                 }
             },
             {
@@ -71,7 +85,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "pitch": -2.7
+                    "pitch": "$armPitch"
                 }
             },
             {
@@ -79,7 +93,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "yaw": 0.25
+                    "yaw": "$armYaw"
                 }
             },
             {
@@ -87,7 +101,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "yaw": 0.25
+                    "yaw": "$armYaw"
                 }
             },
             {
@@ -95,7 +109,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "roll": -0.1
+                    "roll": "$armRoll"
                 }
             },
             {
@@ -103,7 +117,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightArm": {
-                    "roll": -0.1
+                    "roll": "$armRoll"
                 }
             },
             {
@@ -111,7 +125,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "pitch": 0.918
+                    "pitch": "$itemPitch"
                 }
             },
             {
@@ -119,7 +133,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "pitch": 0.918
+                    "pitch": "$itemPitch"
                 }
             },
             {
@@ -127,7 +141,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "yaw": 0.078
+                    "yaw": "$itemYaw"
                 }
             },
             {
@@ -135,7 +149,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "yaw": 0.078
+                    "yaw": "$itemYaw"
                 }
             },
             {
@@ -143,7 +157,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "roll": 0.158
+                    "roll": "$itemRoll"
                 }
             },
             {
@@ -151,7 +165,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "roll": 0.158
+                    "roll": "$itemRoll"
                 }
             },
             {
@@ -159,7 +173,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "x": -2.43
+                    "x": "$itemX"
                 }
             },
             {
@@ -167,7 +181,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "x": -2.43
+                    "x": "$itemX"
                 }
             },
             {
@@ -175,7 +189,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "y": -3.2
+                    "y": "$itemY"
                 }
             },
             {
@@ -183,7 +197,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "y": -3.2
+                    "y": "$itemY"
                 }
             },
             {
@@ -191,7 +205,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "z": -0.8
+                    "z": "$itemZ"
                 }
             },
             {
@@ -199,7 +213,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "z": -0.8
+                    "z": "$itemZ"
                 }
             }
         ]
