@@ -159,7 +159,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "x": 0.5
+                    "x": -2.43
                 }
             },
             {
@@ -167,7 +167,7 @@
                 "easing": "EASEINOUTQUAD",
                 "turn": 0,
                 "rightItem": {
-                    "x": 0.5
+                    "x": -2.43
                 }
             },
             {
