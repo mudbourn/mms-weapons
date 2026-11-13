@@ -49,6 +49,18 @@
     "mms_combat": "*",
     "mms_arsenal": "*"
   },
+  "custom": {
+    "fabric:resource_load_order": {
+      "after": [
+        "basicweapons",
+        "expanded_weaponry",
+        "weaponsexpanded",
+        "bountiful-fish",
+        "mutantmonsters",
+        "bettercombat"
+      ]
+    }
+  },
   "suggests": {
     "sounds": "*",
     "frostiful": "*"
