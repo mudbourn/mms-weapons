@@ -26,6 +26,8 @@ public final class FocusSkill {
     private static final List<Predicate<ItemStack>> SKILLS = new CopyOnWriteArrayList<>();
     // Client side: set by a crouch cancel or a crouching right click, cleared once right click is let go.
     private static boolean locked;
+    // Client side: ticks left in the local player's released focus attack, during which swinging and jumping are held off.
+    private static int executingTicks;
     // Server side: players whose client cancelled a skill and still holds right click. The client always sends
     // its use packet even when it refuses the use itself, so without this the server restarted the skill and the arms twitched.
     private static final Set<UUID> SERVER_LOCKED = ConcurrentHashMap.newKeySet();
@@ -94,6 +96,20 @@ public final class FocusSkill {
 
     public static boolean locked() {
         return locked;
+    }
+
+    // Marks the local player's focus attack as executing for this many ticks.
+    public static void execute(int ticks) {
+        executingTicks = Math.max(executingTicks, ticks);
+    }
+
+    // Whether the local player's focus attack is still executing, counting one tick down per call.
+    public static boolean tickExecuting() {
+        if (executingTicks <= 0) {
+            return false;
+        }
+        executingTicks--;
+        return true;
     }
 
     // Client to server: right click was let go after a cancel, so skills may start again.

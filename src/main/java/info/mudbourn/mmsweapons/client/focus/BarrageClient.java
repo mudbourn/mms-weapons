@@ -3,6 +3,7 @@ package info.mudbourn.mmsweapons.client.focus;
 import info.mudbourn.mmsweapons.chainlink.Chainlink;
 import info.mudbourn.mmsweapons.focus.Barrage;
 import info.mudbourn.mmsweapons.focus.Focus;
+import info.mudbourn.mmsweapons.focus.FocusSkill;
 import info.mudbourn.mmsweapons.throwable.MmsThrowables;
 import info.mudbourn.mmsweapons.throwable.sickle.SickleThrowing;
 import net.bettercombat.client.animation.PlayerAttackAnimatable;
@@ -31,6 +32,7 @@ public final class BarrageClient {
             weapon = player.getMainHandItem();
             ticks = 0;
             played = 0;
+            FocusSkill.execute((Barrage.SWINGS - 1) * Barrage.SWING_GAP_TICKS + (int) Barrage.SWING_LENGTH);
         });
         ClientTickEvents.END_CLIENT_TICK.register(BarrageClient::tick);
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {

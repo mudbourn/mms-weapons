@@ -10,6 +10,7 @@ import net.minecraft.client.player.LocalPlayer;
 import org.lwjgl.glfw.GLFW;
 
 // Watches the crouch key every tick, taps shorter than a tick included, and cancels a held focus skill the moment it is pressed.
+// Also holds off swinging and jumping while a focus attack charges or executes.
 public final class FocusCancelClient {
 
     // Whether the server has been told about the current lock.
@@ -20,6 +21,7 @@ public final class FocusCancelClient {
 
     public static void register() {
         ClientTickEvents.END_CLIENT_TICK.register(FocusCancelClient::tick);
+        ClientTickEvents.START_CLIENT_TICK.register(FocusCancelClient::holdOffWhileExecuting);
     }
 
     // Whether the button bound to use is really down right now, read from the window rather than the key binding.
@@ -29,6 +31,21 @@ public final class FocusCancelClient {
             return GLFW.glfwGetMouseButton(client.getWindow().handle(), key.getValue()) == GLFW.GLFW_PRESS;
         }
         return key.getType() == InputConstants.Type.KEYSYM && InputConstants.isKeyDown(client.getWindow(), key.getValue());
+    }
+
+    // Runs before the tick reads input, so no swing or jump starts while a focus attack charges or executes.
+    private static void holdOffWhileExecuting(Minecraft client) {
+        boolean executing = FocusSkill.tickExecuting();
+        LocalPlayer player = client.player;
+        boolean charging = player != null && player.isUsingItem() && FocusSkill.isSkill(player.getUseItem());
+        if (!executing && !charging) {
+            return;
+        }
+        client.options.keyAttack.setDown(false);
+        while (client.options.keyAttack.consumeClick()) {
+            // Drop swings queued during the attack.
+        }
+        client.options.keyJump.setDown(false);
     }
 
     private static void tick(Minecraft client) {
