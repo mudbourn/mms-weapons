@@ -36,9 +36,7 @@ public final class FocusCancelClient {
     // Runs before the tick reads input, so no swing or jump starts while a focus attack charges or executes.
     private static void holdOffWhileExecuting(Minecraft client) {
         boolean executing = FocusSkill.tickExecuting();
-        LocalPlayer player = client.player;
-        boolean charging = player != null && player.isUsingItem() && FocusSkill.isSkill(player.getUseItem());
-        if (!executing && !charging) {
+        if (!executing && (client.player == null || !FocusSkill.holdsOff(client.player))) {
             return;
         }
         client.options.keyAttack.setDown(false);

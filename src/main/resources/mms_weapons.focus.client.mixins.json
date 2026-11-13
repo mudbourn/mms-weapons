@@ -3,6 +3,7 @@
   "package": "info.mudbourn.mmsweapons.client.mixin.focus",
   "compatibilityLevel": "JAVA_21",
   "client": [
+    "FocusJumpMixin",
     "HandSmokeMixin",
     "ItemLayerSmokeMixin"
   ],

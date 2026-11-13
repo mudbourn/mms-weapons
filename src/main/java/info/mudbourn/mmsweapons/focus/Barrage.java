@@ -59,7 +59,6 @@ public final class Barrage {
     private static final Map<UUID, Long> PARRIED = new HashMap<>();
     private static Consumer<Player> localBarrage = player -> {
     };
-    private static boolean striking;
 
     private Barrage() {
     }
@@ -72,11 +71,6 @@ public final class Barrage {
     // Plays the swings on the local player, who gets no Better Combat packet for their own attack.
     public static void setLocalBarrage(Consumer<Player> barrage) {
         localBarrage = barrage;
-    }
-
-    // Whether barrage damage is being dealt right now, so it does not refill the focus that started it.
-    public static boolean striking() {
-        return striking;
     }
 
     // Starts a barrage with a full-focus weapon. Called on both sides from the right click.
@@ -161,8 +155,7 @@ public final class Barrage {
         Vec3 eye = player.getEyePosition();
         Vec3 look = player.getLookAngle();
         AABB box = player.getBoundingBox().inflate(reach);
-        striking = true;
-        try {
+        Focus.spend(() -> {
             for (Entity entity : level.getEntities(player, box, e -> e instanceof LivingEntity && e.isAlive() && e.isPickable())) {
                 LivingEntity target = (LivingEntity) entity;
                 Vec3 to = target.getBoundingBox().getCenter().subtract(eye);
@@ -181,9 +174,7 @@ public final class Barrage {
                     trackGuard(level, run, target);
                 }
             }
-        } finally {
-            striking = false;
-        }
+        });
         Vec3 front = eye.add(look.scale(1.2));
         level.sendParticles(ParticleTypes.SWEEP_ATTACK, front.x, front.y - 0.3, front.z, 1, 0.0, 0.0, 0.0, 0.0);
     }

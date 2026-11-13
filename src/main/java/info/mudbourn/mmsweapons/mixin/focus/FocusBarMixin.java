@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-// Shows a barrage weapon's focus as a red bar under it, in place of durability, while it has any focus.
+// Shows a focus weapon's focus as a red bar under it, in place of durability, while it has any focus.
 @Mixin(Item.class)
 public abstract class FocusBarMixin {
 
@@ -37,6 +37,6 @@ public abstract class FocusBarMixin {
     }
 
     private static boolean showsFocus(ItemStack stack) {
-        return Focus.focus(stack) > 0.0F && Focus.eligible(stack);
+        return Focus.focus(stack) > 0.0F && Focus.builds(stack);
     }
 }

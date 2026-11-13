@@ -11,19 +11,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Predicate;
 
 // Held focus skills (the barrage, the Dragon Slayer and Odachi) and their crouch cancel.
 // Any crouch while one is held drops it on the client and tells the server to end the use without releasing it,
 // so the attack cannot fire. Right click then stays ignored until it is let go and pressed again.
 public final class FocusSkill {
 
-    private static final List<Predicate<ItemStack>> SKILLS = new CopyOnWriteArrayList<>();
     // Client side: set by a crouch cancel or a crouching right click, cleared once right click is let go.
     private static boolean locked;
     // Client side: ticks left in the local player's released focus attack, during which swinging and jumping are held off.
@@ -51,31 +47,19 @@ public final class FocusSkill {
         });
     }
 
-    // Lets another mod mark its held skills as crouch-cancellable, such as the Armory's Dragon Slayer.
-    public static void addSkill(Predicate<ItemStack> skill) {
-        SKILLS.add(skill);
-    }
-
     // Whether this stack's right click is a held focus skill that is ready to use.
     public static boolean isSkill(ItemStack stack) {
-        if (stack.isEmpty()) {
-            return false;
-        }
-        if (Focus.focused(stack) && Focus.eligible(stack)) {
-            return true;
-        }
-        for (Predicate<ItemStack> skill : SKILLS) {
-            if (skill.test(stack)) {
-                return true;
-            }
-        }
-        return false;
+        return Focus.focused(stack) && Focus.builds(stack);
     }
 
-    // Whether a right click on this skill should be ignored: while crouching, or on the client until right click is let go after a cancel.
+    // Whether a right click on this skill should be ignored: while airborne or crouching, or on the client until right click is let go after a cancel.
     public static boolean blocksStart(Player player, ItemStack stack, InteractionHand hand) {
         if (hand != InteractionHand.MAIN_HAND || !isSkill(stack)) {
             return false;
+        }
+        // A charge started in the air would carry a jump's momentum into the lunge.
+        if (!player.onGround()) {
+            return true;
         }
         if (player.isShiftKeyDown()) {
             if (player.level().isClientSide()) {
@@ -101,6 +85,11 @@ public final class FocusSkill {
     // Marks the local player's focus attack as executing for this many ticks.
     public static void execute(int ticks) {
         executingTicks = Math.max(executingTicks, ticks);
+    }
+
+    // Whether this player is charging a focus skill or, on the client, still executing one, so jumping and swinging are held off.
+    public static boolean holdsOff(Player player) {
+        return executingTicks > 0 || player.isUsingItem() && isSkill(player.getUseItem());
     }
 
     // Whether the local player's focus attack is still executing, counting one tick down per call.

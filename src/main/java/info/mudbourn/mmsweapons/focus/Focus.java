@@ -25,11 +25,11 @@ import net.minecraft.world.phys.Vec3;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Predicate;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-// Focus for weapons with no right click of their own: damage dealt with one fills a bar, and a full bar unlocks the barrage.
+// The one focus engine for every weapon: damage dealt with a focus weapon fills its bar, and a full bar unlocks its focus attack.
+// Weapons with no right click of their own spend it on the barrage; registered weapons such as the Armory's Dragon Slayer spend it on their own.
 // Also holds the shared rule that a one-handed weapon gives its right click up to a shield in the off hand.
 public final class Focus {
 
@@ -38,12 +38,17 @@ public final class Focus {
     // A flat item sprite's blade, corner to corner in model space: handle bottom left, tip top right.
     private static final Blade DIAGONAL = new Blade(new Vec3(0.0, 0.0, 0.5), new Vec3(1.0, 1.0, 0.5));
     private static final Map<Item, Blade> BLADES = new ConcurrentHashMap<>();
-    private static final List<Predicate<ItemStack>> SMOKE_SOURCES = new CopyOnWriteArrayList<>();
+    private static final Set<Item> OWN_ATTACKS = ConcurrentHashMap.newKeySet();
+    private static boolean spending;
 
     public static final DataComponentType<Float> FOCUS = Registry.register(
             BuiltInRegistries.DATA_COMPONENT_TYPE,
             Identifier.fromNamespaceAndPath("mms_weapons", "focus"),
-            DataComponentType.<Float>builder().persistent(Codec.FLOAT).networkSynchronized(ByteBufCodecs.FLOAT).build());
+            DataComponentType.<Float>builder()
+                    .persistent(Codec.FLOAT)
+                    .networkSynchronized(ByteBufCodecs.FLOAT)
+                    .ignoreSwapAnimation()
+                    .build());
 
     private Focus() {
     }
@@ -51,17 +56,37 @@ public final class Focus {
     public static void register() {
     }
 
-    // Adds melee damage dealt with an eligible weapon to its focus. Called for every hit, killing blows included.
+    // Adds melee damage dealt with a focus weapon to its focus. Called for every hit, killing blows included.
     public static void onDamage(DamageSource source, float damage) {
-        if (Barrage.striking() || damage <= 0.0F) {
+        if (spending || damage <= 0.0F) {
             return;
         }
         if (source.getEntity() instanceof Player player && source.getDirectEntity() == player) {
             ItemStack held = player.getMainHandItem();
-            if (eligible(held)) {
+            if (builds(held)) {
                 held.set(FOCUS, Math.min(MAX_FOCUS, focus(held) + damage));
             }
         }
+    }
+
+    // Deals a focus attack's hits without letting them refill the focus that paid for them.
+    public static void spend(Runnable hits) {
+        spending = true;
+        try {
+            hits.run();
+        } finally {
+            spending = false;
+        }
+    }
+
+    // Marks a weapon that spends focus on its own attack instead of the barrage, such as the Armory's Dragon Slayer.
+    public static void registerFocusWeapon(Item item) {
+        OWN_ATTACKS.add(item);
+    }
+
+    // Whether damage dealt with this stack builds focus, for the barrage or for its own focus attack.
+    public static boolean builds(ItemStack stack) {
+        return !stack.isEmpty() && (OWN_ATTACKS.contains(stack.getItem()) || eligible(stack));
     }
 
     public static float focus(ItemStack stack) {
@@ -89,25 +114,9 @@ public final class Focus {
         return BLADES.getOrDefault(stack.getItem(), DIAGONAL);
     }
 
-    // Lets another mod's focused weapons smoke too, such as the Armory's Dragon Slayer.
-    public static void addSmokeSource(Predicate<ItemStack> focused) {
-        SMOKE_SOURCES.add(focused);
-    }
-
     // Whether this stack should be giving off focus smoke.
     public static boolean showsSmoke(ItemStack stack) {
-        if (stack.isEmpty()) {
-            return false;
-        }
-        if (focused(stack) && eligible(stack)) {
-            return true;
-        }
-        for (Predicate<ItemStack> source : SMOKE_SOURCES) {
-            if (source.test(stack)) {
-                return true;
-            }
-        }
-        return false;
+        return focused(stack) && builds(stack);
     }
 
     // A Better Combat weapon with no right click of its own: it does not block, eat, equip, throw, or override use.
@@ -157,6 +166,4 @@ public final class Focus {
                 || weapon.is(MmsThrowables.THROWABLE_WEAPONS) || weapon.is(Items.TRIDENT);
         return weaponRightClick && (attributes == null || !attributes.isTwoHanded());
     }
-
-
 }

@@ -57,7 +57,7 @@ public final class BarrageClient {
         if (stack.is(MmsThrowables.THROWABLE_WEAPONS) || SickleThrowing.isSickle(stack) || stack.is(Items.TRIDENT) || stack.is(Items.MACE)) {
             return Component.translatable("tooltip.mms_weapons.throwable").withStyle(ChatFormatting.GRAY);
         }
-        if (Focus.eligible(stack)) {
+        if (Focus.builds(stack)) {
             return Component.translatable("tooltip.mms_weapons.focus", (int) Focus.focus(stack), (int) Focus.MAX_FOCUS)
                     .withStyle(Focus.focused(stack) ? ChatFormatting.DARK_RED : ChatFormatting.GRAY);
         }
