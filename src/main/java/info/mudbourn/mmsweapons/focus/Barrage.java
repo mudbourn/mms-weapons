@@ -179,6 +179,18 @@ public final class Barrage {
         level.sendParticles(ParticleTypes.SWEEP_ATTACK, front.x, front.y - 0.3, front.z, 1, 0.0, 0.0, 0.0, 0.0);
     }
 
+    // Whether this entity is winding up or swinging a focus barrage, during which it takes no knockback.
+    public static boolean knockbackImmune(Entity entity) {
+        if (!(entity instanceof Player player)) {
+            return false;
+        }
+        if (RUNS.containsKey(player.getUUID())) {
+            return true;
+        }
+        ItemStack using = player.getUseItem();
+        return player.isUsingItem() && Focus.focused(using) && Focus.eligible(using);
+    }
+
     // Whether this entity parried a barrage swing with a weapon or shield recently enough to block again at once.
     public static boolean inParryWindow(LivingEntity entity) {
         Long until = PARRIED.get(entity.getUUID());

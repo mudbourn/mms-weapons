@@ -7,7 +7,9 @@
     "BarrageUseMixin",
     "FocusDamageMixin",
     "FocusBarMixin",
-    "ParryReblockMixin"
+    "ParryReblockMixin",
+    "FocusKnockbackMixin",
+    "FocusExplosionMixin"
   ],
   "injectors": {
     "defaultRequire": 1
