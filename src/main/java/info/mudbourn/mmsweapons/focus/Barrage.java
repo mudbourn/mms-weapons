@@ -143,7 +143,7 @@ public final class Barrage {
         if (flat.lengthSqr() > 1.0E-4) {
             flat = flat.normalize().scale(DASH_SPEED);
             player.push(flat.x, DASH_LIFT, flat.z);
-            player.hurtMarked = true;
+            player.syncVelocity = true;
         }
     }
 
@@ -164,7 +164,7 @@ public final class Barrage {
                 }
                 boolean blocking = target.isBlocking();
                 ItemStack guard = blocking ? target.getItemBlockingWith() : null;
-                target.invulnerableTime = 0;
+                target.damageCooldownTime = 0;
                 target.hurtServer(level, player.damageSources().playerAttack(player), damage);
                 if (blocking) {
                     // Any blocking item parries: weapons that block and shields alike.

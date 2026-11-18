@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.item.ItemModelResolver;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -93,15 +93,15 @@ public class ThrownWeaponRenderer extends EntityRenderer<ThrownWeaponEntity, Thr
                         -Mth.cos(yaw) * cos * HEAVY_GROUND_PULLBACK);
             }
             // Vanilla's projectile alignment, verbatim from ThrownTridentRenderer.
-            poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot - 90.0F));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(state.xRot + 90.0F));
-            poseStack.mulPose(Axis.XP.rotationDegrees(MODEL_PITCH_CORRECTION));
+            poseStack.rotate(Axis.YP.rotationDegrees(state.yRot - 90.0F));
+            poseStack.rotate(Axis.ZP.rotationDegrees(state.xRot + 90.0F));
+            poseStack.rotate(Axis.XP.rotationDegrees(MODEL_PITCH_CORRECTION));
             if (MODEL_ROLL_CORRECTION != 0.0F) {
-                poseStack.mulPose(Axis.YP.rotationDegrees(MODEL_ROLL_CORRECTION));
+                poseStack.rotate(Axis.YP.rotationDegrees(MODEL_ROLL_CORRECTION));
             }
             if (state.heavy) {
-                poseStack.mulPose(Axis.XP.rotationDegrees(HEAVY_MODEL_PITCH_CORRECTION));
-                poseStack.mulPose(Axis.YP.rotationDegrees(HEAVY_MODEL_ROLL_CORRECTION));
+                poseStack.rotate(Axis.XP.rotationDegrees(HEAVY_MODEL_PITCH_CORRECTION));
+                poseStack.rotate(Axis.YP.rotationDegrees(HEAVY_MODEL_ROLL_CORRECTION));
             }
             state.item.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
             poseStack.popPose();

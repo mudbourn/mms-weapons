@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +30,7 @@ public class ThrownChainRenderer extends EntityRenderer<ThrownChainEntity, Throw
     private static final float ANCHOR_SCALE = 0.6F;
 
     private final ItemModelResolver itemModels;
-    private final ItemStack chainStack = new ItemStack(Items.IRON_CHAIN);
+    private ItemStack chainStack;
 
     public ThrownChainRenderer(EntityRendererProvider.Context context) {
         super(context);
@@ -43,7 +43,7 @@ public class ThrownChainRenderer extends EntityRenderer<ThrownChainEntity, Throw
     }
 
     @Override
-    public boolean shouldRender(ThrownChainEntity entity, Frustum frustum, double x, double y, double z) {
+    public boolean shouldRender(ThrownChainEntity entity, Frustum frustum, double x, double y, double z, float partialTick) {
         return true;
     }
 
@@ -51,6 +51,9 @@ public class ThrownChainRenderer extends EntityRenderer<ThrownChainEntity, Throw
     public void extractRenderState(ThrownChainEntity entity, State state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
         this.itemModels.updateForNonLiving(state.anchor, entity.weaponForRender(), ItemDisplayContext.NONE, entity);
+        if (this.chainStack == null) {
+            this.chainStack = new ItemStack(Items.IRON_CHAIN);
+        }
         this.itemModels.updateForNonLiving(state.chain, this.chainStack, ItemDisplayContext.NONE, entity);
         Entity owner = entity.getOwner();
         state.toHand = owner instanceof LivingEntity living ? this.handPosition(living, partialTick).subtract(entity.getPosition(partialTick)) : null;
@@ -62,7 +65,7 @@ public class ThrownChainRenderer extends EntityRenderer<ThrownChainEntity, Throw
         Quaternionf facing = new Quaternionf().rotationTo(0.0F, 1.0F, 0.0F, (float) outward.x, (float) outward.y, (float) outward.z);
 
         poseStack.pushPose();
-        poseStack.mulPose(facing);
+        poseStack.rotate(facing);
         poseStack.scale(ANCHOR_SCALE, ANCHOR_SCALE, ANCHOR_SCALE);
         state.anchor.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
         poseStack.popPose();
@@ -82,8 +85,8 @@ public class ThrownChainRenderer extends EntityRenderer<ThrownChainEntity, Throw
             Vec3 at = dir.scale((i + 0.5) * length / links);
             poseStack.pushPose();
             poseStack.translate(at.x, at.y, at.z);
-            poseStack.mulPose(along);
-            poseStack.mulPose(Axis.YP.rotationDegrees(i % 2 == 0 ? 0.0F : 90.0F));
+            poseStack.rotate(along);
+            poseStack.rotate(Axis.YP.rotationDegrees(i % 2 == 0 ? 0.0F : 90.0F));
             poseStack.scale(LINK_LENGTH, LINK_LENGTH, LINK_LENGTH);
             state.chain.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, EntityRenderState.NO_OUTLINE);
             poseStack.popPose();
@@ -95,7 +98,7 @@ public class ThrownChainRenderer extends EntityRenderer<ThrownChainEntity, Throw
         Minecraft minecraft = Minecraft.getInstance();
         if (owner == minecraft.player && minecraft.options.getCameraType().isFirstPerson()) {
             double fovScale = 960.0 / minecraft.options.fov().get();
-            Vec3 onScreen = this.entityRenderDispatcher.camera.getNearPlane().getPointOnPlane(side * 0.525F, -0.45F).scale(fovScale);
+            Vec3 onScreen = this.entityRenderDispatcher.camera.getNearPlane(minecraft.options.fov().get().floatValue()).getPointOnPlane(side * 0.525F, -0.45F).scale(fovScale);
             return owner.getEyePosition(partialTick).add(onScreen);
         }
         float yaw = Mth.lerp(partialTick, owner.yBodyRotO, owner.yBodyRot) * Mth.DEG_TO_RAD;

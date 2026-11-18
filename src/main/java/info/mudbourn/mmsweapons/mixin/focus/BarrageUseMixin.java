@@ -1,10 +1,8 @@
 package info.mudbourn.mmsweapons.mixin.focus;
 
+import info.mudbourn.mmsweapons.MmsSounds;
 import info.mudbourn.mmsweapons.focus.Barrage;
 import info.mudbourn.mmsweapons.focus.Focus;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,8 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Item.class)
 public abstract class BarrageUseMixin {
 
-    private static final Identifier CHARGE_SOUND = Identifier.fromNamespaceAndPath("mms_arsenal", "dragon_slayer_charge");
-
     @Inject(method = "use", at = @At("RETURN"), cancellable = true)
     private void mmsWeapons$windUp(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (hand != InteractionHand.MAIN_HAND || cir.getReturnValue() != InteractionResult.PASS) {
@@ -34,11 +30,7 @@ public abstract class BarrageUseMixin {
         ItemStack stack = player.getItemInHand(hand);
         if (ready(stack) && !player.getCooldowns().isOnCooldown(stack)) {
             player.startUsingItem(hand);
-            // The same charge sound the Dragon Slayer and Odachi wind up with.
-            SoundEvent charge = BuiltInRegistries.SOUND_EVENT.getValue(CHARGE_SOUND);
-            if (charge != null) {
-                level.playSound(player, player.blockPosition(), charge, SoundSource.PLAYERS, 1.0F, 1.0F);
-            }
+            level.playSound(player, player.blockPosition(), MmsSounds.FOCUS_CHARGE, SoundSource.PLAYERS, 1.0F, 1.0F);
             cir.setReturnValue(InteractionResult.CONSUME);
         }
     }

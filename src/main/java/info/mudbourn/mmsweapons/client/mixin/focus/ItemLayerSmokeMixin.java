@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ItemLayerSmokeMixin {
 
     @Inject(method = "submit", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/block/model/ItemTransform;apply(ZLcom/mojang/blaze3d/vertex/PoseStack$Pose;)V",
+            target = "Lnet/minecraft/client/renderer/item/ItemStackRenderState$LayerRenderState;applyTransform(Lcom/mojang/blaze3d/vertex/PoseStack$Pose;)V",
             shift = At.Shift.AFTER))
     private void mmsWeapons$smokeAtModel(PoseStack poseStack, SubmitNodeCollector collector, int light, int overlay, int outline, CallbackInfo ci) {
         FocusSmokeClient.atModel(poseStack.last().pose());

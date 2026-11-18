@@ -7,5 +7,6 @@
   "subtitles.mms_weapons.barrage_swing": "Barrage slashes",
   "tooltip.mms_weapons.blockable": "Blockable",
   "tooltip.mms_weapons.throwable": "Throwable",
-  "tooltip.mms_weapons.chain_throw": "Chain Throw"
+  "tooltip.mms_weapons.chain_throw": "Chain Throw",
+  "subtitles.mms_weapons.focus_charge": "Focus gathers"
 }

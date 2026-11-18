@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.EntityRenderState;
 import net.minecraft.client.renderer.item.ItemModelResolver;
 import net.minecraft.client.renderer.item.ItemStackRenderState;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.world.item.ItemDisplayContext;
 
@@ -46,12 +46,12 @@ public class ThrownSickleRenderer extends EntityRenderer<ThrownSickleEntity, Thr
     @Override
     public void submit(State state, PoseStack poseStack, SubmitNodeCollector collector, CameraRenderState camera) {
         poseStack.pushPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot - 90.0F));
-        poseStack.mulPose(Axis.ZP.rotationDegrees(state.xRot));
+        poseStack.rotate(Axis.YP.rotationDegrees(state.yRot - 90.0F));
+        poseStack.rotate(Axis.ZP.rotationDegrees(state.xRot));
         if (state.anchored) {
             poseStack.translate(-ANCHOR_PULLBACK, 0.0F, 0.0F);
         }
-        poseStack.mulPose(Axis.ZN.rotationDegrees(state.spin));
+        poseStack.rotate(Axis.ZN.rotationDegrees(state.spin));
         state.item.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
         poseStack.popPose();
         super.submit(state, poseStack, collector, camera);

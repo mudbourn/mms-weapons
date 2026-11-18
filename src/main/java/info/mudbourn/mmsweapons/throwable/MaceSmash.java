@@ -63,7 +63,7 @@ public final class MaceSmash {
         attacker.setDeltaMovement(attacker.getDeltaMovement().with(Direction.Axis.Y, 0.01F));
         if (attacker instanceof ServerPlayer serverPlayer) {
             serverPlayer.currentImpulseImpactPos = impactPosition(serverPlayer);
-            serverPlayer.setIgnoreFallDamageFromCurrentImpulse(true);
+            serverPlayer.setIgnoreFallDamageFromCurrentImpulse(true, serverPlayer.currentImpulseImpactPos);
             serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(serverPlayer));
         }
 

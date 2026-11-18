@@ -152,7 +152,7 @@ public class ThrownChainEntity extends Projectile {
         if (target.hurtServer(server, this.damageSources().trident(this, owner == null ? this : owner), damage)) {
             // Same launch for every mob, replacing vanilla knockback and ignoring weight
             target.setDeltaMovement(push.x, LIFT, push.z);
-            target.hurtMarked = true;
+            target.syncVelocity = true;
             this.playSound(SoundEvents.CHAIN_HIT, 1.0F, 0.7F);
         }
     }

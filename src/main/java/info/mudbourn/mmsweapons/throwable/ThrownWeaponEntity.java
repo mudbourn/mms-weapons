@@ -13,6 +13,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileDeflection;
@@ -175,7 +176,7 @@ public class ThrownWeaponEntity extends AbstractArrow {
 
         this.dealtDamage = true;
         if (target.hurtOrSimulate(source, damage)) {
-            if (target.getType() == EntityType.ENDERMAN) {
+            if (target.getType() == EntityTypes.ENDERMAN) {
                 return;
             }
 
@@ -190,8 +191,7 @@ public class ThrownWeaponEntity extends AbstractArrow {
             }
         }
 
-        this.deflect(ProjectileDeflection.REVERSE, target, this.owner, false);
-        this.setDeltaMovement(this.getDeltaMovement().multiply(0.02, 0.2, 0.02));
+        this.deflect(ProjectileDeflection.REVERSE, target, this.owner, false, new Vec3(0.02, 0.2, 0.02));
         // Heavy weapons sound like Hurl's thrown mace: an air smash on a mob, a heavy ground smash on a block.
         this.playSound(this.isHeavy() ? SoundEvents.MACE_SMASH_AIR : SoundEvents.TRIDENT_HIT, 1.0F, 1.0F);
     }

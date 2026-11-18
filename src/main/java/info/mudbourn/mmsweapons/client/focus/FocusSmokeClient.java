@@ -50,7 +50,7 @@ public final class FocusSmokeClient {
         }
         LAST_SPAWN.put(stack, now);
         Focus.Blade blade = Focus.blade(stack);
-        Vec3 camera = client.gameRenderer.getMainCamera().position();
+        Vec3 camera = client.gameRenderer.mainCamera().position();
         Vec3 previous = null;
         for (Vec3 point : blade.points()) {
             Vector3f moved = pose.transformPosition(new Vector3f((float) point.x, (float) point.y, (float) point.z));
@@ -67,9 +67,9 @@ public final class FocusSmokeClient {
         for (int i = 0; i <= samples; i++) {
             Vec3 at = from.lerp(to, i / (double) samples);
             level.addParticle(PARTICLE,
-                    at.x + (level.random.nextDouble() - 0.5) * 0.06,
-                    at.y + (level.random.nextDouble() - 0.5) * 0.06,
-                    at.z + (level.random.nextDouble() - 0.5) * 0.06,
+                    at.x + (level.getRandom().nextDouble() - 0.5) * 0.06,
+                    at.y + (level.getRandom().nextDouble() - 0.5) * 0.06,
+                    at.z + (level.getRandom().nextDouble() - 0.5) * 0.06,
                     0.0, 0.01, 0.0);
         }
     }

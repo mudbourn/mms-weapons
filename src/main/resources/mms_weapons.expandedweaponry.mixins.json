@@ -6,9 +6,6 @@
   "mixins": [
     "LongbowVelocityMixin"
   ],
-  "client": [
-    "LongbowDrawSoundMixin"
-  ],
   "injectors": {
     "defaultRequire": 1
   }

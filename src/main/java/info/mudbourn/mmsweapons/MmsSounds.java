@@ -58,7 +58,14 @@ public final class MmsSounds {
 
     public static final SoundEvent BARRAGE_SWING = SoundEvent.createVariableRangeEvent(BARRAGE_SWING_ID);
 
+    // The focus barrage's wind-up, the same charge the Dragon Slayer and Odachi use.
+    public static final Identifier FOCUS_CHARGE_ID =
+            Identifier.fromNamespaceAndPath("mms_weapons", "focus_charge");
+
+    public static final SoundEvent FOCUS_CHARGE = SoundEvent.createVariableRangeEvent(FOCUS_CHARGE_ID);
+
     public static void register() {
+        Registry.register(BuiltInRegistries.SOUND_EVENT, FOCUS_CHARGE_ID, FOCUS_CHARGE);
         Registry.register(BuiltInRegistries.SOUND_EVENT, BARRAGE_SWING_ID, BARRAGE_SWING);
         Registry.register(BuiltInRegistries.SOUND_EVENT, STONE_IMPACT_ID, STONE_IMPACT);
         Registry.register(BuiltInRegistries.SOUND_EVENT, SWING_LEFT_ID, SWING_LEFT);

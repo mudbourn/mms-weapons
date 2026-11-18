@@ -36,5 +36,12 @@
     "sounds": [
       "mms_weapons:barrage_swing"
     ]
+  },
+  "focus_charge": {
+    "category": "player",
+    "subtitle": "subtitles.mms_weapons.focus_charge",
+    "sounds": [
+      "mms_weapons:focus_charge"
+    ]
   }
 }

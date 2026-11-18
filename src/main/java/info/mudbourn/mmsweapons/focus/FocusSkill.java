@@ -32,8 +32,8 @@ public final class FocusSkill {
     }
 
     public static void register() {
-        PayloadTypeRegistry.playC2S().register(CancelPayload.TYPE, CancelPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(ReleasePayload.TYPE, ReleasePayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(CancelPayload.TYPE, CancelPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(ReleasePayload.TYPE, ReleasePayload.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(ReleasePayload.TYPE, (payload, context) ->
             SERVER_LOCKED.remove(context.player().getUUID()));
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> SERVER_LOCKED.remove(handler.getPlayer().getUUID()));

@@ -3,11 +3,11 @@ package info.mudbourn.mmsweapons.client.focus;
 import com.mojang.blaze3d.platform.InputConstants;
 import info.mudbourn.mmsweapons.focus.FocusSkill;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.MouseHandler;
 import net.minecraft.client.player.LocalPlayer;
-import org.lwjgl.glfw.GLFW;
 
 // Watches the crouch key every tick, taps shorter than a tick included, and cancels a held focus skill the moment it is pressed.
 // Also holds off swinging and jumping while a focus attack charges or executes.
@@ -24,13 +24,19 @@ public final class FocusCancelClient {
         ClientTickEvents.START_CLIENT_TICK.register(FocusCancelClient::holdOffWhileExecuting);
     }
 
-    // Whether the button bound to use is really down right now, read from the window rather than the key binding.
+    // Whether the button bound to use is really down right now, read from the input devices rather than the key binding.
     private static boolean useKeyPhysicallyHeld(Minecraft client) {
-        InputConstants.Key key = KeyBindingHelper.getBoundKeyOf(client.options.keyUse);
+        InputConstants.Key key = KeyMappingHelper.getBoundKeyOf(client.options.keyUse);
         if (key.getType() == InputConstants.Type.MOUSE) {
-            return GLFW.glfwGetMouseButton(client.getWindow().handle(), key.getValue()) == GLFW.GLFW_PRESS;
+            MouseHandler mouse = client.mouseHandler;
+            return switch (key.getValue()) {
+                case InputConstants.MOUSE_BUTTON_LEFT -> mouse.isLeftPressed();
+                case InputConstants.MOUSE_BUTTON_MIDDLE -> mouse.isMiddlePressed();
+                case InputConstants.MOUSE_BUTTON_RIGHT -> mouse.isRightPressed();
+                default -> client.options.keyUse.isDown();
+            };
         }
-        return key.getType() == InputConstants.Type.KEYSYM && InputConstants.isKeyDown(client.getWindow(), key.getValue());
+        return key.getType() == InputConstants.Type.KEYBOARD && InputConstants.isKeyDown(key.getValue());
     }
 
     // Runs before the tick reads input, so no swing or jump starts while a focus attack charges or executes.

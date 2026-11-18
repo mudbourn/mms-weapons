@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom-remap' version '1.17.14'
+    id 'net.fabricmc.fabric-loom' version "${loom_version}"
 }
 
 version = project.mod_version
@@ -16,35 +16,20 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:0.141.4+1.21.11"
-    // The longbow mixins target Kielson's CustomBow and Expanded Weaponry's own
-    // item registry. Expanded Weaponry ships Kielson's API as a nested jar, and
-    // nested jars are not put on the compile classpath, so both are pulled in.
-    modCompileOnly files("libs/expanded_weaponry-0.8.jar")
-    modCompileOnly files("libs/kielsons-api-0.8.1.jar")
-    // The longbow draw-sound mixin reuses the Sounds mod's configured bow sound.
-    modCompileOnly files("libs/sounds-2.4.23+edge+1.21.11-fabric.jar")
-    modCompileOnly "maven.modrinth:better-combat:${project.better_combat_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    compileOnly files("libs/expanded_weaponry-1.0.3-26.2.jar")
+    compileOnly files("libs/kielsons-api-1.3.1-26.2.jar")
+    compileOnly files("libs/bettercombat-fabric-3.2.2+26.3.jar")
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 21
+    it.options.release = 25
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-
-    // Pin a JDK 21 toolchain so compile and (crucially) runClient fork on a
-    // supported HotSpot JVM instead of whatever launched Gradle. Without this,
-    // the build still succeeds on a newer JVM (bytecode 21 compiles anywhere),
-    // but runClient launches Minecraft on an unsupported runtime. Matches the
-    // other mms mods (e.g. mms-economy).
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 
     withSourcesJar()
 }
@@ -83,17 +68,13 @@ jar {
     }
 }
 
-// Mixin claims every class under a config's `package` and refuses to load
-// anything there as a normal class (IllegalClassLoadError). A plain helper put
-// in a mixin package compiles and packages cleanly and only explodes the first
-// time it is touched at runtime, as a class-load crash in production. Fail the
-// build instead.
+// Fails the build when a helper class sits in a mixin package.
 def checkMixinPackages = tasks.register('checkMixinPackages', Exec) {
-    dependsOn tasks.named('remapJar')
+    dependsOn tasks.named('jar')
     doFirst {
         commandLine 'python3',
                 "$projectDir/gradle/scripts/check-mixin-packages.py",
-                tasks.named('remapJar').get().archiveFile.get().asFile
+                tasks.named('jar').get().archiveFile.get().asFile
     }
 }
 

@@ -6,27 +6,17 @@ import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Gates the Expanded Weaponry mixins on the mod being loaded.
- *
- * <p>The draw-sound mixin needs a second guard: it calls into the Sounds mod's
- * config to reuse the same sound instance vanilla bows get, so it can only
- * apply when both mods are present.
- */
+// Applies the Expanded Weaponry mixins only when that mod is loaded.
 public class ExpandedWeaponryMixinGate implements IMixinConfigPlugin {
 
     private final boolean present = FabricLoader.getInstance().isModLoaded("expanded_weaponry");
-    private final boolean soundsPresent = FabricLoader.getInstance().isModLoaded("sounds");
 
     @Override public void onLoad(String mixinPackage) {}
     @Override public String getRefMapperConfig() { return null; }
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (!present) {
-            return false;
-        }
-        return soundsPresent || !mixinClassName.endsWith("LongbowDrawSoundMixin");
+        return present;
     }
 
     @Override public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {}
