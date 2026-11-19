@@ -5,7 +5,9 @@ import info.mudbourn.mmsweapons.focus.Barrage;
 import info.mudbourn.mmsweapons.focus.Focus;
 import info.mudbourn.mmsweapons.focus.FocusSkill;
 import info.mudbourn.mmsweapons.throwable.MmsThrowables;
+import info.mudbourn.mmsweapons.spellengine.SpellEngineBarrage;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +34,11 @@ public class MmsWeapons implements ModInitializer {
         Focus.register();
         Barrage.register();
         FocusSkill.register();
+
+        // The barrage as a Spell Engine skill, only where Spell Engine is installed.
+        if (FabricLoader.getInstance().isModLoaded("spell_engine")) {
+            SpellEngineBarrage.register();
+        }
 
         LOG.info("MMS Weapons loaded — weapon tuning, throwable melee, anchor chain throw, focus barrage, mace smash, longbow tuning.");
     }

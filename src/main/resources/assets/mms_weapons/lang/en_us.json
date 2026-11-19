@@ -8,5 +8,7 @@
   "tooltip.mms_weapons.blockable": "Blockable",
   "tooltip.mms_weapons.throwable": "Throwable",
   "tooltip.mms_weapons.chain_throw": "Chain Throw",
-  "subtitles.mms_weapons.focus_charge": "Focus gathers"
+  "subtitles.mms_weapons.focus_charge": "Focus gathers",
+  "spell.mms_weapons.barrage.name": "Barrage",
+  "spell.mms_weapons.barrage.description": "Spend a full focus bar on three quick dashing swings, each at 70% of your weapon damage."
 }

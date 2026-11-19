@@ -1,0 +1,8 @@
+{
+  "required": false,
+  "package": "info.mudbourn.mmsweapons.mixin.spellengine",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "WeaponCompatibilityMixin"
+  ]
+}
