@@ -28,21 +28,21 @@ public abstract class ChainlinkThrowMixin {
                                       InteractionHand hand,
                                       CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack stack = player.getItemInHand(hand);
-        if (Chainlink.throwable(stack)) {
+        if (Chainlink.throwsNow(stack)) {
             cir.setReturnValue(Chainlink.use(player, hand));
         }
     }
 
     @Inject(method = "getUseAnimation", at = @At("HEAD"), cancellable = true)
     private void mmsWeapons$chainAnimation(ItemStack stack, CallbackInfoReturnable<ItemUseAnimation> cir) {
-        if (Chainlink.throwable(stack)) {
+        if (Chainlink.throwsNow(stack)) {
             cir.setReturnValue(ItemUseAnimation.TRIDENT);
         }
     }
 
     @Inject(method = "getUseDuration", at = @At("HEAD"), cancellable = true)
     private void mmsWeapons$chainDuration(ItemStack stack, LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
-        if (Chainlink.throwable(stack)) {
+        if (Chainlink.throwsNow(stack)) {
             cir.setReturnValue(Chainlink.MAX_HOLD_DURATION);
         }
     }
@@ -53,7 +53,7 @@ public abstract class ChainlinkThrowMixin {
                                           LivingEntity entity,
                                           int timeLeft,
                                           CallbackInfoReturnable<Boolean> cir) {
-        if (Chainlink.throwable(stack)) {
+        if (Chainlink.throwsNow(stack)) {
             cir.setReturnValue(Chainlink.release(stack, level, entity, timeLeft));
         }
     }

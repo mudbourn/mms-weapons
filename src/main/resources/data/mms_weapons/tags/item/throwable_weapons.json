@@ -1,21 +1,121 @@
 {
   "replace": false,
   "values": [
-    { "id": "basicweapons:wooden_pike", "required": false },
-    { "id": "basicweapons:stone_pike", "required": false },
-    { "id": "basicweapons:copper_pike", "required": false },
-    { "id": "basicweapons:tin_pike", "required": false },
-    { "id": "basicweapons:bronze_pike", "required": false },
-    { "id": "basicweapons:iron_pike", "required": false },
-    { "id": "basicweapons:golden_pike", "required": false },
-    { "id": "basicweapons:diamond_pike", "required": false },
-    { "id": "basicweapons:netherite_pike", "required": false },
-    { "id": "expanded_weaponry:wooden_hammer", "required": false },
-    { "id": "expanded_weaponry:stone_hammer", "required": false },
-    { "id": "expanded_weaponry:copper_hammer", "required": false },
-    { "id": "expanded_weaponry:iron_hammer", "required": false },
-    { "id": "expanded_weaponry:golden_hammer", "required": false },
-    { "id": "expanded_weaponry:diamond_hammer", "required": false },
-    { "id": "expanded_weaponry:netherite_hammer", "required": false }
+    {
+      "id": "basicweapons:wooden_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:stone_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:copper_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:tin_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:bronze_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:iron_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:golden_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:diamond_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:netherite_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:azurite_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:ruby_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:shadoline_pike",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:wooden_hammer",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:stone_hammer",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:copper_hammer",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:iron_hammer",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:golden_hammer",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:diamond_hammer",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:netherite_hammer",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_eclipse_soldier_spear",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_sharp_spear",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_infected_sharp_spear",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_savage_spear",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_forgotten_trace_spear",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_soldier_greatspear",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_ornstein_spear",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_hammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_hammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_hammer",
+      "required": false
+    }
   ]
 }

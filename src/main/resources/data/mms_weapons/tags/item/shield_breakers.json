@@ -1,0 +1,345 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "weaponsexpanded:wooden_battleaxe",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:stone_battleaxe",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:copper_battleaxe",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:iron_battleaxe",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:golden_battleaxe",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:diamond_battleaxe",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:netherite_battleaxe",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:wooden_warhammer",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:stone_warhammer",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:copper_warhammer",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:iron_warhammer",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:golden_warhammer",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:diamond_warhammer",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:netherite_warhammer",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:wooden_halberd",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:stone_halberd",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:copper_halberd",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:iron_halberd",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:golden_halberd",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:diamond_halberd",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:netherite_halberd",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:wooden_morningstar",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:stone_morningstar",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:copper_morningstar",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:iron_morningstar",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:golden_morningstar",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:diamond_morningstar",
+      "required": false
+    },
+    {
+      "id": "weaponsexpanded:netherite_morningstar",
+      "required": false
+    },
+    {
+      "id": "basicweapons:tin_hammer",
+      "required": false
+    },
+    {
+      "id": "basicweapons:bronze_hammer",
+      "required": false
+    },
+    {
+      "id": "basicweapons:wooden_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:stone_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:copper_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:tin_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:bronze_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:iron_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:golden_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:diamond_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:netherite_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:azurite_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:ruby_club",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:wooden_greatsword",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:stone_greatsword",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:copper_greatsword",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:iron_greatsword",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:golden_greatsword",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:diamond_greatsword",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:netherite_greatsword",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_golden_horns_battleaxe",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_golden_execution_battleaxe",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_ashen_judgment_battleaxe",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_frostbite_axe",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_dragonslayer_halberd",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_golden_halberd",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_knight_halberd",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_grave_sentinel_halberd",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_chess_board_knight_polearm",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_hefty_club",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_savage_hammer",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_marika_hammer",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_old_knight_hammer",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_hero_claymore",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_sunset_wings_claymore",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_knight_greatsword",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_banished_knight_greatsword",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_dark_moon_greatsword",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_zweihander",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_watchdog_greatsword",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_royal_greatsword",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_crucible_greatsword",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_marai_executioner_sword",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_volcano_flame",
+      "required": false
+    },
+    {
+      "id": "fantasy_weapons:weapon_fates_beacon",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_morningstar",
+      "required": false
+    }
+  ]
+}

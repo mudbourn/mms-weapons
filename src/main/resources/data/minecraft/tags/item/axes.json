@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:azurite_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_battleaxe",
+      "required": false
+    }
+  ]
+}

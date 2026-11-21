@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "aerialhell:ruby",
+    "b": "aerialhell:ruby_block"
+  },
+  "pattern": [
+    "# #",
+    "b #"
+  ],
+  "result": {
+    "id": "mms_weapons:heavy_ruby_boots"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell"
+      ]
+    }
+  ]
+}

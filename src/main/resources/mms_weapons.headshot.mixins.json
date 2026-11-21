@@ -3,7 +3,9 @@
   "package": "info.mudbourn.mmsweapons.mixin.headshot",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ArrowHeadshotMixin"
+    "ArrowHeadshotMixin",
+    "ArrowHitDebugMixin",
+    "ProjectileDeflectDebugMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:azurite_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_katana",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "info.mudbourn.mmsweapons.mixin.shieldbash",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "RamDamageMixin",
+    "ShieldDualWieldMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

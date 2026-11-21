@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:azurite_rapier",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_rapier",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_rapier",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_halberd",
+      "required": false
+    }
+  ]
+}

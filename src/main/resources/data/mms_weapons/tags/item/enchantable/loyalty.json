@@ -28,6 +28,18 @@
     {
       "id": "weaponsexpanded:netherite_sickle",
       "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_sickle",
+      "required": false
     }
   ]
 }

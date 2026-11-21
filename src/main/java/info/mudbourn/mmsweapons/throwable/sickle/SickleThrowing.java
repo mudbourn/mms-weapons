@@ -29,6 +29,7 @@ public final class SickleThrowing {
             return false;
         }
         if (level instanceof ServerLevel serverLevel) {
+            info.mudbourn.mmsweapons.material.VoidCharge.activate(player, stack, 80);
             ThrownSickleEntity sickle = new ThrownSickleEntity(serverLevel, player, stack.copyWithCount(1));
             sickle.shootFromRotation(
                 player,

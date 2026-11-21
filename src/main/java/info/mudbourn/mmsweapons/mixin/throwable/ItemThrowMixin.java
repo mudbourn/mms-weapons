@@ -121,6 +121,7 @@ public abstract class ItemThrowMixin {
         if (level instanceof ServerLevel serverLevel) {
             stack.hurtWithoutBreaking(MmsThrowables.throwDurabilityCost(stack), player);
             if (riptide == 0.0F) {
+                info.mudbourn.mmsweapons.material.VoidCharge.activate(player, stack, 80);
                 ItemStack thrown = stack.consumeAndReturn(1, player);
                 ThrownWeaponEntity weapon = Projectile.spawnProjectileFromRotation(
                         ThrownWeaponEntity::new, serverLevel, thrown, player,

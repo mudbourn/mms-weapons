@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:azurite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_shield",
+      "required": false
+    }
+  ]
+}

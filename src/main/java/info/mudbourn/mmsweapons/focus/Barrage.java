@@ -81,6 +81,7 @@ public final class Barrage {
         }
         stack.set(Focus.FOCUS, 0.0F);
         RUNS.put(player.getUUID(), new Run(level.getGameTime(), stack));
+        info.mudbourn.mmsweapons.material.VoidCharge.activate(player, stack, SWINGS * SWING_GAP_TICKS + 20);
     }
 
     // The Better Combat hand a weapon swings with.

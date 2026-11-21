@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/shield",
+  "textures": {
+    "particle": "aerialhell:item/shadoline"
+  }
+}

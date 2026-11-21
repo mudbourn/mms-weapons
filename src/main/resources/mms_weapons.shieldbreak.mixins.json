@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "info.mudbourn.mmsweapons.mixin.shieldbreak",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ShieldBreakerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

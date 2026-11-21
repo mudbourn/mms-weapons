@@ -5,6 +5,7 @@ import info.mudbourn.mmsweapons.client.chainlink.ThrownChainRenderer;
 import info.mudbourn.mmsweapons.client.focus.BarrageClient;
 import info.mudbourn.mmsweapons.client.focus.FocusCancelClient;
 import info.mudbourn.mmsweapons.client.spellengine.SpellEngineBarrageClient;
+import info.mudbourn.mmsweapons.client.material.CompatShieldClient;
 import info.mudbourn.mmsweapons.client.throwable.ThrownSickleRenderer;
 import info.mudbourn.mmsweapons.client.throwable.ThrownWeaponRenderer;
 import info.mudbourn.mmsweapons.throwable.MmsThrowables;
@@ -36,6 +37,11 @@ public class MmsWeaponsClient implements ClientModInitializer {
         FocusCancelClient.register();
         if (FabricLoader.getInstance().isModLoaded("spell_engine")) {
             SpellEngineBarrageClient.register();
+        }
+
+        if (FabricLoader.getInstance().isModLoaded("aerialhell")
+                && FabricLoader.getInstance().isModLoaded("expanded_weaponry")) {
+            CompatShieldClient.register();
         }
 
         // 3D models for other mods' weapons, shipped as a built-in pack that is on by default.

@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "mms_weapons:heavy_shadoline"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "mms_weapons:heavy_shadoline"
+      }
+    ]
+  }
+}

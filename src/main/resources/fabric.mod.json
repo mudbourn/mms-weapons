@@ -20,6 +20,8 @@
     "mms_weapons.headshot.mixins.json",
     "mms_weapons.spellengine.mixins.json",
     "mms_weapons.expandedweaponry.mixins.json",
+    "mms_weapons.shieldbreak.mixins.json",
+    "mms_weapons.shieldbash.mixins.json",
     {
       "config": "mms_weapons.swing.client.mixins.json",
       "environment": "client"
@@ -30,6 +32,10 @@
     },
     {
       "config": "mms_weapons.focus.client.mixins.json",
+      "environment": "client"
+    },
+    {
+      "config": "mms_weapons.shieldbash.client.mixins.json",
       "environment": "client"
     }
   ],
@@ -46,6 +52,7 @@
     "bountiful-fish": "*",
     "mutantmonsters": "*",
     "bettercombat": "*",
+    "combat_roll": "*",
     "mms_render_common": "*",
     "mms_combat": "*",
     "mms_arsenal": "*"

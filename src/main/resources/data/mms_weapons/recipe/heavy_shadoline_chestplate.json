@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "enderscape:shadoline_ingot",
+    "b": "enderscape:shadoline_block"
+  },
+  "pattern": [
+    "# #",
+    "#b#",
+    "###"
+  ],
+  "result": {
+    "id": "mms_weapons:heavy_shadoline_chestplate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "enderscape"
+      ]
+    }
+  ]
+}

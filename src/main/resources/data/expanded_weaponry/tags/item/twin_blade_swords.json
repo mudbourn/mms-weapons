@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:azurite_twin_blade_sword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_twin_blade_sword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_twin_blade_sword",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "enderscape:shadoline_ingot",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "MM ",
+    "MSM",
+    " S "
+  ],
+  "result": {
+    "id": "mms_weapons:shadoline_battleaxe"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "enderscape"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:shadoline_morningstar",
+      "required": false
+    }
+  ]
+}

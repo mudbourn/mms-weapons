@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "info.mudbourn.mmsweapons.client.mixin.shieldbash",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ShieldRamKeyMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

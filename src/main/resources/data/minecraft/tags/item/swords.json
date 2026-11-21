@@ -1,0 +1,65 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:azurite_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_halberd",
+      "required": false
+    }
+  ]
+}

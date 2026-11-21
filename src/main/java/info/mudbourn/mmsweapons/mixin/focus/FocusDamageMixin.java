@@ -24,6 +24,7 @@ public abstract class FocusDamageMixin {
     private void mmsWeapons$recordFocus(DamageSource source, float damage, CallbackInfo ci) {
         if (!this.mob.level().isClientSide()) {
             Focus.onDamage(source, damage);
+            info.mudbourn.mmsweapons.material.VoidCharge.onDamage(this.mob, source, damage);
         }
     }
 }

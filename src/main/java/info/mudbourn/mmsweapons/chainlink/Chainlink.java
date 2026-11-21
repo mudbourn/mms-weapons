@@ -1,6 +1,7 @@
 package info.mudbourn.mmsweapons.chainlink;
 
 import com.mojang.serialization.Codec;
+import info.mudbourn.mmsweapons.material.NebuliteFuel;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -21,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 // The chain throw: hold to wind up, release to hurl the weapon out on a chain that reels back in.
-// Only the Bountiful Fish anchor has it; every other weapon has its own right click now.
+// The Bountiful Fish anchor has it, and the shadoline morningstar spends Nebulite fuel on it.
 public final class Chainlink {
 
     public static final int MIN_CHARGE_TICKS = 5;
@@ -31,6 +32,7 @@ public final class Chainlink {
     public static final int MAX_HOLD_DURATION = 72000;
 
     private static final Identifier BOUNTIFUL_ANCHOR = Identifier.fromNamespaceAndPath("bountiful-fish", "anchor");
+    private static final Identifier SHADOLINE_MORNINGSTAR = Identifier.fromNamespaceAndPath("mms_weapons", "shadoline_morningstar");
 
 
     // Set while this stack is out on its chain.
@@ -58,9 +60,29 @@ public final class Chainlink {
     public static void register() {
     }
 
-    // Whether this stack throws on a chain: only the Bountiful Fish anchor.
+    // Whether this stack throws on a chain: the Bountiful Fish anchor or the shadoline morningstar.
     public static boolean throwable(ItemStack stack) {
-        return !stack.isEmpty() && BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(BOUNTIFUL_ANCHOR);
+        if (stack.isEmpty()) {
+            return false;
+        }
+        Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        return id.equals(BOUNTIFUL_ANCHOR) || id.equals(SHADOLINE_MORNINGSTAR);
+    }
+
+    // The shadoline morningstar keeps the focus barrage: a full focus bar turns its right click
+    // into the barrage, and the chain throw comes back once the bar is spent.
+    public static boolean keepsBarrage(ItemStack stack) {
+        return fueled(stack);
+    }
+
+    // Whether right click throws the chain right now, rather than firing the barrage.
+    public static boolean throwsNow(ItemStack stack) {
+        return throwable(stack) && !(fueled(stack) && info.mudbourn.mmsweapons.focus.Focus.focused(stack));
+    }
+
+    // Whether this stack spends Nebulite fuel on the throw.
+    private static boolean fueled(ItemStack stack) {
+        return BuiltInRegistries.ITEM.getKey(stack.getItem()).equals(SHADOLINE_MORNINGSTAR);
     }
 
     // Whether this stack is out on its chain.
@@ -69,6 +91,10 @@ public final class Chainlink {
     }
 
     public static InteractionResult use(Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (fueled(stack) && !NebuliteFuel.canSpend(stack, player)) {
+            return InteractionResult.FAIL;
+        }
         player.startUsingItem(hand);
         return InteractionResult.CONSUME;
     }
@@ -85,8 +111,15 @@ public final class Chainlink {
         if (held < MIN_CHARGE_TICKS) {
             return false;
         }
+        if (fueled(stack) && !NebuliteFuel.canSpend(stack, entity)) {
+            return false;
+        }
         if (level.isClientSide()) {
             return true;
+        }
+        if (fueled(stack)) {
+            NebuliteFuel.spend(stack, entity);
+            info.mudbourn.mmsweapons.material.VoidCharge.charge(entity, MAX_FLIGHT_COOLDOWN);
         }
         float charge = Math.min(1.0F, held / (float) FULL_CHARGE_TICKS);
         level.addFreshEntity(new ThrownChainEntity(level, entity, stack, charge));

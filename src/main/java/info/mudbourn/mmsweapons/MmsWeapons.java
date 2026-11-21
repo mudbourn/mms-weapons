@@ -4,6 +4,11 @@ import info.mudbourn.mmsweapons.chainlink.Chainlink;
 import info.mudbourn.mmsweapons.focus.Barrage;
 import info.mudbourn.mmsweapons.focus.Focus;
 import info.mudbourn.mmsweapons.focus.FocusSkill;
+import info.mudbourn.mmsweapons.material.CompatWeapons;
+import info.mudbourn.mmsweapons.material.HeavyArmors;
+import info.mudbourn.mmsweapons.material.MaterialpackTab;
+import info.mudbourn.mmsweapons.shieldbash.ShieldRam;
+import info.mudbourn.mmsweapons.shieldbash.ShieldWeapons;
 import info.mudbourn.mmsweapons.throwable.MmsThrowables;
 import info.mudbourn.mmsweapons.spellengine.SpellEngineBarrage;
 import net.fabricmc.api.ModInitializer;
@@ -34,6 +39,18 @@ public class MmsWeapons implements ModInitializer {
         Focus.register();
         Barrage.register();
         FocusSkill.register();
+
+        // Shields as main-hand weapons, and the guard ram on the combat roll key.
+        ShieldWeapons.register();
+        ShieldRam.register();
+
+        // Heavy armor in other mods' materials
+        HeavyArmors.register();
+
+        // Azurite, ruby and shadoline weapons from Weapons Expanded and Expanded Weaponry
+        CompatWeapons.register();
+        info.mudbourn.mmsweapons.material.VoidCharge.register();
+        MaterialpackTab.register();
 
         // The barrage as a Spell Engine skill, only where Spell Engine is installed.
         if (FabricLoader.getInstance().isModLoaded("spell_engine")) {

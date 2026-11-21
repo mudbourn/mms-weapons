@@ -128,7 +128,7 @@ public final class Focus {
         if (stack.has(DataComponents.BLOCKS_ATTACKS) || stack.has(DataComponents.CONSUMABLE) || stack.has(DataComponents.EQUIPPABLE)) {
             return false;
         }
-        if (Chainlink.throwable(stack) || stack.is(MmsThrowables.THROWABLE_WEAPONS) || SickleThrowing.isSickle(stack) || stack.is(Items.TRIDENT) || stack.is(Items.MACE)) {
+        if ((Chainlink.throwable(stack) && !Chainlink.keepsBarrage(stack)) || stack.is(MmsThrowables.THROWABLE_WEAPONS) || SickleThrowing.isSickle(stack) || stack.is(Items.TRIDENT) || stack.is(Items.MACE)) {
             return false;
         }
         // Spears have their own charged attack, vanilla's through these components and modded ones by name.

@@ -1,0 +1,29 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:azurite_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_warhammer",
+      "required": false
+    }
+  ]
+}

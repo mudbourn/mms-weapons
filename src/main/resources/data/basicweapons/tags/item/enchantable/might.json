@@ -1,0 +1,53 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:shield",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:wooden_shield",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:stone_shield",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:copper_shield",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:iron_shield",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:golden_shield",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:diamond_shield",
+      "required": false
+    },
+    {
+      "id": "expanded_weaponry:netherite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:azurite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_shield",
+      "required": false
+    },
+    {
+      "id": "#c:tools/shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_shield",
+      "required": false
+    }
+  ]
+}

@@ -9,12 +9,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-// Drops the Better Combat idle pose while a throw is being charged, so the vanilla arm-back throwing pose shows.
-// Without this, a weapon idling in a held pose (hammers on the shoulder) kept its arm down through the wind-up.
+// Swaps the Better Combat idle pose for the throw wind-up pose while a throw is being charged.
 @Mixin(value = PlayerAttackHelper.class, remap = false)
 public abstract class ThrowChargePoseMixin {
 
-    private static final Pose NO_POSE = new Pose("", "");
+    private static final Pose THROW_CHARGE = new Pose("mms_weapons:pose_throw_charge", "");
 
     @Inject(method = "poseForPlayer", at = @At("HEAD"), cancellable = true)
     private static void mmsWeapons$throwChargePose(Player player, CallbackInfoReturnable<Pose> cir) {
@@ -23,7 +22,7 @@ public abstract class ThrowChargePoseMixin {
         }
         ItemUseAnimation animation = player.getUseItem().getUseAnimation();
         if (animation == ItemUseAnimation.TRIDENT || animation == ItemUseAnimation.SPEAR) {
-            cir.setReturnValue(NO_POSE);
+            cir.setReturnValue(THROW_CHARGE);
         }
     }
 }

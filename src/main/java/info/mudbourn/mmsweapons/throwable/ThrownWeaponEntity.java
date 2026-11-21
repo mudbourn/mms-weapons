@@ -2,6 +2,7 @@ package info.mudbourn.mmsweapons.throwable;
 
 import java.util.Collection;
 import java.util.List;
+import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -21,8 +22,10 @@ import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -62,6 +65,11 @@ public class ThrownWeaponEntity extends AbstractArrow {
             SynchedEntityData.defineId(ThrownWeaponEntity.class, EntityDataSerializers.ITEM_STACK);
 
     private static final float WATER_INERTIA = 0.99F;
+    private static final double BOUNCE_DAMPING = 0.6;
+    private static final double SMASH_SPEED = 0.3;
+    private static final double SMASH_RADIUS = 3.5;
+    private static final double SMASH_KNOCKBACK = 0.7;
+    private static final double SMASH_LIFT = 0.7;
 
     private boolean dealtDamage;
     public int clientSideReturnTickCount;
@@ -209,6 +217,53 @@ public class ThrownWeaponEntity extends AbstractArrow {
     @Override
     protected double getDefaultGravity() {
         return MmsThrowables.gravity(this.getRenderedWeapon());
+    }
+
+    // Heavy weapons bounce off walls and smash the ground like Hurl's mace, scaled by their weight.
+    @Override
+    protected void onHitBlock(BlockHitResult hitResult) {
+        if (!this.isHeavy()) {
+            super.onHitBlock(hitResult);
+            return;
+        }
+        if (hitResult.getDirection() != Direction.UP) {
+            this.bounce(hitResult);
+            return;
+        }
+        if (this.level() instanceof ServerLevel serverLevel && this.getDeltaMovement().y < -SMASH_SPEED) {
+            this.smash(serverLevel);
+        } else {
+            this.playSound(SoundEvents.MACE_SMASH_GROUND_HEAVY, 1.0F, 0.9F + this.random.nextFloat() * 0.1F);
+        }
+        this.setSoundEvent(SoundEvents.EMPTY);
+        super.onHitBlock(hitResult);
+    }
+
+    private void bounce(BlockHitResult hitResult) {
+        if (this.level() instanceof ServerLevel serverLevel) {
+            this.hitBlockEnchantmentEffects(serverLevel, hitResult, this.getWeaponItem());
+        }
+        Vec3 normal = hitResult.getDirection().getUnitVec3();
+        Vec3 motion = this.getDeltaMovement();
+        Vec3 reflected = motion.subtract(normal.scale(2.0 * motion.dot(normal))).scale(BOUNCE_DAMPING);
+        this.setPos(this.position().add(normal.scale(0.05)));
+        this.setDeltaMovement(reflected);
+        this.playSound(SoundEvents.MACE_SMASH_AIR, 1.0F, 0.85F + this.random.nextFloat() * 0.3F);
+    }
+
+    private void smash(ServerLevel level) {
+        float weight = MmsThrowables.weight(this.getRenderedWeapon());
+        level.levelEvent(LevelEvent.PARTICLES_SMASH_ATTACK, this.getOnPos(), 750);
+        Entity owner = this.getOwner();
+        AABB area = this.getBoundingBox().inflate(SMASH_RADIUS * weight);
+        for (LivingEntity living : level.getEntitiesOfClass(LivingEntity.class, area, entity -> entity != owner && entity.isAlive() && !entity.isSpectator())) {
+            Vec3 away = living.position().subtract(this.position());
+            double strength = Math.max(0.0, SMASH_RADIUS * weight - away.length()) * SMASH_KNOCKBACK * weight;
+            Vec3 push = away.horizontalDistanceSqr() > 1.0E-4 ? away.multiply(1.0, 0.0, 1.0).normalize().scale(strength) : Vec3.ZERO;
+            living.push(push.x, SMASH_LIFT * weight, push.z);
+            living.needsSync = true;
+        }
+        this.playSound(SoundEvents.MACE_SMASH_GROUND_HEAVY, 2.0F * weight, 0.9F + this.random.nextFloat() * 0.1F);
     }
 
     /** Channeling's lightning strike hangs off this. */

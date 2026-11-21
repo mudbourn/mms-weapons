@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mms_weapons:item/shadoline_twin_blade_sword_gui"
+  }
+}

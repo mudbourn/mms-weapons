@@ -17,6 +17,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -28,6 +30,10 @@ public class ThrownChainRenderer extends EntityRenderer<ThrownChainEntity, Throw
 
     private static final float LINK_LENGTH = 0.5F;
     private static final float ANCHOR_SCALE = 0.6F;
+    // Centre-to-corner distance of a 1x1 item sprite at ANCHOR_SCALE, pulled in
+    // slightly because the handle's last pixel sits just inside the corner.
+    private static final double HANDLE_REACH = Math.sqrt(0.5) * ANCHOR_SCALE * 0.9;
+    private static final Identifier BOUNTIFUL_ANCHOR = Identifier.fromNamespaceAndPath("bountiful-fish", "anchor");
 
     private final ItemModelResolver itemModels;
     private ItemStack chainStack;
@@ -51,6 +57,7 @@ public class ThrownChainRenderer extends EntityRenderer<ThrownChainEntity, Throw
     public void extractRenderState(ThrownChainEntity entity, State state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
         this.itemModels.updateForNonLiving(state.anchor, entity.weaponForRender(), ItemDisplayContext.NONE, entity);
+        state.diagonal = !BuiltInRegistries.ITEM.getKey(entity.weaponForRender().getItem()).equals(BOUNTIFUL_ANCHOR);
         if (this.chainStack == null) {
             this.chainStack = new ItemStack(Items.IRON_CHAIN);
         }
@@ -66,6 +73,9 @@ public class ThrownChainRenderer extends EntityRenderer<ThrownChainEntity, Throw
 
         poseStack.pushPose();
         poseStack.rotate(facing);
+        if (state.diagonal) {
+            poseStack.rotate(Axis.ZP.rotationDegrees(45.0F));
+        }
         poseStack.scale(ANCHOR_SCALE, ANCHOR_SCALE, ANCHOR_SCALE);
         state.anchor.submit(poseStack, collector, state.lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor);
         poseStack.popPose();
@@ -77,12 +87,19 @@ public class ThrownChainRenderer extends EntityRenderer<ThrownChainEntity, Throw
     }
 
     private void submitChain(State state, PoseStack poseStack, SubmitNodeCollector collector) {
-        double length = state.toHand.length();
+        // A diagonal weapon points its head away from the hand, so the chain
+        // starts at the handle's tip (the sprite's bottom-left corner) instead
+        // of the sprite centre, which sits at the base of the head.
+        double start = state.diagonal ? HANDLE_REACH : 0.0;
+        double length = state.toHand.length() - start;
+        if (length <= 0.0) {
+            return;
+        }
         int links = (int) Math.ceil(length / LINK_LENGTH);
         Vec3 dir = state.toHand.normalize();
         Quaternionf along = new Quaternionf().rotationTo(0.0F, 1.0F, 0.0F, (float) dir.x, (float) dir.y, (float) dir.z);
         for (int i = 0; i < links; i++) {
-            Vec3 at = dir.scale((i + 0.5) * length / links);
+            Vec3 at = dir.scale(start + (i + 0.5) * length / links);
             poseStack.pushPose();
             poseStack.translate(at.x, at.y, at.z);
             poseStack.rotate(along);
@@ -120,5 +137,6 @@ public class ThrownChainRenderer extends EntityRenderer<ThrownChainEntity, Throw
         final ItemStackRenderState anchor = new ItemStackRenderState();
         final ItemStackRenderState chain = new ItemStackRenderState();
         Vec3 toHand;
+        boolean diagonal;
     }
 }

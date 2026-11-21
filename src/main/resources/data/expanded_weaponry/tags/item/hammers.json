@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:azurite_hammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_hammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_hammer",
+      "required": false
+    }
+  ]
+}
