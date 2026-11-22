@@ -109,9 +109,11 @@ final class AerialHellHeavy {
         TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("aerialhell", "repairs_heavy_material")));
 
     static void weapons() {
-        // The battleaxe hits 2 harder and swings 0.2 slower than the Heavy Axe, and slows its holder the same way.
+        // Each heavy weapon hits 1.3x its netherite counterpart, as the Heavy Axe (13) does a netherite axe (10). The heavy
+        // material adds 7 (player 1 + material 6), netherite 5, so each figure below is 1.3 x netherite's hit, less 7.
+        // The battleaxe: netherite 13, heavy 17, 0.2 slower than the Heavy Axe.
         register("heavy_battleaxe", key -> new AerialHellItem(new AerialHellItem.Properties().setId(key)
-            .axe(AerialHellToolMaterials.HEAVY, 8.0F, -3.7F, AttributeEntry.movementSpeed(-0.1F)).rarity(Rarity.EPIC)));
+            .axe(AerialHellToolMaterials.HEAVY, 10.0F, -3.7F, AttributeEntry.movementSpeed(-0.1F)).rarity(Rarity.EPIC)));
         // The halberd keeps Weapons Expanded's slash and pierce modes, at the heavy material's damage and a slower swing.
         register("heavy_halberd", key -> new HeavyHalberd(new Item.Properties().setId(key).rarity(Rarity.EPIC)));
         // The longsword keeps Weapons Expanded's one- and two-handed grips, a step slower than an obsidian one.
@@ -136,7 +138,7 @@ final class AerialHellHeavy {
     // Shows the "Slow but powerful" line the Heavy Axe has, under Weapons Expanded's mode tooltip.
     private static final class HeavyHalberd extends HalberdItem implements ExtraHoverTextItem {
         HeavyHalberd(Item.Properties properties) {
-            super(HEAVY, 6.5F, -3.5F, 6.0F, -3.6F, properties);
+            super(HEAVY, 8.0F, -3.5F, 7.3F, -3.6F, properties);
         }
 
         @Override
@@ -153,7 +155,7 @@ final class AerialHellHeavy {
 
     private static final class HeavyLongsword extends BastardSwordItem implements ExtraHoverTextItem {
         HeavyLongsword(Item.Properties properties) {
-            super(HEAVY, 6.0F, -3.2F, 7.0F, -3.2F, properties);
+            super(HEAVY, 7.3F, -3.2F, 8.6F, -3.2F, properties);
         }
 
         @Override

@@ -77,6 +77,10 @@ public final class CompatWeapons {
                 CompatOrigin.weaponMod("paladins");
                 PaladinsWeapons.register(name, material);
             }
+            if (name.equals("arsonist") && (loader.isModLoaded("wizards") || loader.isModLoaded("paladins")) && loader.isModLoaded("spell_engine")) {
+                CompatOrigin.weaponMod(loader.isModLoaded("wizards") ? "wizards" : "paladins");
+                WizardsGear.register(material);
+            }
             if (name.equals("shadow")) {
                 CompatOrigin.weaponMod(null);
                 ShadowTools.register(material);

@@ -1,0 +1,6 @@
+{
+  "parent": "wizards:item/medium_staff",
+  "textures": {
+    "layer0": "mms_weapons:item/arsonist_frost_staff"
+  }
+}

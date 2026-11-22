@@ -56,7 +56,7 @@ public final class Hammers {
         Map.entry("volucite", new Stat(1.05F, 9.5F)),
         Map.entry("lunatic", new Stat(1.1F, 9.5F)),
         Map.entry("arsonist", new Stat(1.2F, 10.0F)),
-        Map.entry("heavy", new Stat(1.3F, 10.5F)),
+        Map.entry("heavy", new Stat(1.3F, 11.7F)), // 1.3x the netherite hammer, as the Heavy Axe is to a netherite axe
         // Mutant Monsters' hulk hammer: mace weight, a step under the heavy hammer
         Map.entry("hulk", new Stat(1.0F, 9.0F))
     );
@@ -78,11 +78,11 @@ public final class Hammers {
     public static void register() {
         DefaultItemComponentEvents.MODIFY.register(context -> {
             context.modify(item -> item == Items.MACE, (builder, item) ->
-                builder.set(DataComponents.ATTRIBUTE_MODIFIERS, attributes(MACE_HIT, 1.0F)));
+                builder.set(DataComponents.ATTRIBUTE_MODIFIERS, attributes(MACE_HIT, 1.0F, false)));
             context.modify(Hammers::isHammer, (builder, item) -> {
                 Stat stat = stat(item);
                 float hit = AerialGear.isAerial(item) ? stat.hit() * AerialGear.STAT_MULTIPLIER : stat.hit();
-                builder.set(DataComponents.ATTRIBUTE_MODIFIERS, attributes(hit, stat.weight()));
+                builder.set(DataComponents.ATTRIBUTE_MODIFIERS, attributes(hit, stat.weight(), isHeavyHammer(item)));
             });
         });
     }
@@ -126,12 +126,20 @@ public final class Hammers {
         return STATS.getOrDefault(material, DEFAULT);
     }
 
-    private static ItemAttributeModifiers attributes(float hit, float weight) {
+    private static boolean isHeavyHammer(Item item) {
+        return BuiltInRegistries.ITEM.getKey(item).equals(Identifier.fromNamespaceAndPath("mms_weapons", "heavy_hammer"));
+    }
+
+    // The heavy hammer takes the Heavy Axe's flat -10% (total) like the other heavy weapons, in place of the weight slowdown.
+    private static ItemAttributeModifiers attributes(float hit, float weight, boolean heavy) {
         float speed = LIGHT_SPEED - SPEED_PER_WEIGHT * weight;
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder()
             .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(Item.BASE_ATTACK_DAMAGE_ID, hit - 1.0F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
             .add(Attributes.ATTACK_SPEED, new AttributeModifier(Item.BASE_ATTACK_SPEED_ID, speed - 4.0F, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
-        if (weight > 1.0F) {
+        if (heavy) {
+            builder.add(Attributes.MOVEMENT_SPEED, new AttributeModifier(SLOW_ID, -0.1F,
+                AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL), EquipmentSlotGroup.MAINHAND);
+        } else if (weight > 1.0F) {
             builder.add(Attributes.MOVEMENT_SPEED, new AttributeModifier(SLOW_ID, -(weight - 1.0F) * SLOW_PER_EXTRA_WEIGHT,
                 AttributeModifier.Operation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.MAINHAND);
         }

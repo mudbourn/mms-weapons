@@ -71,7 +71,7 @@ public final class AerialGear {
                 ItemAttributeModifiers modifiers = item.components().get(DataComponents.ATTRIBUTE_MODIFIERS);
                 // Hammers get their boosted hit from Hammers, which sets their whole attribute curve.
                 if (modifiers != null && !info.mudbourn.mmsweapons.throwable.Hammers.isHammer(item)) {
-                    builder.set(DataComponents.ATTRIBUTE_MODIFIERS, scaledDamage(modifiers));
+                    builder.set(DataComponents.ATTRIBUTE_MODIFIERS, scaledDamage(heavyDrawbacks(item, modifiers)));
                 }
             }));
     }
@@ -86,6 +86,39 @@ public final class AerialGear {
                 modifier = new AttributeModifier(modifier.id(), (1.0 + modifier.amount()) * STAT_MULTIPLIER - 1.0, modifier.operation());
             }
             rebuilt.add(entry.attribute(), modifier, entry.slot());
+        }
+        return rebuilt.build();
+    }
+
+    // The Heavy Axe's drawback on every heavy weapon: -10% movement while held (the same total-multiplied modifier
+    // Aerial Hell gives it), added where the item doesn't already carry one. The greatsword also swings 0.2 slower and
+    // hits 1 harder (13, 1.3x a netherite greatsword's 10; Expanded Weaponry fixes its bonus, so it's raised here).
+    private static final Identifier HEAVY_SLOW_ID = Identifier.fromNamespaceAndPath("mms_weapons", "heavy_weapon_slow");
+    private static final float HEAVY_SLOW = -0.1F;
+
+    private static ItemAttributeModifiers heavyDrawbacks(Item item, ItemAttributeModifiers modifiers) {
+        String path = BuiltInRegistries.ITEM.getKey(item).getPath();
+        if (!BuiltInRegistries.ITEM.getKey(item).getNamespace().equals("mms_weapons") || !HEAVY_WEAPONS.contains(path)) {
+            return modifiers;
+        }
+        ItemAttributeModifiers.Builder rebuilt = ItemAttributeModifiers.builder();
+        boolean slowed = false;
+        for (ItemAttributeModifiers.Entry entry : modifiers.modifiers()) {
+            AttributeModifier modifier = entry.modifier();
+            if (entry.attribute().equals(Attributes.MOVEMENT_SPEED)) {
+                slowed = true;
+            }
+            if (path.equals("heavy_greatsword") && entry.attribute().equals(Attributes.ATTACK_SPEED) && modifier.id().equals(Item.BASE_ATTACK_SPEED_ID)) {
+                modifier = new AttributeModifier(modifier.id(), modifier.amount() - 0.2, modifier.operation());
+            }
+            if (path.equals("heavy_greatsword") && entry.attribute().equals(Attributes.ATTACK_DAMAGE) && modifier.id().equals(Item.BASE_ATTACK_DAMAGE_ID)) {
+                modifier = new AttributeModifier(modifier.id(), modifier.amount() + 1.0, modifier.operation());
+            }
+            rebuilt.add(entry.attribute(), modifier, entry.slot());
+        }
+        if (!slowed) {
+            rebuilt.add(Attributes.MOVEMENT_SPEED, new AttributeModifier(HEAVY_SLOW_ID, HEAVY_SLOW, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                net.minecraft.world.entity.EquipmentSlotGroup.MAINHAND);
         }
         return rebuilt.build();
     }

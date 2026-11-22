@@ -175,12 +175,37 @@ public final class Focus {
         if (stack.is(MmsThrowables.THROWABLE_WEAPONS) || SickleThrowing.isSickle(stack) || stack.is(Items.TRIDENT) || stack.is(Items.MACE)) {
             return false;
         }
-        // Spears have their own charged attack, vanilla's through these components and modded ones by name.
-        if (stack.has(DataComponents.KINETIC_WEAPON) || stack.has(DataComponents.PIERCING_WEAPON)
+        // Spears have their own charged attack, vanilla's through the kinetic component and modded ones by name. A
+        // piercing component alone is a left-click jab (Weapons Expanded's halberd pierce mode), which leaves the skill free.
+        if (stack.has(DataComponents.KINETIC_WEAPON)
                 || BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath().endsWith("spear")) {
             return false;
         }
+        if (AERIAL_IDLE_USE.computeIfAbsent(stack.getItem(), Focus::aerialIdleUse)) {
+            return true;
+        }
         return !OVERRIDES_USE.computeIfAbsent(stack.getItem().getClass(), Focus::overridesUse);
+    }
+
+    private static final Map<Item, Boolean> AERIAL_IDLE_USE = new java.util.concurrent.ConcurrentHashMap<>();
+
+    // Aerial Hell's item class overrides right click for its abilities, but an item with no ability and no use
+    // duration (the Heavy Axe, the heavy battleaxe, most of its weapons) does nothing with it, so it can still take
+    // the focus skill. Read by reflection, since Aerial Hell is optional.
+    private static boolean aerialIdleUse(Item item) {
+        for (Class<?> c = item.getClass(); c != null && c != Item.class; c = c.getSuperclass()) {
+            if (!c.getName().equals("fr.factionbedrock.aerialhell.Item.AerialHellItem")) {
+                continue;
+            }
+            try {
+                Object selector = c.getField("abilitySelector").get(item);
+                int duration = c.getField("maxUseDuration").getInt(item);
+                return selector == null && duration <= 0;
+            } catch (ReflectiveOperationException e) {
+                return false;
+            }
+        }
+        return false;
     }
 
     // Matched on the parameter types, not the name, so it still works once the game's names are remapped.

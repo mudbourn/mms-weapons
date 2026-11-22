@@ -43,12 +43,8 @@ public final class WeaponSkills {
             player -> Chainlink.throwChain(player, player.getMainHandItem()));
         define(SHIELD_RAM, player -> ShieldRam.ramShield(player) != null,
             player -> ShieldRam.start(player, ShieldRam.ramShield(player)));
-        define(HAMMER_SLAM, player -> Hammers.slamFall(player.getMainHandItem().getItem()) > 0.0F && !MaceSmash.isForced(player),
-            player -> {
-                MaceSmash.force(player, player.getMainHandItem().getItem(), Hammers.slamFall(player.getMainHandItem().getItem()));
-                player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
-                    net.minecraft.sounds.SoundEvents.MACE_SMASH_AIR, player.getSoundSource(), 1.0F, 0.6F);
-            });
+        define(HAMMER_SLAM, player -> Hammers.slamFall(player.getMainHandItem().getItem()) > 0.0F,
+            player -> MaceSmash.slam(player, Hammers.slamFall(player.getMainHandItem().getItem())));
         SpellHandlers.registerCustomDelivery(EMPTY, (level, spell, caster, targets, context, position) -> false);
         SpellEvents.CASTING_ATTEMPT.PRE.register(args -> {
             if (args.spell().is(EMPTY)) {

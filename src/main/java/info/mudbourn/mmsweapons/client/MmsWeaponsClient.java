@@ -44,6 +44,13 @@ public class MmsWeaponsClient implements ClientModInitializer {
             info.mudbourn.mmsweapons.client.spellengine.SpellBindsClient.register();
         }
 
+        // Arsonist class sets wear their netherite set's 3D model with an arsonist texture.
+        for (info.mudbourn.mmsweapons.material.WizardsGear.Worn worn : info.mudbourn.mmsweapons.material.WizardsGear.WORN) {
+            net.rpg_foundation.armor_api.client.ArmorRenderers.register(
+                net.rpg_foundation.armor_api.client.GeoArmorRenderer.of(worn.geo(), worn.texture()),
+                worn.pieces().toArray(new net.minecraft.world.level.ItemLike[0]));
+        }
+
         if (FabricLoader.getInstance().isModLoaded("aerialhell")
                 && FabricLoader.getInstance().isModLoaded("expanded_weaponry")) {
             CompatShieldClient.register();

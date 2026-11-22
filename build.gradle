@@ -29,6 +29,8 @@ dependencies {
     compileOnly files("libs/wthit-26.3-fabric-21.0.0.jar")
     compileOnly files("libs/jei-26.3-fabric-31.17.0.113.jar")
     compileOnly files("libs/aerialhell-0.7.9_fabric26.3.jar")
+    compileOnly files("libs/wizards-fabric-3.1.4+26.3.jar")
+    compileOnly files("libs/armor_model_api-fabric-1.1.2+26.3.jar")
 }
 
 tasks.withType(JavaCompile).configureEach {

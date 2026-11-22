@@ -1,5 +1,7 @@
 package info.mudbourn.mmsweapons.spellengine;
 
+import info.mudbourn.mmsweapons.focus.FocusStun;
+
 import info.mudbourn.mmsweapons.focus.Barrage;
 import info.mudbourn.mmsweapons.focus.Focus;
 import io.netty.buffer.ByteBuf;
@@ -14,7 +16,8 @@ import net.spell_engine.api.spell.event.SpellEvents;
 import net.spell_engine.api.spell.event.SpellHandlers;
 import net.spell_engine.internals.casting.SpellCast;
 
-// The focus barrage as the Spell Engine skill mms_weapons:barrage: castable only on a full focus bar, which the cast spends.
+// The focus skill as the Spell Engine skill mms_weapons:barrage: castable only on a full focus bar, which the cast spends
+// on a stunning shockwave (FocusStun). The id stays "barrage" so existing skill layouts and keybinds carry over.
 public final class SpellEngineBarrage {
 
     public static final Identifier SPELL = Identifier.fromNamespaceAndPath("mms_weapons", "barrage");
@@ -29,8 +32,7 @@ public final class SpellEngineBarrage {
             if (!(caster instanceof ServerPlayer player) || !ready(player.getMainHandItem())) {
                 return false;
             }
-            Barrage.start(player, player.getMainHandItem());
-            ServerPlayNetworking.send(player, new StartPayload());
+            FocusStun.unleash(player, player.getMainHandItem());
             return true;
         });
         SpellEvents.CASTING_ATTEMPT.PRE.register(args -> {

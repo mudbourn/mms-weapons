@@ -1,8 +1,11 @@
 package info.mudbourn.mmsweapons.throwable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.List;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import java.util.function.Predicate;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.core.Direction;
@@ -52,51 +55,78 @@ public final class MaceSmash {
         return item.builtInRegistryHolder().is(MmsThrowables.MACE_SMASH_WEAPONS);
     }
 
-    /** How long a forced smash stays armed, in ticks. */
-    private static final int FORCED_WINDOW = 60;
-
-    private record Forced(Item item, float fall, long until) {
-    }
-
-    private static final Map<UUID, Forced> FORCED = new HashMap<>();
+    /** Reach of a slam: how far in front it lands and the radius it hits around that point. */
+    private static final double SLAM_REACH = 1.5;
+    private static final double SLAM_RADIUS = 2.5;
 
     /**
-     * Arms the next swing with this weapon to land as a smash from {@code fall} blocks, whether or not the attacker
-     * is falling. Expires after three seconds or on the next hit.
+     * The heavy hammers' Slam: the holder swings the hammer down into the ground in front of them and it lands as a
+     * smash from {@code fall} blocks, hitting everything around the impact for the weapon's hit plus that smash
+     * bonus (scaled by weight), with the mace's ground burst, sound and knockback.
      */
-    public static void force(LivingEntity attacker, Item item, float fall) {
-        FORCED.put(attacker.getUUID(), new Forced(item, fall, attacker.level().getGameTime() + FORCED_WINDOW));
-    }
+    public static void slam(ServerPlayer player, float fall) {
+        ServerLevel level = player.level();
+        ItemStack weapon = player.getMainHandItem();
+        // A slow, full swing, so the hammer visibly comes down.
+        player.swing(InteractionHand.MAIN_HAND, new net.minecraft.world.item.component.SwingAnimation(
+                net.minecraft.world.item.component.SwingAnimation.DEFAULT.type(), 12), true);
 
-    private static float forcedFall(LivingEntity attacker) {
-        Forced forced = FORCED.get(attacker.getUUID());
-        if (forced == null) {
-            return 0.0F;
+        Vec3 look = player.getLookAngle().multiply(1.0, 0.0, 1.0);
+        look = look.lengthSqr() < 1.0E-4 ? Vec3.ZERO : look.normalize();
+        Vec3 impact = player.position().add(look.scale(SLAM_REACH));
+        level.levelEvent(2013, BlockPos.containing(impact).below(), 750);
+        level.playSound(null, impact.x, impact.y, impact.z,
+                fall > SMASH_ATTACK_HEAVY_THRESHOLD ? SoundEvents.MACE_SMASH_GROUND_HEAVY : SoundEvents.MACE_SMASH_GROUND,
+                player.getSoundSource(), 1.0F, 0.8F);
+
+        float damage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE)
+                + (float) fallBonus(fall) * Hammers.smashScale(weapon.getItem());
+        AABB area = new AABB(impact, impact).inflate(SLAM_RADIUS, 1.5, SLAM_RADIUS);
+        List<LivingEntity> hit = level.getEntitiesOfClass(LivingEntity.class, area, nearby ->
+                nearby != player && nearby.isAlive() && !nearby.isSpectator() && !player.isAlliedTo(nearby)
+                        && !(nearby instanceof ArmorStand stand && stand.isMarker())
+                        && nearby.position().distanceToSqr(impact) <= SLAM_RADIUS * SLAM_RADIUS * 2.0);
+        for (LivingEntity target : hit) {
+            target.hurtServer(level, player.damageSources().mace(player), damage);
+            Vec3 away = target.position().subtract(impact);
+            double power = Math.max(0.0, SMASH_ATTACK_KNOCKBACK_RADIUS - away.length()) * SMASH_ATTACK_KNOCKBACK_POWER
+                    * (fall > SMASH_ATTACK_HEAVY_THRESHOLD ? 2 : 1)
+                    * (1.0 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
+            if (power > 0.0 && away.lengthSqr() > 1.0E-4) {
+                Vec3 push = away.normalize().scale(power);
+                target.push(push.x, SMASH_ATTACK_KNOCKBACK_POWER, push.z);
+                if (target instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(serverPlayer));
+                }
+            }
         }
-        if (attacker.level().getGameTime() > forced.until() || !attacker.getMainHandItem().is(forced.item())) {
-            FORCED.remove(attacker.getUUID());
-            return 0.0F;
+        if (!hit.isEmpty()) {
+            weapon.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
         }
-        return forced.fall();
     }
 
-    public static boolean isForced(LivingEntity attacker) {
-        return forcedFall(attacker) > 0.0F;
+    /** The mace's fall-distance curve. */
+    private static double fallBonus(double fall) {
+        if (fall <= 3.0) {
+            return 4.0 * fall;
+        }
+        if (fall <= 8.0) {
+            return 12.0 + 2.0 * (fall - 3.0);
+        }
+        return 22.0 + fall - 8.0;
     }
 
-    /** The fall the smash counts: the real one, or a forced one if that's bigger. */
     private static double effectiveFall(LivingEntity attacker) {
-        return Math.max(attacker.fallDistance, forcedFall(attacker));
+        return attacker.fallDistance;
     }
 
     public static boolean canSmashAttack(LivingEntity attacker) {
-        return isForced(attacker) || attacker.fallDistance > SMASH_ATTACK_FALL_THRESHOLD && !attacker.isFallFlying();
+        return attacker.fallDistance > SMASH_ATTACK_FALL_THRESHOLD && !attacker.isFallFlying();
     }
 
-    /** Ends a smash: the fall resets and any forced smash is spent. */
+    /** Ends a smash: the fall resets. */
     public static void spend(LivingEntity attacker) {
         attacker.resetFallDistance();
-        FORCED.remove(attacker.getUUID());
     }
 
     /** Mirrors {@code MaceItem.hurtEnemy}: kill the attacker's fall, make noise, shove the crowd. */
@@ -150,14 +180,7 @@ public final class MaceSmash {
         }
 
         double fall = effectiveFall(attacker);
-        double bonus;
-        if (fall <= 3.0) {
-            bonus = 4.0 * fall;
-        } else if (fall <= 8.0) {
-            bonus = 12.0 + 2.0 * (fall - 3.0);
-        } else {
-            bonus = 22.0 + fall - 8.0;
-        }
+        double bonus = fallBonus(fall);
 
         if (attacker.level() instanceof ServerLevel serverLevel) {
             float perBlock = EnchantmentHelper.modifyFallBasedDamage(
