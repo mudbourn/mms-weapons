@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "aerialhell:cursed_crystal",
+    "s": "aerialhell:sky_stick"
+  },
+  "pattern": [
+    "##",
+    "#s",
+    " s"
+  ],
+  "result": {
+    "id": "mms_weapons:shadow_axe"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell"
+      ]
+    }
+  ]
+}

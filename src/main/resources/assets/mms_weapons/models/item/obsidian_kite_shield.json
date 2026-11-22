@@ -1,0 +1,7 @@
+{
+  "parent": "paladins:item/base/metal_kite_shield_a_template",
+  "textures": {
+    "0": "mms_weapons:item/obsidian_kite_shield",
+    "particle": "mms_weapons:item/obsidian_kite_shield"
+  }
+}

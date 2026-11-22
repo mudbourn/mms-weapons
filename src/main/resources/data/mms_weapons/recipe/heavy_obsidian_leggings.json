@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "aerialhell:obsidian_leggings",
+    "minecraft:obsidian"
+  ],
+  "result": {
+    "id": "mms_weapons:heavy_obsidian_leggings"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell"
+      ]
+    }
+  ]
+}

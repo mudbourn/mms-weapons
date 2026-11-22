@@ -1,0 +1,49 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:azurite_holy_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_holy_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_holy_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_holy_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_holy_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_holy_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_holy_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_holy_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_holy_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_holy_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_holy_staff",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:azurite_kite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_kite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_kite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_kite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_kite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_kite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_kite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_kite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_kite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_kite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_kite_shield",
+      "required": false
+    }
+  ]
+}

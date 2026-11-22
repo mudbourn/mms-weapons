@@ -38,6 +38,34 @@
       "required": false
     },
     {
+      "id": "mms_weapons:arsonist_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_shield",
+      "required": false
+    },
+    {
       "id": "mms_weapons:ruby_shield",
       "required": false
     },
@@ -47,6 +75,10 @@
     },
     {
       "id": "mms_weapons:shadoline_shield",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_shield",
       "required": false
     }
   ]

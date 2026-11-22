@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mms_weapons:item/heavy_lunatic_helmet"
+  }
+}

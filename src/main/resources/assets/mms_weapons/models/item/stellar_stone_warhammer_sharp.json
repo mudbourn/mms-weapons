@@ -1,0 +1,6 @@
+{
+  "parent": "weaponsexpanded:item/warhammer_sharp",
+  "textures": {
+    "layer0": "mms_weapons:item/stellar_stone_warhammer_sharp"
+  }
+}

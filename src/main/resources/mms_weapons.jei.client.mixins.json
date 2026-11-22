@@ -1,0 +1,11 @@
+{
+  "required": false,
+  "package": "info.mudbourn.mmsweapons.mixin.jei",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "JeiModNameMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

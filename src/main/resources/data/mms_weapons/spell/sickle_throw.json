@@ -1,0 +1,37 @@
+{
+  "school": "spell_power:physical_melee",
+  "range": 0.0,
+  "range_mechanic": "MELEE",
+  "tier": 1,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0.5,
+      "movement_speed": 0.5,
+      "animation": {
+        "id": "spell_engine:one_handed_throw_charge"
+      }
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "spell_engine:one_handed_throw_release"
+    }
+  },
+  "target": {
+    "type": "NONE"
+  },
+  "deliver": {
+    "type": "CUSTOM",
+    "custom": {
+      "handler": "mms_weapons:sickle_throw"
+    }
+  },
+  "cost": {
+    "exhaust": 0.0,
+    "durability": 0,
+    "cooldown": {
+      "duration": 0.0
+    }
+  }
+}

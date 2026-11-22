@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "#aerialhell:aerialhell_planks",
+    "H": "minecraft:gold_ingot"
+  },
+  "pattern": [
+    " AA",
+    " HA",
+    "H  "
+  ],
+  "result": {
+    "id": "mms_weapons:sky_wood_holy_staff"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell",
+        "paladins"
+      ]
+    }
+  ]
+}

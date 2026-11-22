@@ -1,0 +1,9 @@
+{
+  "mms_weapons:origin": {
+    "entrypoints": {
+      "client": "info.mudbourn.mmsweapons.client.origin.OriginWthitPlugin"
+    },
+    "side": "*",
+    "required": ["wthit"]
+  }
+}

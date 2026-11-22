@@ -298,11 +298,67 @@
       "required": false
     },
     {
+      "id": "mms_weapons:arsonist_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_battleaxe",
+      "required": false
+    },
+    {
       "id": "mms_weapons:ruby_battleaxe",
       "required": false
     },
     {
       "id": "mms_weapons:azurite_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_warhammer",
       "required": false
     },
     {
@@ -314,11 +370,67 @@
       "required": false
     },
     {
+      "id": "mms_weapons:arsonist_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_halberd",
+      "required": false
+    },
+    {
       "id": "mms_weapons:ruby_halberd",
       "required": false
     },
     {
       "id": "mms_weapons:azurite_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_morningstar",
       "required": false
     },
     {
@@ -339,6 +451,34 @@
     },
     {
       "id": "mms_weapons:shadoline_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:heavy_battleaxe",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:heavy_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:heavy_greatsword",
       "required": false
     }
   ]

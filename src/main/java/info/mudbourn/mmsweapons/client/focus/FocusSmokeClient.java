@@ -28,7 +28,8 @@ public final class FocusSmokeClient {
 
     // Called as the hand layer starts drawing a main-hand weapon.
     public static void beginHand(ItemStack stack) {
-        DRAWING.set(Focus.showsSmoke(stack) ? stack : null);
+        // Spellcasters' weapons get a body aura instead, from FocusAuraClient.
+        DRAWING.set(Focus.showsSmoke(stack) && !Focus.spellFocus(stack) ? stack : null);
     }
 
     public static void endHand() {

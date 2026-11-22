@@ -2,7 +2,11 @@
   "required": false,
   "package": "info.mudbourn.mmsweapons.mixin.spellengine",
   "compatibilityLevel": "JAVA_21",
+  "plugin": "info.mudbourn.mmsweapons.mixin.spellengine.SpellEngineMixinGate",
   "mixins": [
+    "SpellActivesMixin",
+    "SpellContainerEmpowerMixin",
+    "SpellPowerEmpowerMixin",
     "WeaponCompatibilityMixin"
   ]
 }

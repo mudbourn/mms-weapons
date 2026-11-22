@@ -1,0 +1,6 @@
+{
+  "parent": "weaponsexpanded:item/warhammer_sharp",
+  "textures": {
+    "layer0": "mms_weapons:item/volucite_warhammer_sharp"
+  }
+}

@@ -34,11 +34,43 @@
       "required": false
     },
     {
+      "id": "mms_weapons:arsonist_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_sickle",
+      "required": false
+    },
+    {
       "id": "mms_weapons:ruby_sickle",
       "required": false
     },
     {
       "id": "mms_weapons:shadoline_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_sickle",
       "required": false
     }
   ]

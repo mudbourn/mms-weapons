@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "#aerialhell:aerialhell_planks",
+    "S": "aerialhell:sky_stick"
+  },
+  "pattern": [
+    "MSM",
+    "MS ",
+    " S "
+  ],
+  "result": {
+    "id": "mms_weapons:sky_wood_warhammer"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell"
+      ]
+    }
+  ]
+}

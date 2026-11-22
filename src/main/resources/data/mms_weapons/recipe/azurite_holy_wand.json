@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "aerialhell:azurite_crystal",
+    "H": "minecraft:gold_ingot"
+  },
+  "pattern": [
+    " A",
+    "H "
+  ],
+  "result": {
+    "id": "mms_weapons:azurite_holy_wand"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell",
+        "paladins"
+      ]
+    }
+  ]
+}

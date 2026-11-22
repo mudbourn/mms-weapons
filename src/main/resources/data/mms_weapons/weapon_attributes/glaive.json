@@ -1,0 +1,6 @@
+{
+  "parent": "bettercombat:glaive",
+  "attributes": {
+    "pose": "mms_weapons:pose_glaive_hanging"
+  }
+}

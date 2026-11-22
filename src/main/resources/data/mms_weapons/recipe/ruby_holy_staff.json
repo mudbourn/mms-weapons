@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "aerialhell:ruby",
+    "H": "minecraft:gold_ingot"
+  },
+  "pattern": [
+    " AA",
+    " HA",
+    "H  "
+  ],
+  "result": {
+    "id": "mms_weapons:ruby_holy_staff"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell",
+        "paladins"
+      ]
+    }
+  ]
+}

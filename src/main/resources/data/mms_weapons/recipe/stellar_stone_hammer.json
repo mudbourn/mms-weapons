@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "h": "aerialhell:stellar_cobblestone",
+    "s": "aerialhell:sky_stick"
+  },
+  "pattern": [
+    "hhh",
+    "hsh",
+    " s "
+  ],
+  "result": {
+    "id": "mms_weapons:stellar_stone_hammer"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "required": false,
+  "package": "info.mudbourn.mmsweapons.client.mixin.spellengine",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "info.mudbourn.mmsweapons.mixin.spellengine.SpellEngineMixinGate",
+  "client": [
+    "BlockingCastMixin",
+    "SpellHotbarMouseMixin"
+  ]
+}

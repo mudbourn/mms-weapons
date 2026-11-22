@@ -3,9 +3,10 @@ package info.mudbourn.mmsweapons.client;
 import info.mudbourn.mmsweapons.chainlink.Chainlink;
 import info.mudbourn.mmsweapons.client.chainlink.ThrownChainRenderer;
 import info.mudbourn.mmsweapons.client.focus.BarrageClient;
-import info.mudbourn.mmsweapons.client.focus.FocusCancelClient;
+import info.mudbourn.mmsweapons.client.focus.FocusHoldOffClient;
 import info.mudbourn.mmsweapons.client.spellengine.SpellEngineBarrageClient;
 import info.mudbourn.mmsweapons.client.material.CompatShieldClient;
+import info.mudbourn.mmsweapons.client.shieldbash.ShieldRamClient;
 import info.mudbourn.mmsweapons.client.throwable.ThrownSickleRenderer;
 import info.mudbourn.mmsweapons.client.throwable.ThrownWeaponRenderer;
 import info.mudbourn.mmsweapons.throwable.MmsThrowables;
@@ -34,9 +35,13 @@ public class MmsWeaponsClient implements ClientModInitializer {
                 ThrownChainRenderer::new);
 
         BarrageClient.register();
-        FocusCancelClient.register();
+        info.mudbourn.mmsweapons.client.focus.FocusAuraClient.register();
+        FocusHoldOffClient.register();
+        ShieldRamClient.register();
         if (FabricLoader.getInstance().isModLoaded("spell_engine")) {
             SpellEngineBarrageClient.register();
+            info.mudbourn.mmsweapons.client.spellengine.DownedCastingClient.register();
+            info.mudbourn.mmsweapons.client.spellengine.SpellBindsClient.register();
         }
 
         if (FabricLoader.getInstance().isModLoaded("aerialhell")

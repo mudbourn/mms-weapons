@@ -1,0 +1,49 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:azurite_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:ruby_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadoline_morningstar",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_morningstar",
+      "required": false
+    }
+  ]
+}

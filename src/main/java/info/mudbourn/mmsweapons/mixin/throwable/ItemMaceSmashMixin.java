@@ -16,9 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * Routes the mace's smash attack onto tagged weapons — Expanded Weaponry's
  * hammers — so the mace enchantments have something to modify.
  *
- * <p>Same seam as {@link ItemThrowMixin} and for the same reason: Expanded
- * Weaponry's {@code HammerItem} declares none of these four methods, so
- * {@code Item} is the only class that can be injected. All four move together —
+ * <p>Expanded Weaponry's {@code HammerItem} declares none of these four
+ * methods, so {@code Item} is the only class that can be injected. All four move together —
  * the damage bonus without {@code hurtEnemy} would deal smash damage with no
  * knockback or sound, and without {@code postHurtEnemy} the attacker's fall
  * distance never resets, so every subsequent hit that tick would smash again.

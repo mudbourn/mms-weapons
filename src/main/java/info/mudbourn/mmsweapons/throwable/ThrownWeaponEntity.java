@@ -344,22 +344,6 @@ public class ThrownWeaponEntity extends AbstractArrow {
         }
     }
 
-    // TEMP: logs who removes a thrown weapon, remove once the vanishing bug is found.
-    @Override
-    public void remove(Entity.RemovalReason reason) {
-        if (!this.level().isClientSide()) {
-            org.slf4j.LoggerFactory.getLogger("mms_weapons").warn(
-                    "Thrown weapon {} removed ({}) at {} inGround={} dealtDamage={}",
-                    this.getWeaponItem(),
-                    reason,
-                    this.position(),
-                    this.isInGround(),
-                    this.dealtDamage,
-                    new Throwable("removal trace"));
-        }
-        super.remove(reason);
-    }
-
     @Override
     protected float getWaterInertia() {
         return WATER_INERTIA;

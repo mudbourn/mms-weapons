@@ -6,11 +6,67 @@
       "required": false
     },
     {
+      "id": "mms_weapons:arsonist_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_sickle",
+      "required": false
+    },
+    {
       "id": "mms_weapons:ruby_sickle",
       "required": false
     },
     {
       "id": "mms_weapons:azurite_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_longsword",
       "required": false
     },
     {
@@ -22,6 +78,34 @@
       "required": false
     },
     {
+      "id": "mms_weapons:arsonist_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_katana",
+      "required": false
+    },
+    {
       "id": "mms_weapons:ruby_katana",
       "required": false
     },
@@ -30,11 +114,67 @@
       "required": false
     },
     {
+      "id": "mms_weapons:arsonist_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_warhammer",
+      "required": false
+    },
+    {
       "id": "mms_weapons:ruby_warhammer",
       "required": false
     },
     {
       "id": "mms_weapons:azurite_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_halberd",
       "required": false
     },
     {
@@ -59,6 +199,39 @@
     },
     {
       "id": "mms_weapons:shadoline_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_sickle",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_katana",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_warhammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_halberd",
+      "required": false
+    },
+    "mms_weapons:shadow_sword",
+    {
+      "id": "mms_weapons:heavy_halberd",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:heavy_longsword",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:heavy_greatsword",
       "required": false
     }
   ]

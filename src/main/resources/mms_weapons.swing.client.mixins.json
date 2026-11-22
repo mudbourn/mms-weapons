@@ -3,7 +3,8 @@
   "package": "info.mudbourn.mmsweapons.mixin.swing",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "SwingDurationMixin"
+    "SwingDurationMixin",
+    "MineToggleYieldMixin"
   ],
   "injectors": {
     "defaultRequire": 1

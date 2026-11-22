@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "info.mudbourn.mmsweapons.mixin.downed",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "DownedHotbarMixin",
+    "DownedBackSlotMixin",
+    "DownedBeltSlotMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

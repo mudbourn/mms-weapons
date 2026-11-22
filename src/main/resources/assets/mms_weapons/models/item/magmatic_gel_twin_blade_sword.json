@@ -1,0 +1,6 @@
+{
+  "parent": "expanded_weaponry:item/twin_blade_sword",
+  "textures": {
+    "layer0": "mms_weapons:item/magmatic_gel_twin_blade_sword"
+  }
+}

@@ -17,7 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-// Plays the barrage swings on the local player, and tags each weapon's tooltip with what its right click does.
+// Plays the barrage swings on the local player, and tags each weapon's tooltip with what its skill does.
 public final class BarrageClient {
 
     private static ItemStack weapon = ItemStack.EMPTY;
@@ -36,15 +36,15 @@ public final class BarrageClient {
         });
         ClientTickEvents.END_CLIENT_TICK.register(BarrageClient::tick);
         ItemTooltipCallback.EVENT.register((stack, context, type, lines) -> {
-            Component tag = rightClickTag(stack);
+            Component tag = skillTag(stack);
             if (tag != null) {
                 lines.add(tag);
             }
         });
     }
 
-    // The tooltip line naming what this weapon's right click does, or null when it has none of ours.
-    private static Component rightClickTag(ItemStack stack) {
+    // The tooltip line naming what this weapon's skill does, or null when it has none of ours.
+    private static Component skillTag(ItemStack stack) {
         if (stack.isEmpty()) {
             return null;
         }

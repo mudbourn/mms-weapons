@@ -33,14 +33,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-// The focus barrage: three quick dashing swings at 70% of the weapon's damage, for weapons with no right click of their own.
-// A target who keeps a shield raised through two of the swings, instead of letting go between them, has their guard broken.
-// Also cancels a throw being charged when the thrower is hit by a thrown weapon or an arrow.
+// The focus barrage skill: three quick dashing swings at 70% of the weapon's damage, breaking the guard of a shield held through two of them.
 public final class Barrage {
 
     public static final int SWINGS = 3;
-    public static final int WIND_UP_TICKS = 6;
-    public static final int MAX_HOLD_TICKS = 72000;
     public static final int SWING_GAP_TICKS = 6;
     public static final float SWING_LENGTH = 6.0F;
     public static final float SWING_UPSWING = 0.5F;
@@ -48,6 +44,8 @@ public final class Barrage {
     private static final double DAMAGE_SHARE = 0.7;
     private static final double DASH_SPEED = 0.75;
     private static final double DASH_LIFT = 0.05;
+    // Edge-to-edge spacing the first swing places the player at, comfortably inside a swing's reach.
+    private static final double ENGAGE_GAP = 1.2;
     private static final double ARC_COS = Math.cos(Math.toRadians(60.0));
     private static final int GUARD_BREAK_HITS = 2;
     private static final float GUARD_BREAK_SECONDS = 5.0F;
@@ -73,14 +71,20 @@ public final class Barrage {
         localBarrage = barrage;
     }
 
-    // Starts a barrage with a full-focus weapon. Called on both sides from the right click.
+    // Starts a barrage with a full-focus weapon. Called on both sides from the skill cast.
     public static void start(Player player, ItemStack stack) {
         if (!(player.level() instanceof ServerLevel level)) {
             localBarrage.accept(player);
             return;
         }
         stack.set(Focus.FOCUS, 0.0F);
-        RUNS.put(player.getUUID(), new Run(level.getGameTime(), stack));
+        Run run = new Run(level.getGameTime(), stack);
+        // Only the opening swing is placed; the later swings keep their own lunges.
+        run.placed = player instanceof ServerPlayer server && Engage.snap(server, ENGAGE_GAP);
+        RUNS.put(player.getUUID(), run);
+        if (player instanceof ServerPlayer server) {
+            DashStep.boost(server, SWINGS * SWING_GAP_TICKS + 10);
+        }
         info.mudbourn.mmsweapons.material.VoidCharge.activate(player, stack, SWINGS * SWING_GAP_TICKS + 20);
     }
 
@@ -111,7 +115,7 @@ public final class Barrage {
             }
             long elapsed = player.level().getGameTime() - run.started;
             for (int swing = run.swung; swing < SWINGS && elapsed >= (long) swing * SWING_GAP_TICKS; swing++) {
-                animate(player, run.weapon, swing);
+                animate(player, run.weapon, swing, swing == 0 && run.placed);
                 run.swung = swing + 1;
             }
             for (int swing = run.struck; swing < SWINGS && elapsed >= (long) swing * SWING_GAP_TICKS + STRIKE_OFFSET_TICKS; swing++) {
@@ -124,7 +128,7 @@ public final class Barrage {
         }
     }
 
-    private static void animate(ServerPlayer player, ItemStack weapon, int swing) {
+    private static void animate(ServerPlayer player, ItemStack weapon, int swing, boolean placed) {
         Packets.AttackAnimation packet = new Packets.AttackAnimation(
                 player.getId(),
                 hand(weapon),
@@ -138,10 +142,10 @@ public final class Barrage {
             ServerPlayNetworking.send(viewer, packet);
         }
         player.level().playSound(null, player.blockPosition(), MmsSounds.BARRAGE_SWING, SoundSource.PLAYERS, 1.0F, 1.0F + swing * 0.1F);
-        // Each swing lunges the player forward along where they face.
+        // Each swing lunges the player forward along where they face, unless the opening swing already placed them.
         Vec3 look = player.getLookAngle();
         Vec3 flat = new Vec3(look.x, 0.0, look.z);
-        if (flat.lengthSqr() > 1.0E-4) {
+        if (!placed && flat.lengthSqr() > 1.0E-4) {
             flat = flat.normalize().scale(DASH_SPEED);
             player.push(flat.x, DASH_LIFT, flat.z);
             player.syncVelocity = true;
@@ -180,16 +184,9 @@ public final class Barrage {
         level.sendParticles(ParticleTypes.SWEEP_ATTACK, front.x, front.y - 0.3, front.z, 1, 0.0, 0.0, 0.0, 0.0);
     }
 
-    // Whether this entity is winding up or swinging a focus barrage, during which it takes no knockback.
+    // Whether this entity is swinging a focus barrage, during which it takes no knockback.
     public static boolean knockbackImmune(Entity entity) {
-        if (!(entity instanceof Player player)) {
-            return false;
-        }
-        if (RUNS.containsKey(player.getUUID())) {
-            return true;
-        }
-        ItemStack using = player.getUseItem();
-        return player.isUsingItem() && Focus.focused(using) && Focus.eligible(using);
+        return entity instanceof Player player && RUNS.containsKey(player.getUUID());
     }
 
     // Whether this entity parried a barrage swing with a weapon or shield recently enough to block again at once.
@@ -254,6 +251,7 @@ public final class Barrage {
         final Map<UUID, Guard> guards = new HashMap<>();
         int swung;
         int struck;
+        boolean placed;
 
         Run(long started, ItemStack weapon) {
             this.started = started;

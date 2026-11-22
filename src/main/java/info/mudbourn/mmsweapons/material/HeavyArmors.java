@@ -35,6 +35,19 @@ public final class HeavyArmors {
         if (FabricLoader.getInstance().isModLoaded("aerialhell")) {
             azurite();
             ruby();
+            // Aerial Hell's own armor, one tier heavier: +1 armor per slot, 20% more durability,
+            // +1 toughness and +0.1 knockback resistance.
+            aerialHell("arsonist", 44, 6, 9, 10, 5, 13, 15, SoundEvents.ARMOR_EQUIP_LEATHER, 4.0F, 0.2F);
+            aerialHell("lunatic", 40, 5, 8, 9, 4, 12, 15, SoundEvents.ARMOR_EQUIP_GOLD, 2.5F, 0.1F);
+            aerialHell("magmatic_gel", 8, 2, 4, 6, 3, 5, 25, SoundEvents.ARMOR_EQUIP_GOLD, 1.0F, 0.1F);
+            aerialHell("obsidian", 44, 4, 7, 9, 4, 12, 10, SoundEvents.ARMOR_EQUIP_DIAMOND, 3.0F, 0.2F);
+            aerialHell("volucite", 42, 5, 8, 10, 5, 13, 10, SoundEvents.ARMOR_EQUIP_DIAMOND, 3.5F, 0.15F);
+            aerialHell("shadow", 30, 5, 8, 8, 4, 12, 15, SoundEvents.ARMOR_EQUIP_LEATHER, 2.0F, 0.1F);
+            if (FabricLoader.getInstance().isModLoaded("weaponsexpanded")) {
+                AerialHellHeavy.weapons();
+                CreativeModeTabEvents.modifyOutputEvent(net.minecraft.world.item.CreativeModeTabs.COMBAT).register(output -> AerialHellHeavy.WEAPONS.forEach(output::accept));
+                HeavyLoot.register();
+            }
         }
         if (FabricLoader.getInstance().isModLoaded("enderscape")) {
             shadoline();
@@ -52,6 +65,21 @@ public final class HeavyArmors {
             0.1F,
             TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("aerialhell", "repairs_azurite_material")),
             ResourceKey.create(EquipmentAssets.ROOT_ID, id("heavy_azurite"))
+        ));
+    }
+
+    // Defense values run boots, leggings, chestplate, helmet, body, like ArmorMaterials.makeDefense.
+    private static void aerialHell(String material, int durability, int boots, int leggings, int chestplate, int helmet, int body,
+                                   int enchantability, net.minecraft.core.Holder<net.minecraft.sounds.SoundEvent> sound, float toughness, float knockback) {
+        set(material, new ArmorMaterial(
+            durability,
+            ArmorMaterials.makeDefense(boots, leggings, chestplate, helmet, body),
+            enchantability,
+            sound,
+            toughness,
+            knockback,
+            TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("aerialhell", "repairs_" + material + "_material")),
+            ResourceKey.create(EquipmentAssets.ROOT_ID, id("heavy_" + material))
         ));
     }
 
@@ -81,6 +109,8 @@ public final class HeavyArmors {
         ));
     }
 
+    private static final java.util.Set<String> AERIAL_HELL_ITEMS = java.util.Set.of("arsonist", "lunatic", "magmatic_gel", "obsidian", "volucite", "shadow");
+
     private static void set(String material, ArmorMaterial armor) {
         for (ArmorType type : List.of(ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS)) {
             ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id("heavy_" + material + "_" + type.getName()));
@@ -88,7 +118,11 @@ public final class HeavyArmors {
                 .setId(key)
                 .humanoidArmor(armor, type)
                 .attributes(attributes(armor, type));
-            ITEMS.add(Registry.register(BuiltInRegistries.ITEM, key, new Item(properties)));
+            Item item = Registry.register(BuiltInRegistries.ITEM, key, AERIAL_HELL_ITEMS.contains(material)
+                ? AerialHellHeavy.create(material, armor, type, key, (float) SLOWNESS)
+                : new Item(properties));
+            ITEMS.add(item);
+            CompatOrigin.record(item, CompatWeapons.source(material), "expanded_weaponry");
         }
     }
 

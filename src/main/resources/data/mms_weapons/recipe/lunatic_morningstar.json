@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "aerialhell:lunatic_crystal",
+    "S": "aerialhell:sky_stick"
+  },
+  "pattern": [
+    " M ",
+    "MSM",
+    " S "
+  ],
+  "result": {
+    "id": "mms_weapons:lunatic_morningstar"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell"
+      ]
+    }
+  ]
+}

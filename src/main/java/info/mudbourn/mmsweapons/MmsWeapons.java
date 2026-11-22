@@ -3,7 +3,6 @@ package info.mudbourn.mmsweapons;
 import info.mudbourn.mmsweapons.chainlink.Chainlink;
 import info.mudbourn.mmsweapons.focus.Barrage;
 import info.mudbourn.mmsweapons.focus.Focus;
-import info.mudbourn.mmsweapons.focus.FocusSkill;
 import info.mudbourn.mmsweapons.material.CompatWeapons;
 import info.mudbourn.mmsweapons.material.HeavyArmors;
 import info.mudbourn.mmsweapons.material.MaterialpackTab;
@@ -11,6 +10,7 @@ import info.mudbourn.mmsweapons.shieldbash.ShieldRam;
 import info.mudbourn.mmsweapons.shieldbash.ShieldWeapons;
 import info.mudbourn.mmsweapons.throwable.MmsThrowables;
 import info.mudbourn.mmsweapons.spellengine.SpellEngineBarrage;
+import info.mudbourn.mmsweapons.spellengine.WeaponSkills;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
@@ -26,37 +26,46 @@ public class MmsWeapons implements ModInitializer {
 
         // Anchor/tuna swing cooldown, anchor and tuna knockback, glaive blocking, longbow damage
         WeaponTuning.register();
+        info.mudbourn.mmsweapons.aerial.AerialGear.register();
 
         // Thrown-weapon projectile. Registered unconditionally: the entity type
         // has to exist on both sides regardless of which weapon mods are present,
         // or a saved projectile comes back as an unknown entity.
         MmsThrowables.register();
 
-        // Chain throw for the Bountiful Fish anchor.
+        // Chain throw state for the Bountiful Fish anchor.
         Chainlink.register();
 
-        // Focus and the barrage for weapons with no right click, guard breaks, throw interrupts, shield priority.
+        // Focus and the barrage, guard breaks, throw interrupts, shield priority.
         Focus.register();
         Barrage.register();
-        FocusSkill.register();
+        info.mudbourn.mmsweapons.focus.DashStep.register();
 
-        // Shields as main-hand weapons, and the guard ram on the combat roll key.
+        // Shields as main-hand weapons, and the guard ram.
         ShieldWeapons.register();
         ShieldRam.register();
 
         // Heavy armor in other mods' materials
         HeavyArmors.register();
 
-        // Azurite, ruby and shadoline weapons from Weapons Expanded and Expanded Weaponry
+        // Aerial Hell and Enderscape material weapons from Weapons Expanded, Expanded Weaponry and Paladins
         CompatWeapons.register();
         info.mudbourn.mmsweapons.material.VoidCharge.register();
         MaterialpackTab.register();
 
-        // The barrage as a Spell Engine skill, only where Spell Engine is installed.
+        // The weapon skills, only where Spell Engine is installed.
         if (FabricLoader.getInstance().isModLoaded("spell_engine")) {
             SpellEngineBarrage.register();
+            info.mudbourn.mmsweapons.spellengine.WizardFocus.register();
+            info.mudbourn.mmsweapons.spellengine.DownedCasting.register();
+            info.mudbourn.mmsweapons.spellengine.SpellRevive.register();
+            WeaponSkills.register();
         }
 
-        LOG.info("MMS Weapons loaded — weapon tuning, throwable melee, anchor chain throw, focus barrage, mace smash, longbow tuning.");
+        if (FabricLoader.getInstance().isModLoaded("paladins")) {
+            info.mudbourn.mmsweapons.paladins.PaladinsTrades.register();
+        }
+
+        LOG.info("MMS Weapons loaded: weapon tuning, throwable melee, anchor chain throw, focus barrage, mace smash, longbow tuning.");
     }
 }

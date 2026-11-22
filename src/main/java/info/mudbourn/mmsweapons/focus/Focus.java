@@ -1,7 +1,8 @@
 package info.mudbourn.mmsweapons.focus;
 
-import com.mojang.serialization.Codec;
 import info.mudbourn.mmsweapons.chainlink.Chainlink;
+
+import com.mojang.serialization.Codec;
 import info.mudbourn.mmsweapons.throwable.MmsThrowables;
 import info.mudbourn.mmsweapons.throwable.sickle.SickleThrowing;
 import net.bettercombat.api.WeaponAttributes;
@@ -10,8 +11,10 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -25,12 +28,11 @@ import net.minecraft.world.phys.Vec3;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-// The one focus engine for every weapon: damage dealt with a focus weapon fills its bar, and a full bar unlocks its focus attack.
-// Weapons with no right click of their own spend it on the barrage; registered weapons such as the Armory's Dragon Slayer spend it on their own.
-// Also holds the shared rule that a one-handed weapon gives its right click up to a shield in the off hand.
+// The focus engine for every weapon: damage dealt with a focus weapon fills its bar, and a full bar unlocks its barrage or own focus attack.
 public final class Focus {
 
     public static final float MAX_FOCUS = 100.0F;
@@ -56,17 +58,51 @@ public final class Focus {
     public static void register() {
     }
 
-    // Adds melee damage dealt with a focus weapon to its focus. Called for every hit, killing blows included.
+    // Every focus weapon fills its bar in the same number of swings, whatever its damage.
+    // A weapon can ask for a different count when it registers (the Dragon Slayer fills in 4).
+    public static final int DEFAULT_SWINGS_TO_FILL = 6;
+    private static final Map<Item, Integer> SWINGS_TO_FILL = new ConcurrentHashMap<>();
+    // Game time of each player's last counted swing, so a sweep hitting several targets counts once.
+    private static final Map<UUID, Long> LAST_SWING = new ConcurrentHashMap<>();
+
+    // Adds one swing's share of the bar for a melee hit with a focus weapon. Called for every hit, killing blows included.
     public static void onDamage(DamageSource source, float damage) {
         if (spending || damage <= 0.0F) {
             return;
         }
         if (source.getEntity() instanceof Player player && source.getDirectEntity() == player) {
             ItemStack held = player.getMainHandItem();
-            if (builds(held)) {
-                held.set(FOCUS, Math.min(MAX_FOCUS, focus(held) + damage));
+            // A spellcaster's weapon fills from its spells, not its melee hits.
+            if (!builds(held) || spellFocus(held)) {
+                return;
             }
+            long now = player.level().getGameTime();
+            Long last = LAST_SWING.put(player.getUUID(), now);
+            if (last != null && last == now) {
+                return;
+            }
+            float share = MAX_FOCUS / SWINGS_TO_FILL.getOrDefault(held.getItem(), DEFAULT_SWINGS_TO_FILL);
+            held.set(FOCUS, Math.min(MAX_FOCUS, focus(held) + share));
         }
+    }
+
+    // RPG Series archetypes that mark spellcasters' weapons, such as the Wizards and Paladins staves and wands.
+    private static final List<TagKey<Item>> SPELL_FOCUS_TAGS = List.of(
+            TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("rpg_series", "archetype/magic_damage_weapon")),
+            TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("rpg_series", "archetype/healing_weapon")));
+
+    // Whether this is a spellcaster's weapon, which fills its focus from spell casts and spends it on an empowered spell.
+    public static boolean spellFocus(ItemStack stack) {
+        return !stack.isEmpty() && SPELL_FOCUS_TAGS.stream().anyMatch(stack::is);
+    }
+
+    // Adds one cast's share of the bar to a spellcaster's weapon.
+    public static void onSpellCast(ItemStack held) {
+        if (!spellFocus(held) || !builds(held)) {
+            return;
+        }
+        float share = MAX_FOCUS / SWINGS_TO_FILL.getOrDefault(held.getItem(), DEFAULT_SWINGS_TO_FILL);
+        held.set(FOCUS, Math.min(MAX_FOCUS, focus(held) + share));
     }
 
     // Deals a focus attack's hits without letting them refill the focus that paid for them.
@@ -84,9 +120,15 @@ public final class Focus {
         OWN_ATTACKS.add(item);
     }
 
+    // Same, with its own number of swings to fill the bar.
+    public static void registerFocusWeapon(Item item, int swingsToFill) {
+        OWN_ATTACKS.add(item);
+        SWINGS_TO_FILL.put(item, swingsToFill);
+    }
+
     // Whether damage dealt with this stack builds focus, for the barrage or for its own focus attack.
     public static boolean builds(ItemStack stack) {
-        return !stack.isEmpty() && (OWN_ATTACKS.contains(stack.getItem()) || eligible(stack));
+        return !stack.isEmpty() && (OWN_ATTACKS.contains(stack.getItem()) || eligible(stack) || spellFocus(stack));
     }
 
     public static float focus(ItemStack stack) {
@@ -120,7 +162,6 @@ public final class Focus {
     }
 
     // A Better Combat weapon with no right click of its own: it does not block, eat, equip, throw, or override use.
-    // The mace is left out because Hurl makes it throwable, and spears because they charge their own attack.
     public static boolean eligible(ItemStack stack) {
         if (stack.isEmpty() || WeaponRegistry.getAttributes(stack) == null) {
             return false;
@@ -128,7 +169,10 @@ public final class Focus {
         if (stack.has(DataComponents.BLOCKS_ATTACKS) || stack.has(DataComponents.CONSUMABLE) || stack.has(DataComponents.EQUIPPABLE)) {
             return false;
         }
-        if ((Chainlink.throwable(stack) && !Chainlink.keepsBarrage(stack)) || stack.is(MmsThrowables.THROWABLE_WEAPONS) || SickleThrowing.isSickle(stack) || stack.is(Items.TRIDENT) || stack.is(Items.MACE)) {
+        if (Chainlink.throwable(stack) && !Chainlink.keepsBarrage(stack)) {
+            return false;
+        }
+        if (stack.is(MmsThrowables.THROWABLE_WEAPONS) || SickleThrowing.isSickle(stack) || stack.is(Items.TRIDENT) || stack.is(Items.MACE)) {
             return false;
         }
         // Spears have their own charged attack, vanilla's through these components and modded ones by name.
@@ -162,8 +206,9 @@ public final class Focus {
             return false;
         }
         WeaponAttributes attributes = WeaponRegistry.getAttributes(weapon);
-        boolean weaponRightClick = attributes != null || Chainlink.throwable(weapon) || SickleThrowing.isSickle(weapon)
-                || weapon.is(MmsThrowables.THROWABLE_WEAPONS) || weapon.is(Items.TRIDENT);
-        return weaponRightClick && (attributes == null || !attributes.isTwoHanded());
+        if (attributes == null) {
+            return weapon.is(Items.TRIDENT);
+        }
+        return !attributes.isTwoHanded();
     }
 }

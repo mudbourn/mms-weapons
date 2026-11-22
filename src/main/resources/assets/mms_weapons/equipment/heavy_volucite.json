@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "mms_weapons:heavy_volucite"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "mms_weapons:heavy_volucite"
+      }
+    ]
+  }
+}

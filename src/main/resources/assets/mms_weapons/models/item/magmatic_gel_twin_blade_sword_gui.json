@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "mms_weapons:item/magmatic_gel_twin_blade_sword_gui"
+  }
+}

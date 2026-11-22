@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    "aerialhell:shadow_chestplate",
+    "aerialhell:shadow_crystal_block"
+  ],
+  "result": {
+    "id": "mms_weapons:heavy_shadow_chestplate"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell"
+      ]
+    }
+  ]
+}

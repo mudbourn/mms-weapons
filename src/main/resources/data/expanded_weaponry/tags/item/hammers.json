@@ -6,11 +6,43 @@
       "required": false
     },
     {
+      "id": "mms_weapons:arsonist_hammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:lunatic_hammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:magmatic_gel_hammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:obsidian_hammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:volucite_hammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:sky_wood_hammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:stellar_stone_hammer",
+      "required": false
+    },
+    {
       "id": "mms_weapons:ruby_hammer",
       "required": false
     },
     {
       "id": "mms_weapons:shadoline_hammer",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:shadow_hammer",
       "required": false
     }
   ]

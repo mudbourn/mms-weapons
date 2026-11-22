@@ -1,22 +1,36 @@
 package info.mudbourn.mmsweapons.throwable;
 
+import info.mudbourn.mmsweapons.material.VoidCharge;
+import info.mudbourn.mmsweapons.throwable.sickle.ThrownSickleEntity;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import info.mudbourn.mmsweapons.throwable.sickle.ThrownSickleEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Map;
 
@@ -24,9 +38,9 @@ import java.util.Map;
  * Registry and shared rules for weapons MMS makes throwable.
  *
  * <p>Neither Basic Weapons nor Expanded Weaponry ships a projectile, so the
- * throw is entirely ours: a tag decides which items can be thrown, an item
- * mixin gives those items trident-style use behaviour, and {@link
- * ThrownWeaponEntity} carries them through the air.
+ * throw is entirely ours: a tag decides which items can be thrown, a Spell
+ * Engine skill throws them, and {@link ThrownWeaponEntity} carries them through
+ * the air.
  *
  * <p>The membership tag is deliberately data-driven rather than an
  * {@code instanceof PikeItem} check. Basic Weapons generates its pike variants
@@ -142,6 +156,55 @@ public final class MmsThrowables {
 
     public static boolean isThrowable(ItemStack stack) {
         return stack.is(THROWABLE_WEAPONS);
+    }
+
+    // Whether this stack can be thrown now: it survives the durability cost, and Riptide only has water or rain to work with.
+    public static boolean canThrow(Player player, ItemStack stack) {
+        if (!isThrowable(stack) || stack.nextDamageWillBreak()) {
+            return false;
+        }
+        return EnchantmentHelper.getTridentSpinAttackStrength(stack, player) <= 0.0F || player.isInWaterOrRain();
+    }
+
+    // Throws the held weapon at full draw, or with Riptide launches the player instead.
+    public static void throwWeapon(ServerPlayer player, ItemStack stack) {
+        ServerLevel level = player.level();
+        float riptide = EnchantmentHelper.getTridentSpinAttackStrength(stack, player);
+        Holder<SoundEvent> throwSound = EnchantmentHelper
+                .pickHighestLevel(stack, EnchantmentEffectComponents.TRIDENT_SOUND)
+                .orElse(SoundEvents.TRIDENT_THROW);
+        player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+        stack.hurtWithoutBreaking(throwDurabilityCost(stack), player);
+
+        if (riptide == 0.0F) {
+            VoidCharge.activate(player, stack, 80);
+            ItemStack thrown = stack.consumeAndReturn(1, player);
+            ThrownWeaponEntity weapon = Projectile.spawnProjectileFromRotation(
+                    ThrownWeaponEntity::new, level, thrown, player,
+                    0.0F, shootPower(thrown), 1.0F);
+            weapon.setChargeScale(1.0F);
+            if (player.hasInfiniteMaterials()) {
+                weapon.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
+            }
+
+            level.playSound(null, weapon, throwSound.value(), SoundSource.PLAYERS, 1.0F, throwPitch(thrown));
+            return;
+        }
+
+        float yaw = player.getYRot();
+        float pitch = player.getXRot();
+        float x = -Mth.sin(yaw * (float) (Math.PI / 180.0)) * Mth.cos(pitch * (float) (Math.PI / 180.0));
+        float y = -Mth.sin(pitch * (float) (Math.PI / 180.0));
+        float z = Mth.cos(yaw * (float) (Math.PI / 180.0)) * Mth.cos(pitch * (float) (Math.PI / 180.0));
+        float length = Mth.sqrt(x * x + y * y + z * z);
+        player.push(x * riptide / length, y * riptide / length, z * riptide / length);
+        player.startAutoSpinAttack(20, 8.0F, stack);
+        if (player.onGround()) {
+            player.move(MoverType.SELF, new Vec3(0.0, 1.1999999F, 0.0));
+        }
+        player.syncVelocity = true;
+
+        level.playSound(null, player, throwSound.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
     }
 
     /**

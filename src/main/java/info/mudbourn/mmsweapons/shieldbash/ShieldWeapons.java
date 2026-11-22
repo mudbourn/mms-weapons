@@ -55,7 +55,7 @@ public final class ShieldWeapons {
 
     // A weapon that blocks on its own: it has attack damage and blocks, but is not a shield.
     public static boolean isBlockingWeapon(Item item) {
-        return !(item instanceof ShieldItem) && item.components().has(DataComponents.BLOCKS_ATTACKS) && hasAttackDamage(item);
+        return item.components().has(DataComponents.BLOCKS_ATTACKS) && !isShield(item);
     }
 
     private static BlocksAttacks weakerGuard(BlocksAttacks guard) {
@@ -73,7 +73,13 @@ public final class ShieldWeapons {
         if (item instanceof ShieldItem) {
             return true;
         }
-        return item.components().has(DataComponents.BLOCKS_ATTACKS) && !hasAttackDamage(item);
+        // Shields get attack damage from stats(), so a shield is recognised by the knockback
+        // modifier only shields receive, or, before that runs, by having no attack damage.
+        return item.components().has(DataComponents.BLOCKS_ATTACKS) && (hasShieldStats(item) || !hasAttackDamage(item));
+    }
+
+    private static boolean hasShieldStats(Item item) {
+        return modifiers(item).modifiers().stream().anyMatch(entry -> entry.modifier().id().equals(KNOCKBACK_ID));
     }
 
     private static boolean hasAttackDamage(Item item) {

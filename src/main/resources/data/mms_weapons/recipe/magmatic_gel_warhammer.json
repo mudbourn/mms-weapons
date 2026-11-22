@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "M": "aerialhell:magmatic_gel",
+    "S": "aerialhell:sky_stick"
+  },
+  "pattern": [
+    "MSM",
+    "MS ",
+    " S "
+  ],
+  "result": {
+    "id": "mms_weapons:magmatic_gel_warhammer"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell"
+      ]
+    }
+  ]
+}

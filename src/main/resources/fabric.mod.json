@@ -22,6 +22,12 @@
     "mms_weapons.expandedweaponry.mixins.json",
     "mms_weapons.shieldbreak.mixins.json",
     "mms_weapons.shieldbash.mixins.json",
+    "mms_weapons.downed.mixins.json",
+    "mms_weapons.aerial.mixins.json",
+    {
+      "config": "mms_weapons.jei.client.mixins.json",
+      "environment": "client"
+    },
     {
       "config": "mms_weapons.swing.client.mixins.json",
       "environment": "client"
@@ -35,7 +41,7 @@
       "environment": "client"
     },
     {
-      "config": "mms_weapons.shieldbash.client.mixins.json",
+      "config": "mms_weapons.spellengine.client.mixins.json",
       "environment": "client"
     }
   ],
@@ -65,13 +71,16 @@
         "weaponsexpanded",
         "bountiful-fish",
         "mutantmonsters",
-        "bettercombat"
+        "bettercombat",
+        "paladins",
+        "enderscape"
       ]
     }
   },
   "suggests": {
     "sounds": "*",
     "frostiful": "*",
-    "spell_engine": "*"
+    "spell_engine": "*",
+    "paladins": "*"
   }
 }

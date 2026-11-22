@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "aerialhell:magmatic_gel",
+    "b": "aerialhell:magmatic_gel_block"
+  },
+  "pattern": [
+    "#b#",
+    "# #"
+  ],
+  "result": {
+    "id": "mms_weapons:heavy_magmatic_gel_helmet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell"
+      ]
+    }
+  ]
+}
