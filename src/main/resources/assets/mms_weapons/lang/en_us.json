@@ -232,5 +232,9 @@
   "item.mms_weapons.heavy_longsword": "Heavy Longsword",
   "item.mms_weapons.heavy_longsword.desc": "Slow but powerful",
   "item.mms_weapons.heavy_greatsword": "Heavy Greatsword",
-  "item.mms_weapons.heavy_greatsword.desc": "Slow but powerful"
+  "item.mms_weapons.heavy_greatsword.desc": "Slow but powerful",
+  "item.mms_weapons.heavy_hammer": "Heavy Hammer",
+  "item.mms_weapons.heavy_hammer.desc": "Slow but powerful",
+  "spell.mms_weapons.hammer_slam.name": "Slam",
+  "spell.mms_weapons.hammer_slam.description": "Your next swing within 3 seconds lands as a smash, as if you'd fallen onto the target."
 }

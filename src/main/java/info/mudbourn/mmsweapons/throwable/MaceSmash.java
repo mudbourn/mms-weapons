@@ -1,5 +1,8 @@
 package info.mudbourn.mmsweapons.throwable;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Predicate;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.core.Direction;
@@ -49,8 +52,51 @@ public final class MaceSmash {
         return item.builtInRegistryHolder().is(MmsThrowables.MACE_SMASH_WEAPONS);
     }
 
+    /** How long a forced smash stays armed, in ticks. */
+    private static final int FORCED_WINDOW = 60;
+
+    private record Forced(Item item, float fall, long until) {
+    }
+
+    private static final Map<UUID, Forced> FORCED = new HashMap<>();
+
+    /**
+     * Arms the next swing with this weapon to land as a smash from {@code fall} blocks, whether or not the attacker
+     * is falling. Expires after three seconds or on the next hit.
+     */
+    public static void force(LivingEntity attacker, Item item, float fall) {
+        FORCED.put(attacker.getUUID(), new Forced(item, fall, attacker.level().getGameTime() + FORCED_WINDOW));
+    }
+
+    private static float forcedFall(LivingEntity attacker) {
+        Forced forced = FORCED.get(attacker.getUUID());
+        if (forced == null) {
+            return 0.0F;
+        }
+        if (attacker.level().getGameTime() > forced.until() || !attacker.getMainHandItem().is(forced.item())) {
+            FORCED.remove(attacker.getUUID());
+            return 0.0F;
+        }
+        return forced.fall();
+    }
+
+    public static boolean isForced(LivingEntity attacker) {
+        return forcedFall(attacker) > 0.0F;
+    }
+
+    /** The fall the smash counts: the real one, or a forced one if that's bigger. */
+    private static double effectiveFall(LivingEntity attacker) {
+        return Math.max(attacker.fallDistance, forcedFall(attacker));
+    }
+
     public static boolean canSmashAttack(LivingEntity attacker) {
-        return attacker.fallDistance > SMASH_ATTACK_FALL_THRESHOLD && !attacker.isFallFlying();
+        return isForced(attacker) || attacker.fallDistance > SMASH_ATTACK_FALL_THRESHOLD && !attacker.isFallFlying();
+    }
+
+    /** Ends a smash: the fall resets and any forced smash is spent. */
+    public static void spend(LivingEntity attacker) {
+        attacker.resetFallDistance();
+        FORCED.remove(attacker.getUUID());
     }
 
     /** Mirrors {@code MaceItem.hurtEnemy}: kill the attacker's fall, make noise, shove the crowd. */
@@ -72,7 +118,7 @@ public final class MaceSmash {
                 serverPlayer.setSpawnExtraParticlesOnFall(true);
             }
 
-            SoundEvent sound = attacker.fallDistance > SMASH_ATTACK_HEAVY_THRESHOLD
+            SoundEvent sound = effectiveFall(attacker) > SMASH_ATTACK_HEAVY_THRESHOLD
                     ? SoundEvents.MACE_SMASH_GROUND_HEAVY
                     : SoundEvents.MACE_SMASH_GROUND;
             serverLevel.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(),
@@ -103,7 +149,7 @@ public final class MaceSmash {
             return 0.0F;
         }
 
-        double fall = attacker.fallDistance;
+        double fall = effectiveFall(attacker);
         double bonus;
         if (fall <= 3.0) {
             bonus = 4.0 * fall;
@@ -116,9 +162,9 @@ public final class MaceSmash {
         if (attacker.level() instanceof ServerLevel serverLevel) {
             float perBlock = EnchantmentHelper.modifyFallBasedDamage(
                     serverLevel, attacker.getWeaponItem(), target, source, 0.0F);
-            return (float) (bonus + perBlock * fall);
+            return (float) ((bonus + perBlock * fall) * Hammers.smashScale(attacker.getWeaponItem().getItem()));
         }
-        return (float) bonus;
+        return (float) (bonus * Hammers.smashScale(attacker.getWeaponItem().getItem()));
     }
 
     private static void knockback(Level level, Entity target, Entity attacker) {
@@ -159,7 +205,7 @@ public final class MaceSmash {
     private static double knockbackPower(Entity attacker, LivingEntity nearby, Vec3 away) {
         return (SMASH_ATTACK_KNOCKBACK_RADIUS - away.length())
                 * SMASH_ATTACK_KNOCKBACK_POWER
-                * (attacker.fallDistance > SMASH_ATTACK_HEAVY_THRESHOLD ? 2 : 1)
+                * (attacker instanceof LivingEntity living && effectiveFall(living) > SMASH_ATTACK_HEAVY_THRESHOLD ? 2 : 1)
                 * (1.0 - nearby.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
     }
 }

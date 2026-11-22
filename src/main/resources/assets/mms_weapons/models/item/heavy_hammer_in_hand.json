@@ -1,0 +1,8 @@
+{
+	"parent": "expanded_weaponry:item/hammer",
+	"texture_size": [26, 26],
+	"textures": {
+		"0": "mms_weapons:item/model/heavy_hammer",
+		"particle": "mms_weapons:item/model/heavy_hammer"
+	}
+}

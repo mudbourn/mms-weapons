@@ -27,6 +27,8 @@ public class MmsWeapons implements ModInitializer {
         // Anchor/tuna swing cooldown, anchor and tuna knockback, glaive blocking, longbow damage
         WeaponTuning.register();
         info.mudbourn.mmsweapons.aerial.AerialGear.register();
+        // Hammer and mace weight curve, and the heavy hammers' forced smash.
+        info.mudbourn.mmsweapons.throwable.Hammers.register();
 
         // Thrown-weapon projectile. Registered unconditionally: the entity type
         // has to exist on both sides regardless of which weapon mods are present,

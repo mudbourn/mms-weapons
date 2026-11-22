@@ -480,6 +480,14 @@
     {
       "id": "mms_weapons:heavy_greatsword",
       "required": false
+    },
+    {
+      "id": "mms_weapons:heavy_hammer",
+      "required": false
+    },
+    {
+      "id": "mutantmonsters:hulk_hammer",
+      "required": false
     }
   ]
 }

@@ -9,11 +9,12 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.component.BlocksAttacks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-// Aerial Hell vs overworld in combat: weapon damage on mobs, and how much armor counts against a mob.
+// Aerial Hell vs overworld in combat: weapon damage on mobs, and how much armor and shields count against a mob.
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityAerialMixin {
 
@@ -35,5 +36,12 @@ public abstract class LivingEntityAerialMixin {
             value = Math.max(0.0, value + AerialGear.armorAdjustment(self, source.getEntity(), Attributes.ARMOR_TOUGHNESS));
         }
         return value;
+    }
+
+    @WrapOperation(method = "applyItemBlocking", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/component/BlocksAttacks;resolveBlockedDamage(Lnet/minecraft/world/damagesource/DamageSource;FD)F"))
+    private float mmsWeapons$aerialShield(BlocksAttacks blocks, DamageSource source, float amount, double angle, Operation<Float> original) {
+        float blocked = original.call(blocks, source, amount, angle);
+        LivingEntity self = (LivingEntity) (Object) this;
+        return Math.min(amount, blocked * AerialGear.shieldMultiplier(self.getItemBlockingWith(), source.getEntity()));
     }
 }

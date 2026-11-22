@@ -35,7 +35,7 @@ public abstract class ItemMaceSmashMixin {
     @Inject(method = "postHurtEnemy", at = @At("HEAD"))
     private void mmsWeapons$resetFallAfterSmash(ItemStack stack, LivingEntity target, LivingEntity attacker, CallbackInfo ci) {
         if (MaceSmash.isSmashWeapon(stack.getItem()) && MaceSmash.canSmashAttack(attacker)) {
-            attacker.resetFallDistance();
+            MaceSmash.spend(attacker);
         }
     }
 

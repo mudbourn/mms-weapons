@@ -137,19 +137,6 @@ public final class MmsThrowables {
     /** Extra gravity a weight-1 weapon falls with. */
     private static final double WEIGHT_GRAVITY = 0.03;
 
-    /** Hammer weight by material, 0 a pike and 1 the mace: netherite coats diamond, gold sits near diamond, the rest lighten down to wood. */
-    private static final Map<String, Float> HAMMER_WEIGHTS = Map.of(
-            "netherite", 0.85F,
-            "diamond", 0.8F,
-            "golden", 0.75F,
-            "iron", 0.6F,
-            "copper", 0.5F,
-            "stone", 0.4F,
-            "wooden", 0.25F);
-
-    /** Hammer weight for a material missing from the table, iron's. */
-    private static final float DEFAULT_HAMMER_WEIGHT = 0.6F;
-
     /** Called from the mod initializer purely to force the class — and the registration — to load. */
     public static void register() {
     }
@@ -252,15 +239,12 @@ public final class MmsThrowables {
         return stack.is(MACE_SMASH_WEAPONS);
     }
 
-    /** How heavy a throw this weapon is, 0 for a pike up to 1 for Hurl's mace. */
+    /** How heavy a throw this weapon is: 0 for a pike, 1 for Hurl's mace, past 1 for the heaviest hammers. */
     public static float weight(ItemStack stack) {
         if (!isHeavy(stack)) {
             return 0.0F;
         }
-        String path = BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath();
-        int split = path.indexOf('_');
-        String material = split < 0 ? path : path.substring(0, split);
-        return HAMMER_WEIGHTS.getOrDefault(material, DEFAULT_HAMMER_WEIGHT);
+        return Hammers.weight(stack.getItem());
     }
 
     /** Minimum wind-up, in ticks, before this weapon will release. */

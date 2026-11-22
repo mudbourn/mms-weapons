@@ -21,6 +21,7 @@ import net.minecraft.world.item.equipment.ArmorType;
 import fr.factionbedrock.aerialhell.Item.ExtraHoverTextItem;
 import fr.factionbedrock.aerialhell.Item.Material.AerialHellToolMaterials;
 import com.kielson.item.custom.GreatswordItem;
+import com.kielson.item.custom.HammerItem;
 import net.angelic.weaponsexpanded.item.custom.BastardSwordItem;
 import net.angelic.weaponsexpanded.item.custom.HalberdItem;
 import net.minecraft.core.Registry;
@@ -103,7 +104,7 @@ final class AerialHellHeavy {
     }
 
     // Aerial Hell's Heavy Axe and Heavy Sword come as a set from mud dungeon treasure; the Heavy Battleaxe, Halberd,
-    // Longsword and Greatsword join them in its heavy material: slow, hard-hitting, epic, repaired with obsidian shards.
+    // Longsword, Hammer and Greatsword join them in its heavy material: slow, hard-hitting, epic, repaired with obsidian shards.
     private static final ToolMaterial HEAVY = new ToolMaterial(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1561, 8.0F, 6.0F, 10,
         TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("aerialhell", "repairs_heavy_material")));
 
@@ -115,6 +116,8 @@ final class AerialHellHeavy {
         register("heavy_halberd", key -> new HeavyHalberd(new Item.Properties().setId(key).rarity(Rarity.EPIC)));
         // The longsword keeps Weapons Expanded's one- and two-handed grips, a step slower than an obsidian one.
         register("heavy_longsword", key -> new HeavyLongsword(new Item.Properties().setId(key).rarity(Rarity.EPIC)));
+        // The hammer is Expanded Weaponry's, in the heavy material: too heavy to throw, it slams instead (see Hammers).
+        register("heavy_hammer", key -> new HeavyHammer(new Item.Properties().setId(key).rarity(Rarity.EPIC)));
         // The greatsword is Expanded Weaponry's, in the heavy material.
         if (net.fabricmc.loader.api.FabricLoader.getInstance().isModLoaded("expanded_weaponry")) {
             register("heavy_greatsword", key -> new HeavyGreatsword(new Item.Properties().setId(key).rarity(Rarity.EPIC)));
@@ -167,6 +170,23 @@ final class AerialHellHeavy {
 
     private static final class HeavyGreatsword extends GreatswordItem implements ExtraHoverTextItem {
         HeavyGreatsword(Item.Properties properties) {
+            super(HEAVY, properties);
+        }
+
+        @Override
+        public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            appendOptionalDescriptionsHoverText(context, tooltip);
+            super.appendHoverText(stack, context, display, tooltip, flag);
+        }
+
+        @Override
+        public Item getSelf() {
+            return this;
+        }
+    }
+
+    private static final class HeavyHammer extends HammerItem implements ExtraHoverTextItem {
+        HeavyHammer(Item.Properties properties) {
             super(HEAVY, properties);
         }
 

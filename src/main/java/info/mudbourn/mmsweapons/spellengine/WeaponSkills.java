@@ -1,5 +1,8 @@
 package info.mudbourn.mmsweapons.spellengine;
 
+import info.mudbourn.mmsweapons.throwable.Hammers;
+import info.mudbourn.mmsweapons.throwable.MaceSmash;
+
 import info.mudbourn.mmsweapons.chainlink.Chainlink;
 import info.mudbourn.mmsweapons.shieldbash.ShieldRam;
 import info.mudbourn.mmsweapons.throwable.MmsThrowables;
@@ -16,7 +19,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-// The weapon throws, shield ram and empty placeholder as Spell Engine skills.
+// The weapon throws, shield ram, hammer slam and empty placeholder as Spell Engine skills.
 public final class WeaponSkills {
 
     public static final Identifier EMPTY = Identifier.fromNamespaceAndPath("mms_weapons", "empty");
@@ -24,6 +27,7 @@ public final class WeaponSkills {
     public static final Identifier SICKLE_THROW = Identifier.fromNamespaceAndPath("mms_weapons", "sickle_throw");
     public static final Identifier CHAIN_THROW = Identifier.fromNamespaceAndPath("mms_weapons", "chain_throw");
     public static final Identifier SHIELD_RAM = Identifier.fromNamespaceAndPath("mms_weapons", "shield_ram");
+    public static final Identifier HAMMER_SLAM = Identifier.fromNamespaceAndPath("mms_weapons", "hammer_slam");
 
     private static final Map<Identifier, Predicate<Player>> SKILLS = new HashMap<>();
 
@@ -39,6 +43,12 @@ public final class WeaponSkills {
             player -> Chainlink.throwChain(player, player.getMainHandItem()));
         define(SHIELD_RAM, player -> ShieldRam.ramShield(player) != null,
             player -> ShieldRam.start(player, ShieldRam.ramShield(player)));
+        define(HAMMER_SLAM, player -> Hammers.slamFall(player.getMainHandItem().getItem()) > 0.0F && !MaceSmash.isForced(player),
+            player -> {
+                MaceSmash.force(player, player.getMainHandItem().getItem(), Hammers.slamFall(player.getMainHandItem().getItem()));
+                player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                    net.minecraft.sounds.SoundEvents.MACE_SMASH_AIR, player.getSoundSource(), 1.0F, 0.6F);
+            });
         SpellHandlers.registerCustomDelivery(EMPTY, (level, spell, caster, targets, context, position) -> false);
         SpellEvents.CASTING_ATTEMPT.PRE.register(args -> {
             if (args.spell().is(EMPTY)) {

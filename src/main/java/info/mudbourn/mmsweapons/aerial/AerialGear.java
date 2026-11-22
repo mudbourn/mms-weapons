@@ -27,9 +27,9 @@ import java.util.List;
  * <ul>
  *   <li>Aerial Hell tools and weapons get 1.5x damage, mining speed, durability and enchantability.</li>
  *   <li>Against things from outside Aerial Hell they're 1.25x as effective: they mine overworld blocks
- *       1.25x faster, hit non-Aerial Hell mobs 1.25x harder, and their armor counts 1.25x against those mobs.</li>
+ *       1.25x faster, hit non-Aerial Hell mobs 1.25x harder, and their armor and shields count 1.25x against those mobs.</li>
  *   <li>Overworld gear is 0.75x as effective against Aerial Hell: slower on its blocks, weaker on its mobs,
- *       and its armor counts 0.75x against them.</li>
+ *       and its armor and shields count 0.75x against them.</li>
  * </ul>
  *
  * "Aerial Hell" means anything in the aerialhell namespace, plus the mms_weapons items made from Aerial Hell
@@ -43,6 +43,8 @@ public final class AerialGear {
 
     private static final List<String> MATERIALS = List.of(
         "arsonist_", "azurite_", "lunatic_", "magmatic_gel_", "obsidian_", "ruby_", "shadow_", "sky_wood_", "stellar_stone_", "volucite_");
+    private static final java.util.Set<String> HEAVY_WEAPONS = java.util.Set.of(
+        "heavy_battleaxe", "heavy_halberd", "heavy_longsword", "heavy_greatsword", "heavy_hammer");
     private static final List<EquipmentSlot> ARMOR_SLOTS = List.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
 
     private AerialGear() {
@@ -67,7 +69,8 @@ public final class AerialGear {
                     builder.set(DataComponents.TOOL, new Tool(rules, tool.defaultMiningSpeed() * STAT_MULTIPLIER, tool.damagePerBlock(), tool.canDestroyBlocksInCreative()));
                 }
                 ItemAttributeModifiers modifiers = item.components().get(DataComponents.ATTRIBUTE_MODIFIERS);
-                if (modifiers != null) {
+                // Hammers get their boosted hit from Hammers, which sets their whole attribute curve.
+                if (modifiers != null && !info.mudbourn.mmsweapons.throwable.Hammers.isHammer(item)) {
                     builder.set(DataComponents.ATTRIBUTE_MODIFIERS, scaledDamage(modifiers));
                 }
             }));
@@ -102,6 +105,10 @@ public final class AerialGear {
         }
         if (!id.getNamespace().equals("mms_weapons")) {
             return false;
+        }
+        // The heavy weapons are Aerial Hell's heavy material, like its Heavy Axe and Sword.
+        if (HEAVY_WEAPONS.contains(id.getPath())) {
+            return true;
         }
         String path = id.getPath().startsWith("heavy_") ? id.getPath().substring("heavy_".length()) : id.getPath();
         return MATERIALS.stream().anyMatch(path::startsWith);
@@ -146,6 +153,23 @@ public final class AerialGear {
             return HOME_ADVANTAGE;
         }
         if (!aerialWeapon && aerialVictim) {
+            return AWAY_PENALTY;
+        }
+        return 1.0F;
+    }
+
+    // Damage a shield blocks: Aerial Hell shields block 1.25x against non-Aerial Hell mobs, overworld shields 0.75x
+    // against Aerial Hell mobs. Players and attacker-less damage are left alone, like the weapon rule.
+    public static float shieldMultiplier(ItemStack shield, Entity attacker) {
+        if (shield == null || shield.isEmpty() || attacker == null || attacker instanceof Player) {
+            return 1.0F;
+        }
+        boolean aerialShield = isAerial(shield);
+        boolean aerialAttacker = isAerial(attacker);
+        if (aerialShield && !aerialAttacker) {
+            return HOME_ADVANTAGE;
+        }
+        if (!aerialShield && aerialAttacker) {
             return AWAY_PENALTY;
         }
         return 1.0F;

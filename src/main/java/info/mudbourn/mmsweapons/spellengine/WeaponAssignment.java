@@ -1,5 +1,7 @@
 package info.mudbourn.mmsweapons.spellengine;
 
+import info.mudbourn.mmsweapons.throwable.Hammers;
+
 import info.mudbourn.mmsweapons.chainlink.Chainlink;
 import info.mudbourn.mmsweapons.focus.Focus;
 import info.mudbourn.mmsweapons.shieldbash.ShieldWeapons;
@@ -52,6 +54,16 @@ public final class WeaponAssignment {
             if (own != null) {
                 place(spells, own);
                 skills++;
+                changed = true;
+            }
+            // Slam hammers: the slam takes the own-skill slot, or the one after a throw.
+            if (Hammers.slamFall(item) > 0.0F) {
+                String slam = WeaponSkills.HAMMER_SLAM.toString();
+                spells.remove(slam);
+                while (spells.size() < OWN_SKILL_SLOT) {
+                    spells.add(WeaponSkills.EMPTY.toString());
+                }
+                spells.add(own == null ? OWN_SKILL_SLOT : Math.min(OWN_SKILL_SLOT + 1, spells.size()), slam);
                 changed = true;
             }
             if (changed) {

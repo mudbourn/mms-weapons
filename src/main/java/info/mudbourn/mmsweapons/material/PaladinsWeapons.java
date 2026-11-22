@@ -31,22 +31,22 @@ final class PaladinsWeapons {
     private static final Identifier TOUGHNESS_ID = Identifier.fromNamespaceAndPath("mms_weapons", "kite_shield_toughness");
     private static final Identifier HEALTH_ID = Identifier.fromNamespaceAndPath("mms_weapons", "kite_shield_health");
 
-    // The Paladins tier each pack material is matched to: its wand and staff healing power, and its kite shield toughness and health.
-    private record Tier(float wandPower, float staffPower, float toughness, float health) {
+    // The Paladins tier each pack material is matched to: its wand and staff healing power. Kite shields follow ShieldTiers.
+    private record Tier(float wandPower, float staffPower) {
     }
 
     private static final Map<String, Tier> TIERS = Map.ofEntries(
-        Map.entry("azurite", new Tier(3.0F, 4.5F, 0.0F, 0.0F)),
-        Map.entry("ruby", new Tier(4.0F, 5.0F, 1.0F, 2.0F)),
-        Map.entry("shadoline", new Tier(5.0F, 6.0F, 1.0F, 2.0F)),
-        Map.entry("magmatic_gel", new Tier(3.0F, 4.5F, 0.0F, 0.0F)),
-        Map.entry("sky_wood", new Tier(3.0F, 4.5F, 0.0F, 0.0F)),
-        Map.entry("stellar_stone", new Tier(3.0F, 4.5F, 0.0F, 0.0F)),
-        Map.entry("obsidian", new Tier(4.0F, 5.0F, 1.0F, 2.0F)),
-        Map.entry("arsonist", new Tier(5.0F, 6.0F, 1.0F, 2.0F)),
-        Map.entry("lunatic", new Tier(5.0F, 6.0F, 1.0F, 2.0F)),
-        Map.entry("volucite", new Tier(5.0F, 6.0F, 1.0F, 2.0F)),
-        Map.entry("shadow", new Tier(4.0F, 5.0F, 1.0F, 2.0F))
+        Map.entry("azurite", new Tier(3.0F, 4.5F)),
+        Map.entry("ruby", new Tier(4.0F, 5.0F)),
+        Map.entry("shadoline", new Tier(5.0F, 6.0F)),
+        Map.entry("magmatic_gel", new Tier(3.0F, 4.5F)),
+        Map.entry("sky_wood", new Tier(3.0F, 4.5F)),
+        Map.entry("stellar_stone", new Tier(3.0F, 4.5F)),
+        Map.entry("obsidian", new Tier(4.0F, 5.0F)),
+        Map.entry("arsonist", new Tier(5.0F, 6.0F)),
+        Map.entry("lunatic", new Tier(5.0F, 6.0F)),
+        Map.entry("volucite", new Tier(5.0F, 6.0F)),
+        Map.entry("shadow", new Tier(4.0F, 5.0F))
     );
 
     private PaladinsWeapons() {
@@ -56,7 +56,7 @@ final class PaladinsWeapons {
         Tier tier = TIERS.get(name);
         CompatWeapons.add(TAB, name + "_holy_wand", p -> staff(material, p, 2.0, -2.4, tier.wandPower(), HEAL));
         CompatWeapons.add(TAB, name + "_holy_staff", p -> staff(material, p, 4.0, -3.0, tier.staffPower(), HOLY_SHOCK));
-        CompatWeapons.add(TAB, name + "_kite_shield", p -> kiteShield(material, p, tier));
+        CompatWeapons.add(TAB, name + "_kite_shield", p -> kiteShield(name, material, p));
     }
 
     private static Item staff(ToolMaterial material, Item.Properties p, double damage, double speed, float power, Identifier spell) {
@@ -70,14 +70,16 @@ final class PaladinsWeapons {
         return new StaffItem(material, p);
     }
 
-    private static Item kiteShield(ToolMaterial material, Item.Properties p, Tier tier) {
-        List<Shield.AttributeEntry> attributes = tier.toughness() > 0.0F
+    private static Item kiteShield(String name, ToolMaterial material, Item.Properties p) {
+        float toughness = ShieldTiers.kiteToughness(name);
+        float health = ShieldTiers.kiteHealth(name);
+        List<Shield.AttributeEntry> attributes = toughness > 0.0F
             ? List.of(
-                new Shield.AttributeEntry(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(TOUGHNESS_ID, tier.toughness(), AttributeModifier.Operation.ADD_VALUE)),
-                new Shield.AttributeEntry(Attributes.MAX_HEALTH, new AttributeModifier(HEALTH_ID, tier.health(), AttributeModifier.Operation.ADD_VALUE))
+                new Shield.AttributeEntry(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(TOUGHNESS_ID, toughness, AttributeModifier.Operation.ADD_VALUE)),
+                new Shield.AttributeEntry(Attributes.MAX_HEALTH, new AttributeModifier(HEALTH_ID, health, AttributeModifier.Operation.ADD_VALUE))
             )
             : List.of();
-        p.durability(material.durability()).repairable(material.repairItems());
+        p.durability(ShieldTiers.of(name).kiteDurability).repairable(material.repairItems());
         return new Item(Shield.applyVanillaComponents(p, null, attributes));
     }
 }
