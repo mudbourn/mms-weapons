@@ -70,6 +70,11 @@ public final class Hammers {
     /** Movement lost per point of weight past the mace, while held. */
     private static final float SLOW_PER_EXTRA_WEIGHT = 0.25F;
 
+    /** Extra knockback on the hulk hammer's swings, about three Knockback enchantment levels' worth past one. */
+    private static final float HULK_KNOCKBACK = 1.5F;
+    /** The hulk hammer's durability, raised from Mutant Monsters' 150 to the heavy hammer's 1561. */
+    private static final int HULK_DURABILITY = 1561;
+
     private static final Identifier SLOW_ID = Identifier.fromNamespaceAndPath("mms_weapons", "hammer_weight");
 
     private Hammers() {
@@ -82,8 +87,21 @@ public final class Hammers {
             context.modify(Hammers::isHammer, (builder, item) -> {
                 Stat stat = stat(item);
                 float hit = AerialGear.isAerial(item) ? stat.hit() * AerialGear.STAT_MULTIPLIER : stat.hit();
-                builder.set(DataComponents.ATTRIBUTE_MODIFIERS, attributes(hit, stat.weight(), isHeavyHammer(item)));
+                ItemAttributeModifiers attributes = attributes(hit, stat.weight(), isHeavyHammer(item));
+                if (BuiltInRegistries.ITEM.getKey(item).equals(Identifier.fromNamespaceAndPath("mutantmonsters", "hulk_hammer"))) {
+                    // The hulk hammer's swings knock back like a mutant zombie's fists.
+                    attributes = attributes.withModifierAdded(Attributes.ATTACK_KNOCKBACK,
+                        new AttributeModifier(SLOW_ID.withPath("hulk_knockback"), HULK_KNOCKBACK, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
+                }
+                builder.set(DataComponents.ATTRIBUTE_MODIFIERS, attributes);
             });
+            // The hulk hammer throws on a chain; our item model hides it in hand while it's out (see Chainlink).
+            context.modify(item -> BuiltInRegistries.ITEM.getKey(item).equals(Identifier.fromNamespaceAndPath("mutantmonsters", "hulk_hammer")),
+                (builder, item) -> {
+                    builder.set(DataComponents.ITEM_MODEL, Identifier.fromNamespaceAndPath("mms_weapons", "hulk_hammer"));
+                    // 150 uses is too few for a hammer that slams, smashes and throws; it lasts as long as the heavy hammer.
+                    builder.set(DataComponents.MAX_DAMAGE, HULK_DURABILITY);
+                });
         });
     }
 

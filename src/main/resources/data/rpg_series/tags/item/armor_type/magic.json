@@ -1,0 +1,69 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:arsonist_arcane_robe_head",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_arcane_robe_chest",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_arcane_robe_legs",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_arcane_robe_feet",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_fire_robe_head",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_fire_robe_chest",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_fire_robe_legs",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_fire_robe_feet",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_frost_robe_head",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_frost_robe_chest",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_frost_robe_legs",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_frost_robe_feet",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_prior_robe_head",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_prior_robe_chest",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_prior_robe_legs",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_prior_robe_feet",
+      "required": false
+    }
+  ]
+}

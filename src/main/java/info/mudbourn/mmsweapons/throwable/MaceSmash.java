@@ -55,9 +55,16 @@ public final class MaceSmash {
         return item.builtInRegistryHolder().is(MmsThrowables.MACE_SMASH_WEAPONS);
     }
 
-    /** Reach of a slam: how far in front it lands and the radius it hits around that point. */
-    private static final double SLAM_REACH = 1.5;
-    private static final double SLAM_RADIUS = 2.5;
+    /**
+     * Reach of a slam: it lands SLAM_REACH in front and hits an oval skewed forward around that point, SLAM_LENGTH
+     * deep along the look direction and SLAM_WIDTH either side, so it covers from just behind the impact to about
+     * 6.5 blocks ahead.
+     */
+    private static final double SLAM_REACH = 3.0;
+    private static final double SLAM_LENGTH = 3.5;
+    private static final double SLAM_WIDTH = 2.5;
+    /** The hulk hammer throws what it slams twice as far. */
+    private static final double HULK_KNOCKBACK = 2.0;
 
     /**
      * The heavy hammers' Slam: the holder swings the hammer down into the ground in front of them and it lands as a
@@ -81,15 +88,18 @@ public final class MaceSmash {
 
         float damage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE)
                 + (float) fallBonus(fall) * Hammers.smashScale(weapon.getItem());
-        AABB area = new AABB(impact, impact).inflate(SLAM_RADIUS, 1.5, SLAM_RADIUS);
+        AABB area = new AABB(impact, impact).inflate(SLAM_LENGTH, 1.5, SLAM_LENGTH);
+        Vec3 forward = look;
+        double kick = info.mudbourn.mmsweapons.spellengine.WeaponSkills.isHulkHammer(weapon) ? HULK_KNOCKBACK : 1.0;
         List<LivingEntity> hit = level.getEntitiesOfClass(LivingEntity.class, area, nearby ->
                 nearby != player && nearby.isAlive() && !nearby.isSpectator() && !player.isAlliedTo(nearby)
                         && !(nearby instanceof ArmorStand stand && stand.isMarker())
-                        && nearby.position().distanceToSqr(impact) <= SLAM_RADIUS * SLAM_RADIUS * 2.0);
+                        && oval(nearby.position().subtract(impact), forward) <= 1.0);
         for (LivingEntity target : hit) {
             target.hurtServer(level, player.damageSources().mace(player), damage);
             Vec3 away = target.position().subtract(impact);
-            double power = Math.max(0.0, SMASH_ATTACK_KNOCKBACK_RADIUS - away.length()) * SMASH_ATTACK_KNOCKBACK_POWER
+            // Strongest at the impact, fading to nothing at the oval's edge.
+            double power = (1.0 - oval(away, forward)) * SMASH_ATTACK_KNOCKBACK_RADIUS * SMASH_ATTACK_KNOCKBACK_POWER * kick
                     * (fall > SMASH_ATTACK_HEAVY_THRESHOLD ? 2 : 1)
                     * (1.0 - target.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE));
             if (power > 0.0 && away.lengthSqr() > 1.0E-4) {
@@ -103,6 +113,15 @@ public final class MaceSmash {
         if (!hit.isEmpty()) {
             weapon.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
         }
+    }
+
+    /** Where an offset from the impact sits in the slam's oval: 0 at the centre, 1 on its edge. */
+    private static double oval(Vec3 offset, Vec3 forward) {
+        double along = offset.x * forward.x + offset.z * forward.z;
+        double side = forward == Vec3.ZERO ? Math.sqrt(offset.x * offset.x + offset.z * offset.z)
+                : Math.abs(offset.x * forward.z - offset.z * forward.x);
+        double length = forward == Vec3.ZERO ? SLAM_WIDTH : SLAM_LENGTH;
+        return Math.sqrt((along / length) * (along / length) + (side / SLAM_WIDTH) * (side / SLAM_WIDTH));
     }
 
     /** The mace's fall-distance curve. */

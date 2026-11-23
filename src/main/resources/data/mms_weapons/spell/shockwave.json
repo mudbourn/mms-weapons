@@ -1,0 +1,32 @@
+{
+  "school": "spell_power:physical_melee",
+  "range": 0.0,
+  "range_mechanic": "MELEE",
+  "tier": 1,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0.3,
+      "animation": {
+        "id": "spell_engine:weapon_thrust_charge"
+      },
+      "start_sound": {
+        "id": "mms_weapons:focus_charge"
+      }
+    }
+  },
+  "target": {
+    "type": "NONE"
+  },
+  "deliver": {
+    "type": "CUSTOM",
+    "custom": {
+      "handler": "mms_weapons:shockwave"
+    }
+  },
+  "cost": {
+    "cooldown": {
+      "duration": 1.0
+    }
+  }
+}

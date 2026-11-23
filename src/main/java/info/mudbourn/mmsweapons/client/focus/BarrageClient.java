@@ -59,7 +59,8 @@ public final class BarrageClient {
         }
         if (Focus.builds(stack)) {
             // Names the skill the full bar unleashes: Empower on a spellcaster's weapon, Shockwave on the rest.
-            String skill = Focus.spellFocus(stack) ? "spell.mms_weapons.empower.name" : "spell.mms_weapons.barrage.name";
+            String skill = Focus.spellFocus(stack) ? "spell.mms_weapons.empower.name"
+                : info.mudbourn.mmsweapons.aerial.AerialGear.isHeavy(stack.getItem()) ? "spell.mms_weapons.shockwave.name" : "spell.mms_weapons.barrage.name";
             return Component.translatable("tooltip.mms_weapons.focus", Component.translatable(skill), (int) Focus.focus(stack), (int) Focus.MAX_FOCUS)
                     .withStyle(Focus.focused(stack) ? ChatFormatting.DARK_RED : ChatFormatting.GRAY);
         }

@@ -23,12 +23,12 @@ import net.minecraft.world.phys.AABB;
 
 import java.util.List;
 
-// The focus skill: a full focus bar unleashed as a shockwave that stuns every enemy within 7 blocks for 6 seconds
-// and takes a quarter of each non-boss's maximum health.
+// The focus skill: a full focus bar unleashed as a shockwave that stuns every enemy within 7 blocks for as long as
+// the weapon takes to swing three times, and takes a quarter of each non-boss's maximum health.
 public final class FocusStun {
 
     private static final double RADIUS = 7.0;
-    private static final int STUN_TICKS = 6 * 20;
+    private static final int STUN_SWINGS = 3;
     private static final float HEALTH_SHARE = 0.25F;
 
     // Bosses are stunned but take no share of their health: anything tagged c:bosses, or with 200+ max health
@@ -57,10 +57,13 @@ public final class FocusStun {
         AABB area = player.getBoundingBox().inflate(RADIUS);
         List<LivingEntity> enemies = level.getEntitiesOfClass(LivingEntity.class, area,
             target -> target.isAlive() && target.distanceToSqr(player) <= RADIUS * RADIUS && isEnemy(player, target));
+        // Swings a second come from the held weapon's attack speed; the stun lasts three of them.
+        double swingsPerSecond = Math.max(0.1, player.getAttributeValue(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_SPEED));
+        int stunTicks = (int) Math.ceil(STUN_SWINGS * 20.0 / swingsPerSecond);
         Holder<MobEffect> stun = BuiltInRegistries.MOB_EFFECT.get(STUN).<Holder<MobEffect>>map(h -> h).orElse(MobEffects.SLOWNESS);
         Focus.spend(() -> {
             for (LivingEntity target : enemies) {
-                target.addEffect(new MobEffectInstance(stun, STUN_TICKS, stun == MobEffects.SLOWNESS ? 9 : 0), player);
+                target.addEffect(new MobEffectInstance(stun, stunTicks, stun == MobEffects.SLOWNESS ? 9 : 0), player);
                 if (!isBoss(target)) {
                     target.hurtServer(level, player.damageSources().indirectMagic(player, player), target.getMaxHealth() * HEALTH_SHARE);
                 }

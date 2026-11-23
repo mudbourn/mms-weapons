@@ -16,12 +16,15 @@ import net.spell_engine.api.spell.event.SpellEvents;
 import net.spell_engine.api.spell.event.SpellHandlers;
 import net.spell_engine.internals.casting.SpellCast;
 
-// The focus skill as the Spell Engine skill mms_weapons:barrage: castable only on a full focus bar, which the cast spends
-// on a stunning shockwave (FocusStun). The id stays "barrage" so existing skill layouts and keybinds carry over.
+// The focus skills as Spell Engine skills, castable only on a full focus bar: mms_weapons:barrage spends it on three
+// dashing swings, and the heavy weapons' mms_weapons:shockwave on a stunning shockwave (FocusStun).
 public final class SpellEngineBarrage {
 
     public static final Identifier SPELL = Identifier.fromNamespaceAndPath("mms_weapons", "barrage");
     public static final String SPELL_ID = SPELL.toString();
+    /** The heavy weapons' focus skill in the barrage's place: a stunning shockwave (FocusStun). */
+    public static final Identifier SHOCKWAVE = Identifier.fromNamespaceAndPath("mms_weapons", "shockwave");
+    public static final String SHOCKWAVE_ID = SHOCKWAVE.toString();
 
     private SpellEngineBarrage() {
     }
@@ -32,11 +35,19 @@ public final class SpellEngineBarrage {
             if (!(caster instanceof ServerPlayer player) || !ready(player.getMainHandItem())) {
                 return false;
             }
+            Barrage.start(player, player.getMainHandItem());
+            ServerPlayNetworking.send(player, new StartPayload());
+            return true;
+        });
+        SpellHandlers.registerCustomDelivery(SHOCKWAVE, (level, spell, caster, targets, context, position) -> {
+            if (!(caster instanceof ServerPlayer player) || !ready(player.getMainHandItem())) {
+                return false;
+            }
             FocusStun.unleash(player, player.getMainHandItem());
             return true;
         });
         SpellEvents.CASTING_ATTEMPT.PRE.register(args -> {
-            if (args.spell().is(SPELL) && !ready(args.caster().getMainHandItem())) {
+            if ((args.spell().is(SPELL) || args.spell().is(SHOCKWAVE)) && !ready(args.caster().getMainHandItem())) {
                 return SpellCast.Attempt.failOnCooldown(new SpellCast.Attempt.OnCooldownInfo());
             }
             return null;

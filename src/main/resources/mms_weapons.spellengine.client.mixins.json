@@ -5,6 +5,7 @@
   "plugin": "info.mudbourn.mmsweapons.mixin.spellengine.SpellEngineMixinGate",
   "client": [
     "BlockingCastMixin",
-    "SpellHotbarMouseMixin"
+    "SpellHotbarMouseMixin",
+    "HideWeaponSkillsMixin"
   ]
 }

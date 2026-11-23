@@ -45,8 +45,12 @@ public final class WeaponAssignment {
             if (Focus.spellFocus(stack)) {
                 continue;
             }
-            if (!spells.isEmpty() && !spells.contains(SpellEngineBarrage.SPELL_ID) && Focus.eligible(stack)) {
-                spells.add(SpellEngineBarrage.SPELL_ID);
+            // Heavy weapons take the shockwave in the barrage's place.
+            String focusSkill = info.mudbourn.mmsweapons.aerial.AerialGear.isHeavy(item) ? SpellEngineBarrage.SHOCKWAVE_ID : SpellEngineBarrage.SPELL_ID;
+            // Every weapon that charges focus gets a skill to spend it on, whether or not Spell Engine already gave it a
+            // container: compat weapons such as the shadoline rapier have Better Combat attributes but no container.
+            if (!spells.contains(focusSkill) && Focus.eligible(stack)) {
+                spells.add(focusSkill);
                 barrages++;
                 changed = true;
             }
@@ -63,7 +67,14 @@ public final class WeaponAssignment {
                 while (spells.size() < OWN_SKILL_SLOT) {
                     spells.add(WeaponSkills.EMPTY.toString());
                 }
-                spells.add(own == null ? OWN_SKILL_SLOT : Math.min(OWN_SKILL_SLOT + 1, spells.size()), slam);
+                int at = own == null ? OWN_SKILL_SLOT : Math.min(OWN_SKILL_SLOT + 1, spells.size());
+                spells.add(at, slam);
+                // The hulk hammer adds the mutant zombie's smash after its slam.
+                if (WeaponSkills.isHulkHammer(stack)) {
+                    String smash = WeaponSkills.HULK_SMASH.toString();
+                    spells.remove(smash);
+                    spells.add(Math.min(at + 1, spells.size()), smash);
+                }
                 changed = true;
             }
             if (changed) {
@@ -76,7 +87,8 @@ public final class WeaponAssignment {
     // The skill this item casts on its own, or null when it has none.
     private static Identifier ownSkill(ItemStack stack) {
         if (stack.is(MmsThrowables.THROWABLE_WEAPONS)) {
-            return WeaponSkills.WEAPON_THROW;
+            return BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath().endsWith("dagger")
+                ? WeaponSkills.DAGGER_THROW : WeaponSkills.WEAPON_THROW;
         }
         if (SickleThrowing.isSickle(stack)) {
             return WeaponSkills.SICKLE_THROW;

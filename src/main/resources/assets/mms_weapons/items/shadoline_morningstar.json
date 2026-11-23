@@ -1,6 +1,32 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "mms_weapons:item/shadoline_morningstar"
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": [
+          "gui",
+          "ground",
+          "fixed",
+          "on_shelf"
+        ],
+        "model": {
+          "type": "minecraft:model",
+          "model": "mms_weapons:item/shadoline_morningstar"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:condition",
+      "property": "minecraft:has_component",
+      "component": "mms_weapons:chain_out",
+      "on_true": {
+        "type": "minecraft:empty"
+      },
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "mms_weapons:item/shadoline_morningstar"
+      }
+    }
   }
 }

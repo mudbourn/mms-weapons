@@ -16,7 +16,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-// Which skills a player may use: none from the off hand, at most four, or six in a full wizard robe.
+// Which skills a player may use: none from the off hand, at most four, or six for a magic user (holding a spellcaster's
+// weapon, or in a full wizard robe).
 public final class SkillLimits {
 
     public static final int MAX_SKILLS = 4;
@@ -76,7 +77,7 @@ public final class SkillLimits {
         SpellContainerSource.MergeResult merged
     ) {
         List<Holder<Spell>> spells = merged.spells();
-        int max = fullRobe(player) ? MAX_SKILLS_ROBE : MAX_SKILLS;
+        int max = fullRobe(player) || info.mudbourn.mmsweapons.focus.Focus.spellFocus(player.getMainHandItem()) ? MAX_SKILLS_ROBE : MAX_SKILLS;
         if (spells.stream().filter(spell -> !isEmpty(spell)).count() <= max) {
             return merged;
         }

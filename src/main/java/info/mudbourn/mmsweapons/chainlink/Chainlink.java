@@ -29,6 +29,7 @@ public final class Chainlink {
 
     private static final Identifier BOUNTIFUL_ANCHOR = Identifier.fromNamespaceAndPath("bountiful-fish", "anchor");
     private static final Identifier SHADOLINE_MORNINGSTAR = Identifier.fromNamespaceAndPath("mms_weapons", "shadoline_morningstar");
+    private static final Identifier HULK_HAMMER = Identifier.fromNamespaceAndPath("mutantmonsters", "hulk_hammer");
 
     // Set while this stack is out on its chain.
     public static final DataComponentType<Boolean> CHAIN_OUT = Registry.register(
@@ -55,18 +56,23 @@ public final class Chainlink {
     public static void register() {
     }
 
-    // Whether this stack throws on a chain: the Bountiful Fish anchor or the shadoline morningstar.
+    // Whether this stack throws on a chain: the Bountiful Fish anchor, the shadoline morningstar or the hulk hammer.
     public static boolean throwable(ItemStack stack) {
         if (stack.isEmpty()) {
             return false;
         }
         Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        return id.equals(BOUNTIFUL_ANCHOR) || id.equals(SHADOLINE_MORNINGSTAR);
+        return id.equals(BOUNTIFUL_ANCHOR) || id.equals(SHADOLINE_MORNINGSTAR) || id.equals(HULK_HAMMER);
     }
 
     // The shadoline morningstar keeps the focus barrage alongside its chain throw; the anchor does not.
     public static boolean keepsBarrage(ItemStack stack) {
         return fueled(stack);
+    }
+
+    // The heavy chain weapons, the anchor and the hulk hammer, ground slam where they land on the floor.
+    public static boolean slams(ItemStack stack) {
+        return throwable(stack) && !fueled(stack);
     }
 
     // Whether this stack spends Nebulite fuel on the throw.
@@ -84,7 +90,30 @@ public final class Chainlink {
         if (!throwable(stack) || out(stack) || player.getCooldowns().isOnCooldown(stack) || stack.nextDamageWillBreak()) {
             return false;
         }
-        return !fueled(stack) || NebuliteFuel.canSpend(stack, player);
+        return !fueled(stack) || NebuliteFuel.canSpend(stack, player) && wearsShadoline(player);
+    }
+
+    // Whether the shadoline morningstar's chain throw is offered to this player: always for the other chain weapons,
+    // and for the morningstar only in a full set of shadoline armor, Enderscape's or our heavy one (mixed per slot).
+    public static boolean offered(Player player, ItemStack stack) {
+        return !fueled(stack) || wearsShadoline(player);
+    }
+
+    private static final net.minecraft.world.entity.EquipmentSlot[] ARMOR_SLOTS = {
+        net.minecraft.world.entity.EquipmentSlot.HEAD, net.minecraft.world.entity.EquipmentSlot.CHEST,
+        net.minecraft.world.entity.EquipmentSlot.LEGS, net.minecraft.world.entity.EquipmentSlot.FEET};
+    private static final String[] ARMOR_PIECES = {"helmet", "chestplate", "leggings", "boots"};
+
+    public static boolean wearsShadoline(Player player) {
+        for (int i = 0; i < ARMOR_SLOTS.length; i++) {
+            Identifier worn = BuiltInRegistries.ITEM.getKey(player.getItemBySlot(ARMOR_SLOTS[i]).getItem());
+            String piece = ARMOR_PIECES[i];
+            if (!worn.equals(Identifier.fromNamespaceAndPath("enderscape", "shadoline_" + piece))
+                    && !worn.equals(Identifier.fromNamespaceAndPath("mms_weapons", "heavy_shadoline_" + piece))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     // Clears the out flag once the cooldown has run out, in case the weapon never made it back.

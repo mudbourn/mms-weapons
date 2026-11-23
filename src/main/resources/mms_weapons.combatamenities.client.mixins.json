@@ -1,0 +1,11 @@
+{
+  "required": false,
+  "package": "info.mudbourn.mmsweapons.client.mixin.combatamenities",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "CombatAmenitiesKeysMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

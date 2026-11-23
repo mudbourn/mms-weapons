@@ -44,8 +44,11 @@ public final class Barrage {
     private static final double DAMAGE_SHARE = 0.7;
     private static final double DASH_SPEED = 0.75;
     private static final double DASH_LIFT = 0.05;
-    // Edge-to-edge spacing the first swing places the player at, comfortably inside a swing's reach.
-    private static final double ENGAGE_GAP = 1.2;
+    // Edge-to-edge spacing the first swing places the player at.
+    private static final double ENGAGE_GAP = 2.5;
+    // Every weapon's barrage swings reach the same distance, whatever its own attack range, so the 2.5-block placement
+    // is always in reach: the player's 0.3 half width + 2.5 gap, plus height and lunge slack.
+    private static final double REACH = 3.5;
     private static final double ARC_COS = Math.cos(Math.toRadians(60.0));
     private static final int GUARD_BREAK_HITS = 2;
     private static final float GUARD_BREAK_SECONDS = 5.0F;
@@ -135,7 +138,7 @@ public final class Barrage {
                 animation(weapon, swing),
                 SWING_LENGTH,
                 SWING_UPSWING,
-                (float) player.entityInteractionRange(),
+                (float) REACH,
                 (int) (SWING_LENGTH * SWING_UPSWING),
                 Packets.SwingParticles.EMPTY);
         for (ServerPlayer viewer : PlayerLookup.tracking(player)) {
@@ -155,7 +158,7 @@ public final class Barrage {
     // Hits everything in front of the player inside their reach, ignoring the brief invulnerability between hits.
     private static void strike(ServerPlayer player, Run run) {
         ServerLevel level = player.level();
-        double reach = player.entityInteractionRange();
+        double reach = REACH;
         float damage = (float) (player.getAttributeValue(Attributes.ATTACK_DAMAGE) * DAMAGE_SHARE);
         Vec3 eye = player.getEyePosition();
         Vec3 look = player.getLookAngle();

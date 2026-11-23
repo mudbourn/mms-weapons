@@ -38,6 +38,11 @@ public class ThrownChainEntity extends Projectile {
     private static final double REEL_PULL = 0.9;
     private static final double HIT_PUSH = 1.2;
     private static final double LIFT = 0.3;
+    private static final double OVERHEAD_RISE = 0.25;
+    private static final float OVERHEAD_LIFT_DEGREES = 6.0F;
+    private static final double SLAM_RADIUS = 3.0;
+    private static final double SLAM_PUSH = 0.6;
+    private static final double SLAM_LIFT = 0.55;
 
     private final Set<Integer> struck = new HashSet<>();
     private ItemStack weapon = ItemStack.EMPTY;
@@ -56,8 +61,11 @@ public class ThrownChainEntity extends Projectile {
         this.charge = charge;
         this.maxRange = 8.0 + 16.0 * charge;
         Vec3 look = owner.getLookAngle();
-        this.setPos(owner.getEyePosition().add(look.scale(0.5)).subtract(0.0, 0.3, 0.0));
-        this.shootFromRotation(owner, owner.getXRot(), owner.getYRot(), 0.0F, 1.0F + 1.6F * charge, 0.5F);
+        // The morningstar leaves the raised arm, from above the eyes and aimed a little high against the drop; the
+        // heavy anchor and hammer leave from the chest so they come down onto the floor and slam.
+        boolean overhead = !Chainlink.slams(weapon);
+        this.setPos(owner.getEyePosition().add(look.scale(0.5)).add(0.0, overhead ? OVERHEAD_RISE : -0.3, 0.0));
+        this.shootFromRotation(owner, owner.getXRot() - (overhead ? OVERHEAD_LIFT_DEGREES : 0.0F), owner.getYRot(), 0.0F, 1.0F + 1.6F * charge, 0.5F);
     }
 
     @Override
@@ -139,8 +147,32 @@ public class ThrownChainEntity extends Projectile {
     @Override
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
-        this.playSound(SoundEvents.ANVIL_LAND, 0.5F, 0.6F);
+        if (result.getDirection() == net.minecraft.core.Direction.UP && Chainlink.slams(this.weapon)) {
+            this.groundSlam(result.getLocation());
+        } else {
+            this.playSound(SoundEvents.ANVIL_LAND, 0.5F, 0.6F);
+        }
         this.startReeling();
+    }
+
+    // The anchor or hulk hammer hitting the floor: every enemy within SLAM_RADIUS takes a hit and is thrown up and out.
+    private void groundSlam(Vec3 at) {
+        if (!(this.level() instanceof ServerLevel server)) {
+            return;
+        }
+        server.playSound(null, at.x, at.y, at.z, SoundEvents.MACE_SMASH_GROUND_HEAVY, SoundSource.PLAYERS, 1.0F, 0.8F);
+        server.sendParticles(net.minecraft.core.particles.ParticleTypes.EXPLOSION, at.x, at.y + 0.2, at.z, 1, 0.0, 0.0, 0.0, 0.0);
+        server.sendParticles(new net.minecraft.core.particles.BlockParticleOption(net.minecraft.core.particles.ParticleTypes.BLOCK,
+            server.getBlockState(net.minecraft.core.BlockPos.containing(at.x, at.y - 0.1, at.z))), at.x, at.y + 0.1, at.z, 40, SLAM_RADIUS / 2.0, 0.1, SLAM_RADIUS / 2.0, 0.15);
+        float damage = 4.0F + 8.0F * this.charge;
+        AABB area = new AABB(at, at).inflate(SLAM_RADIUS, 1.5, SLAM_RADIUS);
+        for (Entity hit : server.getEntities(this, area, e -> e instanceof LivingEntity && this.canHitEntity(e)
+                && e.position().distanceTo(at) <= SLAM_RADIUS + 1.0)) {
+            Vec3 away = new Vec3(hit.getX() - at.x, 0.0, hit.getZ() - at.z);
+            away = away.lengthSqr() < 1.0E-4 ? Vec3.ZERO : away.normalize().scale(SLAM_PUSH);
+            this.strike(hit, damage, away);
+            hit.setDeltaMovement(away.x, SLAM_LIFT, away.z);
+        }
     }
 
     private void strike(Entity target, float damage, Vec3 push) {

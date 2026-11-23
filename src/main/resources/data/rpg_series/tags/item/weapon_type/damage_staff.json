@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "mms_weapons:arsonist_arcane_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_fire_staff",
+      "required": false
+    },
+    {
+      "id": "mms_weapons:arsonist_frost_staff",
+      "required": false
+    }
+  ]
+}

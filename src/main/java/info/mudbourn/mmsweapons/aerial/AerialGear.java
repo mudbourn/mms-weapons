@@ -131,6 +131,13 @@ public final class AerialGear {
         return modifiers != null && modifiers.modifiers().stream().anyMatch(entry -> entry.attribute().equals(Attributes.ATTACK_DAMAGE));
     }
 
+    /** Aerial Hell's heavy material weapons: its Heavy Axe and Heavy Sword, and ours. */
+    public static boolean isHeavy(Item item) {
+        Identifier id = BuiltInRegistries.ITEM.getKey(item);
+        return id.getNamespace().equals("aerialhell") ? id.getPath().equals("heavy_axe") || id.getPath().equals("heavy_sword")
+            : id.getNamespace().equals("mms_weapons") && HEAVY_WEAPONS.contains(id.getPath());
+    }
+
     public static boolean isAerial(Item item) {
         Identifier id = BuiltInRegistries.ITEM.getKey(item);
         if (id.getNamespace().equals("aerialhell")) {

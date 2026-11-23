@@ -31,6 +31,21 @@ public final class Downed {
     private Downed() {
     }
 
+    // A downed player can't keep riding: each server tick, anyone downed is thrown off their mount (a dragon, a
+    // horse, a boat), and so can't climb back on until revived.
+    public static void register() {
+        if (GET_MODEL == null) {
+            return;
+        }
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.END_SERVER_TICK.register(server -> {
+            for (net.minecraft.server.level.ServerPlayer player : server.getPlayerList().getPlayers()) {
+                if (player.isPassenger() && is(player)) {
+                    player.stopRiding();
+                }
+            }
+        });
+    }
+
     public static boolean is(Player player) {
         if (GET_MODEL == null || !GET_MODEL.getDeclaringClass().isInstance(player)) {
             return false;

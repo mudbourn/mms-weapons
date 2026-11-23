@@ -25,6 +25,10 @@
     "mms_weapons.downed.mixins.json",
     "mms_weapons.aerial.mixins.json",
     {
+      "config": "mms_weapons.combatamenities.client.mixins.json",
+      "environment": "client"
+    },
+    {
       "config": "mms_weapons.jei.client.mixins.json",
       "environment": "client"
     },

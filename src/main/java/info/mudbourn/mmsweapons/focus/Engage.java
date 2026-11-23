@@ -17,7 +17,7 @@ import java.util.Set;
 public final class Engage {
 
     // How close, edge to edge, an enemy has to be before the player is placed instead of lunging.
-    public static final double SNAP_RANGE = 3.0;
+    public static final double SNAP_RANGE = 5.0;
     // How far either side of the look direction an enemy may stand and still be picked, as a cosine (about 50 degrees).
     private static final double PICK_COS = Math.cos(Math.toRadians(50.0));
 
