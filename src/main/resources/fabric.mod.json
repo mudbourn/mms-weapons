@@ -24,6 +24,7 @@
     "mms_weapons.shieldbash.mixins.json",
     "mms_weapons.downed.mixins.json",
     "mms_weapons.aerial.mixins.json",
+    "mms_weapons.aerialcompat.mixins.json",
     {
       "config": "mms_weapons.combatamenities.client.mixins.json",
       "environment": "client"

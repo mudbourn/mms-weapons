@@ -55,16 +55,30 @@ public final class ShieldRam {
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> RAMS.remove(handler.getPlayer().getUUID()));
     }
 
-    // The shield a player can ram with right now: a raised main-hand shield, not a blocking weapon, on the ground with no ram already running.
+    // The shield a player can ram with right now: a main-hand shield, not a blocking weapon, on the ground with no ram
+    // already running. It may be raised or down; a lowered one (even one still cooling down from being lowered or
+    // from a block) is put up by the ram.
     public static ItemStack ramShield(Player player) {
-        ItemStack shield = player.getItemBlockingWith();
-        if (shield == null || player.getUsedItemHand() != InteractionHand.MAIN_HAND || !ShieldWeapons.isShield(shield.getItem()) || player.isSpectator() || player.isPassenger() || player.isSwimming() || !player.onGround() || RAMS.containsKey(player.getUUID())) {
+        ItemStack shield = player.getMainHandItem();
+        boolean otherUse = player.isUsingItem() && player.getUsedItemHand() != InteractionHand.MAIN_HAND;
+        if (shield.isEmpty() || otherUse || !ShieldWeapons.isShield(shield.getItem()) || player.isSpectator() || player.isPassenger() || player.isSwimming() || !player.onGround() || RAMS.containsKey(player.getUUID())) {
             return null;
         }
         return shield;
     }
 
+    // Puts the main-hand shield up for a ram cast with the guard down, clearing any cooldown that would stop it rising.
+    public static void raiseGuard(Player player) {
+        if (player.isUsingItem()) {
+            return;
+        }
+        ItemStack shield = player.getMainHandItem();
+        player.getCooldowns().removeCooldown(player.getCooldowns().getCooldownGroup(shield));
+        player.startUsingItem(InteractionHand.MAIN_HAND);
+    }
+
     public static void start(ServerPlayer player, ItemStack shield) {
+        raiseGuard(player);
         Ram ram = new Ram(Vec3.directionFromRotation(0.0F, player.getYRot()), shield.copy(), RAM_TICKS, ConcurrentHashMap.newKeySet());
         player.level().playSound(null, player, SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.PLAYERS, 1.0F, 0.7F);
         VoidCharge.activate(player, shield, RAM_TICKS + 10);

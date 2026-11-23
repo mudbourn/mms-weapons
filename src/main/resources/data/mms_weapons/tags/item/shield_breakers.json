@@ -488,6 +488,42 @@
     {
       "id": "mutantmonsters:hulk_hammer",
       "required": false
+    },
+    {
+      "id": "basicweapons:shadoline_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:arsonist_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:lunatic_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:magmatic_gel_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:obsidian_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:volucite_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:sky_wood_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:stellar_stone_club",
+      "required": false
+    },
+    {
+      "id": "basicweapons:shadow_club",
+      "required": false
     }
   ]
 }

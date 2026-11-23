@@ -55,6 +55,7 @@ public class MmsWeapons implements ModInitializer {
         CompatWeapons.register();
         info.mudbourn.mmsweapons.material.VoidCharge.register();
         MaterialpackTab.register();
+        info.mudbourn.mmsweapons.material.Morningstars.register();
 
         // The weapon skills, only where Spell Engine is installed.
         if (FabricLoader.getInstance().isModLoaded("spell_engine")) {

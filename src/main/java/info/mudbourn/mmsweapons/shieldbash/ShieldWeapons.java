@@ -33,6 +33,10 @@ public final class ShieldWeapons {
 
     private static final Identifier KNOCKBACK_ID = Identifier.fromNamespaceAndPath("mms_weapons", "shield_knockback");
 
+    // Kite shields are heavier than round shields: held in either hand, they slow the user a little.
+    private static final Identifier KITE_SLOW_ID = Identifier.fromNamespaceAndPath("mms_weapons", "kite_shield_slow");
+    private static final double KITE_SLOW = -0.05;
+
     private ShieldWeapons() {
     }
 
@@ -48,9 +52,60 @@ public final class ShieldWeapons {
         DefaultItemComponentEvents.MODIFY.register(context -> {
             context.modify(ShieldWeapons::isShield, (builder, item) ->
                 builder.set(DataComponents.ATTRIBUTE_MODIFIERS, stats(item)));
-            context.modify(ShieldWeapons::isBlockingWeapon, (builder, item) ->
+            // Weapons WeaponTuning gives blocking are weakened there, from their material's shield.
+            context.modify(item -> isBlockingWeapon(item) && !info.mudbourn.mmsweapons.WeaponTuning.blocksAttacks(item), (builder, item) ->
                 builder.set(DataComponents.BLOCKS_ATTACKS, weakerGuard(item.components().get(DataComponents.BLOCKS_ATTACKS))));
+            // Paladin kite shields (Paladins' own and the pack-material ones) block like their
+            // material's round shield instead of Spell Engine's full vanilla block.
+            context.modify(ShieldWeapons::isKiteShield, (builder, item) -> {
+                BlocksAttacks guard = materialGuard(item);
+                if (guard != null) {
+                    builder.set(DataComponents.BLOCKS_ATTACKS, guard);
+                }
+            });
         });
+    }
+
+    // Paladins tiers with no round shield of their own, matched to the nearest vanilla tier.
+    private static final java.util.Map<String, String> SHIELD_ALIASES = java.util.Map.of(
+        "wood", "wooden",
+        "gold", "golden",
+        "aeternium", "netherite",
+        "aether", "diamond"
+    );
+
+    private static boolean isKiteShield(Item item) {
+        Identifier id = BuiltInRegistries.ITEM.getKey(item);
+        return id.getPath().endsWith("_kite_shield")
+            && (id.getNamespace().equals("paladins") || id.getNamespace().equals("mms_weapons"));
+    }
+
+    // The blocking of the round shield in the item's material: Expanded Weaponry's wooden to
+    // netherite shields, or the pack-material shields. The material is the longest leading run of
+    // the item's id that names a round shield; null when none does.
+    public static BlocksAttacks materialGuard(Item item) {
+        String[] parts = BuiltInRegistries.ITEM.getKey(item).getPath().split("_");
+        for (int end = parts.length - 1; end >= 1; end--) {
+            String material = String.join("_", java.util.Arrays.copyOfRange(parts, 0, end));
+            material = SHIELD_ALIASES.getOrDefault(material, material);
+            for (String namespace : new String[] {"expanded_weaponry", "mms_weapons"}) {
+                Identifier shieldId = Identifier.fromNamespaceAndPath(namespace, material + "_shield");
+                Item shield = BuiltInRegistries.ITEM.getOptional(shieldId).orElse(null);
+                if (shield != null && shield != item) {
+                    BlocksAttacks guard = shield.components().get(DataComponents.BLOCKS_ATTACKS);
+                    if (guard != null) {
+                        return guard;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    // A blocking weapon: its material's round shield, weakened; the fallback guard when it has no material.
+    public static BlocksAttacks weaponGuard(Item item, BlocksAttacks fallback) {
+        BlocksAttacks guard = materialGuard(item);
+        return weakerGuard(guard != null ? guard : fallback);
     }
 
     // A weapon that blocks on its own: it has attack damage and blocks, but is not a shield.
@@ -112,6 +167,13 @@ public final class ShieldWeapons {
             new AttributeModifier(KNOCKBACK_ID, KNOCKBACK_BONUS, AttributeModifier.Operation.ADD_VALUE),
             EquipmentSlotGroup.MAINHAND
         );
+        if (isKiteShield(item)) {
+            rebuilt.add(
+                Attributes.MOVEMENT_SPEED,
+                new AttributeModifier(KITE_SLOW_ID, KITE_SLOW, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
+                EquipmentSlotGroup.HAND
+            );
+        }
         return rebuilt.build();
     }
 

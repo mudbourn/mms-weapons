@@ -25,12 +25,26 @@ public final class SpellEngineBarrage {
     /** The heavy weapons' focus skill in the barrage's place: a stunning shockwave (FocusStun). */
     public static final Identifier SHOCKWAVE = Identifier.fromNamespaceAndPath("mms_weapons", "shockwave");
     public static final String SHOCKWAVE_ID = SHOCKWAVE.toString();
+    /** Blocking weapons' focus skill: a spinning three-wave swing at double reach (Whirlwind). */
+    public static final Identifier WHIRLWIND = Identifier.fromNamespaceAndPath("mms_weapons", "whirlwind");
+    public static final String WHIRLWIND_ID = WHIRLWIND.toString();
 
     private SpellEngineBarrage() {
     }
 
     public static void register() {
         PayloadTypeRegistry.clientboundPlay().register(StartPayload.TYPE, StartPayload.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(WhirlwindPayload.TYPE, WhirlwindPayload.CODEC);
+        info.mudbourn.mmsweapons.focus.Whirlwind.register();
+        SpellHandlers.registerCustomDelivery(WHIRLWIND, (level, spell, caster, targets, context, position) -> {
+            if (!(caster instanceof ServerPlayer player) || !ready(player.getMainHandItem())
+                || !info.mudbourn.mmsweapons.focus.Whirlwind.guardWeapon(player.getMainHandItem())) {
+                return false;
+            }
+            info.mudbourn.mmsweapons.focus.Whirlwind.start(player, player.getMainHandItem());
+            ServerPlayNetworking.send(player, new WhirlwindPayload());
+            return true;
+        });
         SpellHandlers.registerCustomDelivery(SPELL, (level, spell, caster, targets, context, position) -> {
             if (!(caster instanceof ServerPlayer player) || !ready(player.getMainHandItem())) {
                 return false;
@@ -47,7 +61,7 @@ public final class SpellEngineBarrage {
             return true;
         });
         SpellEvents.CASTING_ATTEMPT.PRE.register(args -> {
-            if ((args.spell().is(SPELL) || args.spell().is(SHOCKWAVE)) && !ready(args.caster().getMainHandItem())) {
+            if ((args.spell().is(SPELL) || args.spell().is(SHOCKWAVE) || args.spell().is(WHIRLWIND)) && !ready(args.caster().getMainHandItem())) {
                 return SpellCast.Attempt.failOnCooldown(new SpellCast.Attempt.OnCooldownInfo());
             }
             return null;
@@ -63,6 +77,17 @@ public final class SpellEngineBarrage {
     public record StartPayload() implements CustomPacketPayload {
         public static final Type<StartPayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath("mms_weapons", "start_barrage"));
         public static final StreamCodec<ByteBuf, StartPayload> CODEC = StreamCodec.unit(new StartPayload());
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    // Server to client: the caster's own whirlwind started, so the local spins play.
+    public record WhirlwindPayload() implements CustomPacketPayload {
+        public static final Type<WhirlwindPayload> TYPE = new Type<>(Identifier.fromNamespaceAndPath("mms_weapons", "start_whirlwind"));
+        public static final StreamCodec<ByteBuf, WhirlwindPayload> CODEC = StreamCodec.unit(new WhirlwindPayload());
 
         @Override
         public Type<? extends CustomPacketPayload> type() {

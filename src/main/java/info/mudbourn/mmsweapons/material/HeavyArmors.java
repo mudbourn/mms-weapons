@@ -53,6 +53,40 @@ public final class HeavyArmors {
             shadoline();
         }
         CreativeModeTabEvents.modifyOutputEvent(CompatWeapons.EXPANDED_WEAPONRY_TAB).register(output -> ITEMS.forEach(output::accept));
+        // Heavy helmets wear their own equipment asset, heavy_<material>_helmet, whose geo
+        // armor definition (assets/mms_weapons/geo_armor) draws the helmet with 3D horns.
+        net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents.MODIFY.register(context ->
+            context.modify(item -> hornAsset(item) != null, (builder, item) -> {
+                net.minecraft.world.item.equipment.Equippable e =
+                    item.components().get(net.minecraft.core.component.DataComponents.EQUIPPABLE);
+                if (e != null) {
+                    builder.set(net.minecraft.core.component.DataComponents.EQUIPPABLE, new net.minecraft.world.item.equipment.Equippable(
+                        e.slot(), e.equipSound(),
+                        java.util.Optional.of(ResourceKey.create(EquipmentAssets.ROOT_ID, id(hornAsset(item)))),
+                        e.cameraOverlay(), e.allowedEntities(), e.dispensable(), e.swappable(),
+                        e.damageOnHurt(), e.equipOnInteract(), e.canBeSheared(), e.shearingSound()));
+                }
+            }));
+    }
+
+    private static final java.util.Map<Item, String> HELMETS = new java.util.HashMap<>();
+
+    // Expanded Weaponry's own heavy helmets get the same horns, from its textures.
+    private static final java.util.Map<String, String> EXPANDED_WEAPONRY_HELMETS = java.util.Map.of(
+        "heavy_copper_helmet", "copper",
+        "heavy_iron_helmet", "iron",
+        "heavy_golden_helmet", "gold",
+        "heavy_diamond_helmet", "diamond",
+        "heavy_netherite_helmet", "netherite");
+
+    // The horned equipment asset a heavy helmet wears (assets/mms_weapons/equipment), or null.
+    private static String hornAsset(Item item) {
+        String ours = HELMETS.get(item);
+        if (ours != null) return "heavy_" + ours + "_helmet";
+        Identifier id = net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(item);
+        if (!id.getNamespace().equals("expanded_weaponry")) return null;
+        String material = EXPANDED_WEAPONRY_HELMETS.get(id.getPath());
+        return material == null ? null : "expanded_heavy_" + material + "_helmet";
     }
 
     private static void azurite() {
@@ -122,6 +156,9 @@ public final class HeavyArmors {
                 ? AerialHellHeavy.create(material, armor, type, key, (float) SLOWNESS)
                 : new Item(properties));
             ITEMS.add(item);
+            if (type == ArmorType.HELMET) {
+                HELMETS.put(item, material);
+            }
             CompatOrigin.record(item, CompatWeapons.source(material), "expanded_weaponry");
         }
     }

@@ -51,6 +51,11 @@ public final class BarrageClient {
         if (Chainlink.throwable(stack)) {
             return Component.translatable("tooltip.mms_weapons.chain_throw").withStyle(ChatFormatting.GRAY);
         }
+        if (info.mudbourn.mmsweapons.focus.Whirlwind.guardWeapon(stack)) {
+            return Component.translatable("tooltip.mms_weapons.blockable").withStyle(ChatFormatting.GRAY).append(" · ")
+                .append(Component.translatable("tooltip.mms_weapons.focus", Component.translatable("spell.mms_weapons.whirlwind.name"), (int) Focus.focus(stack), (int) Focus.MAX_FOCUS)
+                    .withStyle(Focus.focused(stack) ? ChatFormatting.DARK_RED : ChatFormatting.GRAY));
+        }
         if (stack.has(DataComponents.BLOCKS_ATTACKS) && WeaponRegistry.getAttributes(stack) != null) {
             return Component.translatable("tooltip.mms_weapons.blockable").withStyle(ChatFormatting.GRAY);
         }

@@ -14,5 +14,8 @@ public final class SpellEngineBarrageClient {
         ClientPlayNetworking.registerGlobalReceiver(
             SpellEngineBarrage.StartPayload.TYPE,
             (payload, context) -> Barrage.start(context.player(), context.player().getMainHandItem()));
+        ClientPlayNetworking.registerGlobalReceiver(
+            SpellEngineBarrage.WhirlwindPayload.TYPE,
+            (payload, context) -> info.mudbourn.mmsweapons.focus.Whirlwind.start(context.player(), context.player().getMainHandItem()));
     }
 }

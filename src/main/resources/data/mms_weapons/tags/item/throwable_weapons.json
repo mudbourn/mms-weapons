@@ -148,6 +148,38 @@
     {
       "id": "mms_weapons:shadow_hammer",
       "required": false
+    },
+    {
+      "id": "basicweapons:arsonist_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:lunatic_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:magmatic_gel_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:obsidian_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:volucite_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:sky_wood_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:stellar_stone_pike",
+      "required": false
+    },
+    {
+      "id": "basicweapons:shadow_pike",
+      "required": false
     }
   ]
 }

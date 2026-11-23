@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "mms_weapons:heavy_shadow_helmet",
+    "mms_weapons:heavy_shadow_chestplate",
+    "mms_weapons:heavy_shadow_leggings",
+    "mms_weapons:heavy_shadow_boots"
+  ]
+}

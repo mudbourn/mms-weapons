@@ -1,0 +1,16 @@
+{
+  "required": false,
+  "package": "info.mudbourn.mmsweapons.mixin.aerialcompat",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ItemStackAerialCompatMixin",
+    "LivingEntityAerialCompatMixin",
+    "PlayerAerialCompatMixin"
+  ],
+  "client": [
+    "ItemStackAerialTooltipMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

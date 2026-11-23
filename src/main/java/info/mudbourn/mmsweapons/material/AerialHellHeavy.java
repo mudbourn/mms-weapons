@@ -79,6 +79,7 @@ final class AerialHellHeavy {
         return switch (material) {
             case "arsonist" -> AerialHellRarities.MYTHICAL;
             case "lunatic" -> AerialHellRarities.LEGENDARY;
+            case "obsidian" -> Rarity.EPIC;
             case "volucite" -> AerialHellRarities.VIBRANT;
             case "shadow" -> AerialHellRarities.CORRUPTED;
             default -> null;

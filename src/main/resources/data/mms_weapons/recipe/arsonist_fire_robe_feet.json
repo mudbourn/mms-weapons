@@ -1,15 +1,8 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "equipment",
-  "key": {
-    "A": "aerialhell:arsonist_ingot",
-    "N": "wizards:netherite_fire_robe_feet"
-  },
-  "pattern": [
-    " A ",
-    "ANA",
-    " A "
-  ],
+  "type": "minecraft:smithing_transform",
+  "template": "aerialhell:arsonist_upgrade_smithing_template",
+  "base": "wizards:netherite_fire_robe_feet",
+  "addition": "aerialhell:arsonist_ingot",
   "result": {
     "id": "mms_weapons:arsonist_fire_robe_feet"
   },

@@ -1,0 +1,7 @@
+{
+  "parent": "paladins:item/base/mace",
+  "textures": {
+    "1": "mms_weapons:item/wooden_morningstar_3d",
+    "particle": "mms_weapons:item/wooden_morningstar_3d"
+  }
+}

@@ -1,15 +1,8 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "equipment",
-  "key": {
-    "L": "minecraft:leather",
-    "M": "aerialhell:arsonist_ingot"
-  },
-  "pattern": [
-    "MLM",
-    "MMM",
-    " M "
-  ],
+  "type": "minecraft:smithing_transform",
+  "template": "aerialhell:arsonist_upgrade_smithing_template",
+  "base": "paladins:netherite_kite_shield",
+  "addition": "aerialhell:arsonist_ingot",
   "result": {
     "id": "mms_weapons:arsonist_kite_shield"
   },

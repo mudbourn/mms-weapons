@@ -128,7 +128,7 @@ public final class Focus {
 
     // Whether damage dealt with this stack builds focus, for the barrage or for its own focus attack.
     public static boolean builds(ItemStack stack) {
-        return !stack.isEmpty() && (OWN_ATTACKS.contains(stack.getItem()) || eligible(stack) || spellFocus(stack));
+        return !stack.isEmpty() && (OWN_ATTACKS.contains(stack.getItem()) || eligible(stack) || spellFocus(stack) || Whirlwind.guardWeapon(stack));
     }
 
     public static float focus(ItemStack stack) {
@@ -184,7 +184,16 @@ public final class Focus {
         if (AERIAL_IDLE_USE.computeIfAbsent(stack.getItem(), Focus::aerialIdleUse)) {
             return true;
         }
+        if (isPaladinsMace(stack)) {
+            return true;
+        }
         return !OVERRIDES_USE.computeIfAbsent(stack.getItem().getClass(), Focus::overridesUse);
+    }
+
+    // Paladins maces override use only for their Smash skill, so the barrage can sit beside it.
+    private static boolean isPaladinsMace(ItemStack stack) {
+        Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        return id.getNamespace().equals("paladins") && id.getPath().endsWith("_mace");
     }
 
     private static final Map<Item, Boolean> AERIAL_IDLE_USE = new java.util.concurrent.ConcurrentHashMap<>();

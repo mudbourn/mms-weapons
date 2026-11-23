@@ -45,10 +45,10 @@ public final class Barrage {
     private static final double DASH_SPEED = 0.75;
     private static final double DASH_LIFT = 0.05;
     // Edge-to-edge spacing the first swing places the player at.
-    private static final double ENGAGE_GAP = 2.5;
-    // Every weapon's barrage swings reach the same distance, whatever its own attack range, so the 2.5-block placement
-    // is always in reach: the player's 0.3 half width + 2.5 gap, plus height and lunge slack.
-    private static final double REACH = 3.5;
+    private static final double ENGAGE_GAP = 3.5;
+    // Every weapon's barrage swings reach the same distance, whatever its own attack range, so the 3.5-block placement
+    // is always in reach: the player's 0.3 half width + 3.5 gap, plus height and lunge slack.
+    private static final double REACH = 4.5;
     private static final double ARC_COS = Math.cos(Math.toRadians(60.0));
     private static final int GUARD_BREAK_HITS = 2;
     private static final float GUARD_BREAK_SECONDS = 5.0F;
@@ -189,7 +189,7 @@ public final class Barrage {
 
     // Whether this entity is swinging a focus barrage, during which it takes no knockback.
     public static boolean knockbackImmune(Entity entity) {
-        return entity instanceof Player player && RUNS.containsKey(player.getUUID());
+        return entity instanceof Player player && (RUNS.containsKey(player.getUUID()) || Whirlwind.active(player));
     }
 
     // Whether this entity parried a barrage swing with a weapon or shield recently enough to block again at once.

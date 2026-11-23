@@ -35,6 +35,7 @@ public class MmsWeaponsClient implements ClientModInitializer {
                 ThrownChainRenderer::new);
 
         BarrageClient.register();
+        info.mudbourn.mmsweapons.client.focus.WhirlwindClient.register();
         info.mudbourn.mmsweapons.client.focus.FocusAuraClient.register();
         FocusHoldOffClient.register();
         ShieldRamClient.register();

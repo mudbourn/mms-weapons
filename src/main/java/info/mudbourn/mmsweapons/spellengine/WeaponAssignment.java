@@ -49,7 +49,11 @@ public final class WeaponAssignment {
             String focusSkill = info.mudbourn.mmsweapons.aerial.AerialGear.isHeavy(item) ? SpellEngineBarrage.SHOCKWAVE_ID : SpellEngineBarrage.SPELL_ID;
             // Every weapon that charges focus gets a skill to spend it on, whether or not Spell Engine already gave it a
             // container: compat weapons such as the shadoline rapier have Better Combat attributes but no container.
-            if (!spells.contains(focusSkill) && Focus.eligible(stack)) {
+            // Weapons that block cannot take the barrage (their right click blocks); they get the whirlwind.
+            if (info.mudbourn.mmsweapons.focus.Whirlwind.guardWeapon(stack)) {
+                focusSkill = SpellEngineBarrage.WHIRLWIND_ID;
+            }
+            if (!spells.contains(focusSkill) && (Focus.eligible(stack) || info.mudbourn.mmsweapons.focus.Whirlwind.guardWeapon(stack))) {
                 spells.add(focusSkill);
                 barrages++;
                 changed = true;

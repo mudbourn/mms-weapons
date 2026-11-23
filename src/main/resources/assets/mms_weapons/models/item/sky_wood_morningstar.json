@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "paladins:item/base/mace",
   "textures": {
-    "layer0": "mms_weapons:item/sky_wood_morningstar"
+    "1": "mms_weapons:item/sky_wood_morningstar_3d",
+    "particle": "mms_weapons:item/sky_wood_morningstar_3d"
   }
 }

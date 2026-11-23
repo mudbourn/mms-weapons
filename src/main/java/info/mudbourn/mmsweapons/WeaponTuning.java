@@ -194,8 +194,10 @@ public final class WeaponTuning {
             // it was purely cosmetic until 0.9.56.
             BlocksAttacks shieldBlocking = Items.SHIELD.components().get(DataComponents.BLOCKS_ATTACKS);
             if (shieldBlocking != null) {
+                // Each weapon blocks like its material's round shield, weakened (ShieldWeapons.weaponGuard).
                 context.modify(WeaponTuning::blocksAttacks,
-                        (builder, item) -> builder.set(DataComponents.BLOCKS_ATTACKS, shieldBlocking));
+                        (builder, item) -> builder.set(DataComponents.BLOCKS_ATTACKS,
+                                info.mudbourn.mmsweapons.shieldbash.ShieldWeapons.weaponGuard(item, shieldBlocking)));
             }
         });
     }
@@ -225,7 +227,7 @@ public final class WeaponTuning {
     }
 
     /** Items given vanilla shield blocking: glaives, katanas, longswords, greatswords and the large tuna. */
-    private static boolean blocksAttacks(Item item) {
+    public static boolean blocksAttacks(Item item) {
         return isGlaive(item) || isBlockingSword(item) || is(item, LARGE_TUNA);
     }
 

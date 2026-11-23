@@ -51,6 +51,7 @@ public final class AerialGear {
     }
 
     public static void register() {
+        AerialCompat.registerComponents();
         DefaultItemComponentEvents.MODIFY.register(context ->
             context.modify(item -> isAerial(item) && isToolOrWeapon(item), (builder, item) -> {
                 Integer durability = item.components().get(DataComponents.MAX_DAMAGE);
@@ -153,6 +154,15 @@ public final class AerialGear {
         }
         String path = id.getPath().startsWith("heavy_") ? id.getPath().substring("heavy_".length()) : id.getPath();
         return MATERIALS.stream().anyMatch(path::startsWith);
+    }
+
+    // The Aerial Hell material a compat item is made from ("arsonist", "heavy"...), or null.
+    static String material(String path) {
+        if (HEAVY_WEAPONS.contains(path)) {
+            return "heavy";
+        }
+        String stripped = path.startsWith("heavy_") ? path.substring("heavy_".length()) : path;
+        return MATERIALS.stream().filter(stripped::startsWith).map(prefix -> prefix.substring(0, prefix.length() - 1)).findFirst().orElse(null);
     }
 
     public static boolean isAerial(ItemStack stack) {
