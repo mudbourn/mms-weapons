@@ -32,8 +32,8 @@ import java.util.List;
  *       and its armor and shields count 0.75x against them.</li>
  * </ul>
  *
- * "Aerial Hell" means anything in the aerialhell namespace, plus the mms_weapons items made from Aerial Hell
- * materials. Everything else, other mods included, counts as overworld.
+ * "Aerial Hell" means anything in the aerialhell namespace, plus the mms_weapons and Basic Weapons items made from
+ * Aerial Hell materials. Everything else, other mods included, counts as overworld.
  */
 public final class AerialGear {
 
@@ -143,7 +143,8 @@ public final class AerialGear {
         if (id.getNamespace().equals("aerialhell")) {
             return true;
         }
-        if (!id.getNamespace().equals("mms_weapons")) {
+        // Our compat items made from Aerial Hell materials: mms_weapons, and the pack's Basic Weapons material pack.
+        if (!id.getNamespace().equals("mms_weapons") && !id.getNamespace().equals("basicweapons")) {
             return false;
         }
         // The heavy weapons are Aerial Hell's heavy material, like its Heavy Axe and Sword.
