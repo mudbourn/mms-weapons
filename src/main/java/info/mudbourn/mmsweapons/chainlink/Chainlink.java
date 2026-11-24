@@ -21,7 +21,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-// The chain throw of the Bountiful Fish anchor and the Nebulite-fuelled shadoline morningstar: the weapon flies out on a chain that reels back in.
+// The chain throw of the Bountiful Fish anchor, the hulk hammer and the morningstars: the weapon flies out on a chain that reels back in.
 public final class Chainlink {
 
     public static final int MAX_FLIGHT_COOLDOWN = 200;
@@ -30,6 +30,10 @@ public final class Chainlink {
     private static final Identifier BOUNTIFUL_ANCHOR = Identifier.fromNamespaceAndPath("bountiful-fish", "anchor");
     private static final Identifier SHADOLINE_MORNINGSTAR = Identifier.fromNamespaceAndPath("mms_weapons", "shadoline_morningstar");
     private static final Identifier HULK_HAMMER = Identifier.fromNamespaceAndPath("mutantmonsters", "hulk_hammer");
+    private static final java.util.Set<Identifier> MORNINGSTARS = java.util.Set.of(
+            SHADOLINE_MORNINGSTAR,
+            Identifier.fromNamespaceAndPath("weaponsexpanded", "netherite_morningstar"),
+            Identifier.fromNamespaceAndPath("mms_weapons", "arsonist_morningstar"));
 
     // Set while this stack is out on its chain.
     public static final DataComponentType<Boolean> CHAIN_OUT = Registry.register(
@@ -56,13 +60,13 @@ public final class Chainlink {
     public static void register() {
     }
 
-    // Whether this stack throws on a chain: the Bountiful Fish anchor, the shadoline morningstar or the hulk hammer.
+    // Whether this stack throws on a chain: the Bountiful Fish anchor, a chain morningstar or the hulk hammer.
     public static boolean throwable(ItemStack stack) {
         if (stack.isEmpty()) {
             return false;
         }
         Identifier id = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        return id.equals(BOUNTIFUL_ANCHOR) || id.equals(SHADOLINE_MORNINGSTAR) || id.equals(HULK_HAMMER);
+        return id.equals(BOUNTIFUL_ANCHOR) || MORNINGSTARS.contains(id) || id.equals(HULK_HAMMER);
     }
 
     // The shadoline morningstar keeps the focus barrage alongside its chain throw; the anchor does not.
@@ -72,7 +76,7 @@ public final class Chainlink {
 
     // The heavy chain weapons, the anchor and the hulk hammer, ground slam where they land on the floor.
     public static boolean slams(ItemStack stack) {
-        return throwable(stack) && !fueled(stack);
+        return throwable(stack) && !MORNINGSTARS.contains(BuiltInRegistries.ITEM.getKey(stack.getItem()));
     }
 
     // Whether this stack spends Nebulite fuel on the throw.

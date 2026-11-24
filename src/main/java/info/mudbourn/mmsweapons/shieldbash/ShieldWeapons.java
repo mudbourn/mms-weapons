@@ -35,7 +35,7 @@ public final class ShieldWeapons {
 
     // Kite shields are heavier than round shields: held in either hand, they slow the user a little.
     private static final Identifier KITE_SLOW_ID = Identifier.fromNamespaceAndPath("mms_weapons", "kite_shield_slow");
-    private static final double KITE_SLOW = -0.05;
+    private static final double KITE_SLOW = -0.15;
 
     private ShieldWeapons() {
     }

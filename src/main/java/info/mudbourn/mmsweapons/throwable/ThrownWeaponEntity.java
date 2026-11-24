@@ -2,6 +2,7 @@ package info.mudbourn.mmsweapons.throwable;
 
 import java.util.Collection;
 import java.util.List;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -70,6 +71,7 @@ public class ThrownWeaponEntity extends AbstractArrow {
     private static final double SMASH_RADIUS = 3.5;
     private static final double SMASH_KNOCKBACK = 0.7;
     private static final double SMASH_LIFT = 0.7;
+    private static final float SMASH_EDGE_DAMAGE = 0.25F;
 
     private boolean dealtDamage;
     public int clientSideReturnTickCount;
@@ -183,7 +185,11 @@ public class ThrownWeaponEntity extends AbstractArrow {
         }
 
         this.dealtDamage = true;
-        if (target.hurtOrSimulate(source, damage)) {
+        boolean hurt = target.hurtOrSimulate(source, damage);
+        if (this.isHeavy() && this.level() instanceof ServerLevel serverLevel) {
+            this.smash(serverLevel, this.position(), target);
+        }
+        if (hurt) {
             if (target.getType() == EntityTypes.ENDERMAN) {
                 return;
             }
@@ -231,7 +237,7 @@ public class ThrownWeaponEntity extends AbstractArrow {
             return;
         }
         if (this.level() instanceof ServerLevel serverLevel && this.getDeltaMovement().y < -SMASH_SPEED) {
-            this.smash(serverLevel);
+            this.smash(serverLevel, this.position(), null);
         } else {
             this.playSound(SoundEvents.MACE_SMASH_GROUND_HEAVY, 1.0F, 0.9F + this.random.nextFloat() * 0.1F);
         }
@@ -251,14 +257,31 @@ public class ThrownWeaponEntity extends AbstractArrow {
         this.playSound(SoundEvents.MACE_SMASH_AIR, 1.0F, 0.85F + this.random.nextFloat() * 0.3F);
     }
 
-    private void smash(ServerLevel level) {
+    // Ground smash at the impact: knockback and damage, both strongest at the centre and fading to the edge.
+    private void smash(ServerLevel level, Vec3 impact, Entity alreadyHit) {
         float weight = MmsThrowables.weight(this.getRenderedWeapon());
-        level.levelEvent(LevelEvent.PARTICLES_SMASH_ATTACK, this.getOnPos(), 750);
+        double radius = SMASH_RADIUS * weight;
+        level.levelEvent(LevelEvent.PARTICLES_SMASH_ATTACK, BlockPos.containing(impact).below(), 750);
         Entity owner = this.getOwner();
-        AABB area = this.getBoundingBox().inflate(SMASH_RADIUS * weight);
-        for (LivingEntity living : level.getEntitiesOfClass(LivingEntity.class, area, entity -> entity != owner && entity.isAlive() && !entity.isSpectator())) {
-            Vec3 away = living.position().subtract(this.position());
-            double strength = Math.max(0.0, SMASH_RADIUS * weight - away.length()) * SMASH_KNOCKBACK * weight;
+        DamageSource source = this.damageSources().trident(this, owner == null ? this : owner);
+        float fullDamage = MmsThrowables.throwDamage(this.getWeaponItem(), this.chargeScale);
+        AABB area = new AABB(impact, impact).inflate(radius);
+        for (LivingEntity living : level.getEntitiesOfClass(LivingEntity.class, area, entity -> entity != owner && entity.isAlive()
+                && !entity.isSpectator() && !(owner != null && owner.isAlliedTo(entity)))) {
+            Vec3 away = living.position().subtract(impact);
+            double distance = away.length();
+            if (distance > radius) {
+                continue;
+            }
+            double closeness = 1.0 - distance / radius;
+            if (living == alreadyHit) {
+                continue;
+            }
+            float damage = fullDamage * (SMASH_EDGE_DAMAGE + (1.0F - SMASH_EDGE_DAMAGE) * (float) closeness);
+            Vec3 motion = living.getDeltaMovement();
+            living.hurtServer(level, source, EnchantmentHelper.modifyDamage(level, this.getWeaponItem(), living, source, damage));
+            living.setDeltaMovement(motion);
+            double strength = closeness * radius * SMASH_KNOCKBACK * weight;
             Vec3 push = away.horizontalDistanceSqr() > 1.0E-4 ? away.multiply(1.0, 0.0, 1.0).normalize().scale(strength) : Vec3.ZERO;
             living.push(push.x, SMASH_LIFT * weight, push.z);
             living.needsSync = true;

@@ -30,6 +30,9 @@ public final class Morningstars {
                 context.modify(item -> BuiltInRegistries.ITEM.getKey(item).equals(star), (builder, item) ->
                     builder.set(DataComponents.ITEM_MODEL, Identifier.fromNamespaceAndPath("mms_weapons", tier + "_morningstar")));
             }
+            Identifier netherite = Identifier.fromNamespaceAndPath("weaponsexpanded", "netherite_morningstar");
+            context.modify(item -> BuiltInRegistries.ITEM.getKey(item).equals(netherite), (builder, item) ->
+                builder.set(DataComponents.ITEM_MODEL, Identifier.fromNamespaceAndPath("mms_weapons", "netherite_morningstar")));
         });
     }
 }

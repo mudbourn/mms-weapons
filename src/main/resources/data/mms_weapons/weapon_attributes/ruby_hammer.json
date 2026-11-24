@@ -1,3 +1,6 @@
 {
-  "parent": "bettercombat:hammer"
+  "parent": "bettercombat:mace",
+  "attributes": {
+    "pose": "mms_arsenal:pose_one_handed_hanging"
+  }
 }

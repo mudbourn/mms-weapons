@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.util.List;
 import java.util.stream.Stream;
 
-// Shows a skill on Spell Engine's hotbar HUD only while its key is bound. Unbinding a spell hotbar key hides that
+// Shows a skill on Spell Engine's hotbar HUD only while its key is bound and the slot holds something. Unbinding a spell hotbar key hides that
 // slot's icon, and binding it again brings the icon back, with nothing to toggle by hand. The morningstar's chain
 // throw also stays hidden until a full shadoline set is worn, and every skill hides while Spell Engine isn't reading
 // its keys (see bypassed).
@@ -24,7 +24,9 @@ public abstract class HideWeaponSkillsMixin {
         if (bypassed()) {
             return Stream.empty();
         }
-        return slots.stream().filter(HideWeaponSkillsMixin::bound);
+        java.util.Set<Object> shown = new java.util.HashSet<>();
+        return slots.stream().filter(HideWeaponSkillsMixin::filled).filter(HideWeaponSkillsMixin::bound)
+            .filter(slot -> slot.spell() == null || shown.add(slot.spell().unwrapKey().orElse(null)));
     }
 
     // Whether Spell Engine is ignoring its hotbar keys right now, so the skills hide as a cue: mms-compat's spell
@@ -57,6 +59,15 @@ public abstract class HideWeaponSkillsMixin {
         } catch (Throwable e) {
             return true;
         }
+    }
+
+    // Whether the slot holds a real spell or a non-blocking item; placeholders and blocking, always on right-click, are left off.
+    private static boolean filled(SpellHotbar.Slot slot) {
+        if (slot.spell() != null) {
+            return !slot.spell().is(info.mudbourn.mmsweapons.spellengine.WeaponSkills.EMPTY);
+        }
+        var stack = slot.itemStack();
+        return stack != null && !stack.isEmpty() && !stack.has(net.minecraft.core.component.DataComponents.BLOCKS_ATTACKS);
     }
 
     private static boolean bound(SpellHotbar.Slot slot) {

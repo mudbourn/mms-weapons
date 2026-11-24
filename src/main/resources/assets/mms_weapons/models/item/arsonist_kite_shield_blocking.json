@@ -1,5 +1,5 @@
 {
-  "parent": "paladins:item/base/metal_kite_shield_a_blocking",
+  "parent": "paladins:item/base/metal_kite_shield_b_blocking",
   "textures": {
     "0": "mms_weapons:item/arsonist_kite_shield",
     "particle": "mms_weapons:item/arsonist_kite_shield"
