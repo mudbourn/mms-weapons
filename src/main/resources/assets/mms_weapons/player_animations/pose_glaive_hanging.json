@@ -9,9 +9,9 @@
         "itemPitch": 0.918,
         "itemYaw": 0.078,
         "itemRoll": 0.158,
-        "itemX": 0,
-        "itemY": -3,
-        "itemZ": -6
+        "itemX": -2.43,
+        "itemY": -3.2,
+        "itemZ": -0.8
     },
     "name": "pose_glaive_hanging",
     "author": "mudbourn",
