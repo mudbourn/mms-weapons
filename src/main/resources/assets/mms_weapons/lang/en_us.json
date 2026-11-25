@@ -270,12 +270,5 @@
   "item.mms_weapons.arsonist_prior_robe_head": "Phoenix Bishop Collar",
   "item.mms_weapons.arsonist_prior_robe_chest": "Phoenix Bishop Vestment",
   "item.mms_weapons.arsonist_prior_robe_legs": "Phoenix Bishop Trousers",
-  "item.mms_weapons.arsonist_prior_robe_feet": "Phoenix Bishop Boots",
-  "item.mms_weapons.paladins_iron_morningstar": "Iron Morningstar",
-  "item.mms_weapons.paladins_golden_morningstar": "Golden Morningstar",
-  "item.mms_weapons.paladins_diamond_morningstar": "Diamond Morningstar",
-  "item.mms_weapons.paladins_netherite_morningstar": "Netherite Morningstar",
-  "item.mms_weapons.paladins_ruby_morningstar": "Ruby Morningstar",
-  "item.mms_weapons.paladins_aether_morningstar": "Aether Morningstar",
-  "item.mms_weapons.paladins_aeternium_morningstar": "Aeternium Morningstar"
+  "item.mms_weapons.arsonist_prior_robe_feet": "Phoenix Bishop Boots"
 }
