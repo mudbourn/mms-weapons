@@ -57,11 +57,11 @@ public class MmsWeaponsClient implements ClientModInitializer {
             CompatShieldClient.register();
         }
 
-        // 3D models for other mods' weapons, shipped as a built-in pack that is on by default.
+        // 3D models for other mods' weapons, shipped as a built-in pack that is always on.
         FabricLoader.getInstance().getModContainer("mms_weapons").ifPresent(mod -> ResourceLoader.registerBuiltinPack(
                 Identifier.fromNamespaceAndPath("mms_weapons", "weapon_models"),
                 mod,
                 Component.literal("MMS 3D Weapon Models"),
-                PackActivationType.DEFAULT_ENABLED));
+                PackActivationType.ALWAYS_ENABLED));
     }
 }
