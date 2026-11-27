@@ -12,8 +12,8 @@ import java.util.Map;
 public final class ShieldGuards {
 
     private static final float DEFAULT_SHARE = 0.7F;
-    private static final float KITE_BONUS = 0.05F;
-    private static final float MAX_SHARE = 0.95F;
+    // A kite shield stops a blocked hit outright, as a vanilla shield does; its movement slow in ShieldWeapons is the price.
+    private static final float KITE_SHARE = 1.0F;
     public static final float WEAPON_SCALE = 0.6F;
 
     private static final Map<String, Float> SHARES = Map.ofEntries(
@@ -52,10 +52,9 @@ public final class ShieldGuards {
         return SHARES.getOrDefault(material, DEFAULT_SHARE);
     }
 
-    // What a round shield of the item's material stops; kite shields stop a little more.
+    // What a round shield of the item's material stops; a kite shield stops all of it.
     public static float shieldShare(Item item, boolean kite) {
-        float share = materialShare(item);
-        return kite ? Math.min(share + KITE_BONUS, MAX_SHARE) : share;
+        return kite ? KITE_SHARE : materialShare(item);
     }
 
     // What a blocking weapon stops: its material's round shield, scaled down.
