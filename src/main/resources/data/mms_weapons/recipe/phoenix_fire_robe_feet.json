@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": "aerialhell:arsonist_upgrade_smithing_template",
+  "base": "wizards:netherite_fire_robe_feet",
+  "addition": "aerialhell:arsonist_ingot",
+  "result": {
+    "id": "mms_weapons:phoenix_fire_robe_feet"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell",
+        "wizards"
+      ]
+    }
+  ]
+}

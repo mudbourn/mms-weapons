@@ -6,7 +6,7 @@
       "required": false
     },
     {
-      "id": "mms_weapons:arsonist_sickle",
+      "id": "mms_weapons:phoenix_sickle",
       "required": false
     },
     {
@@ -42,7 +42,7 @@
       "required": false
     },
     {
-      "id": "mms_weapons:arsonist_longsword",
+      "id": "mms_weapons:phoenix_longsword",
       "required": false
     },
     {
@@ -78,7 +78,7 @@
       "required": false
     },
     {
-      "id": "mms_weapons:arsonist_katana",
+      "id": "mms_weapons:phoenix_katana",
       "required": false
     },
     {
@@ -114,7 +114,7 @@
       "required": false
     },
     {
-      "id": "mms_weapons:arsonist_warhammer",
+      "id": "mms_weapons:phoenix_warhammer",
       "required": false
     },
     {
@@ -150,7 +150,7 @@
       "required": false
     },
     {
-      "id": "mms_weapons:arsonist_halberd",
+      "id": "mms_weapons:phoenix_halberd",
       "required": false
     },
     {

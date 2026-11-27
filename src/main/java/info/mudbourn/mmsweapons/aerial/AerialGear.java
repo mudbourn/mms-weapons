@@ -1,5 +1,6 @@
 package info.mudbourn.mmsweapons.aerial;
 
+import info.mudbourn.mmsweapons.material.PhoenixNames;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -152,7 +153,8 @@ public final class AerialGear {
         if (HEAVY_WEAPONS.contains(id.getPath())) {
             return true;
         }
-        String path = id.getPath().startsWith("heavy_") ? id.getPath().substring("heavy_".length()) : id.getPath();
+        String name = PhoenixNames.legacy(id.getPath());
+        String path = name.startsWith("heavy_") ? name.substring("heavy_".length()) : name;
         return MATERIALS.stream().anyMatch(path::startsWith);
     }
 
@@ -161,7 +163,8 @@ public final class AerialGear {
         if (HEAVY_WEAPONS.contains(path)) {
             return "heavy";
         }
-        String stripped = path.startsWith("heavy_") ? path.substring("heavy_".length()) : path;
+        String name = PhoenixNames.legacy(path);
+        String stripped = name.startsWith("heavy_") ? name.substring("heavy_".length()) : name;
         return MATERIALS.stream().filter(stripped::startsWith).map(prefix -> prefix.substring(0, prefix.length() - 1)).findFirst().orElse(null);
     }
 

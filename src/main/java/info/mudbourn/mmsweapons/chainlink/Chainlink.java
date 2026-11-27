@@ -33,7 +33,7 @@ public final class Chainlink {
     private static final java.util.Set<Identifier> MORNINGSTARS = java.util.Set.of(
             SHADOLINE_MORNINGSTAR,
             Identifier.fromNamespaceAndPath("weaponsexpanded", "netherite_morningstar"),
-            Identifier.fromNamespaceAndPath("mms_weapons", "arsonist_morningstar"));
+            Identifier.fromNamespaceAndPath("mms_weapons", "phoenix_morningstar"));
 
     // Set while this stack is out on its chain.
     public static final DataComponentType<Boolean> CHAIN_OUT = Registry.register(

@@ -2,15 +2,15 @@
   "replace": false,
   "values": [
     {
-      "id": "mms_weapons:arsonist_arcane_wand",
+      "id": "mms_weapons:phoenix_arcane_wand",
       "required": false
     },
     {
-      "id": "mms_weapons:arsonist_fire_wand",
+      "id": "mms_weapons:phoenix_fire_wand",
       "required": false
     },
     {
-      "id": "mms_weapons:arsonist_frost_wand",
+      "id": "mms_weapons:phoenix_frost_wand",
       "required": false
     }
   ]

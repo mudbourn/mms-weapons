@@ -1,5 +1,6 @@
 package info.mudbourn.mmsweapons.shieldbash;
 
+import info.mudbourn.mmsweapons.WeaponTuning;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -40,10 +41,7 @@ public final class ShieldWeapons {
     private ShieldWeapons() {
     }
 
-    // A weapon that can also block gets a weaker guard than a real shield, so a shield stays
-    // worth carrying: it lets more damage through, covers a narrower arc, takes longer to raise
-    // and stays disabled longer when an axe knocks it down.
-    private static final float WEAPON_BLOCK_SHARE = 0.6F;
+    // A blocking weapon covers a narrower arc, takes longer to raise and stays disabled longer than a shield.
     private static final float WEAPON_GUARD_ARC = 0.75F;
     private static final float WEAPON_EXTRA_RAISE_SECONDS = 0.15F;
     private static final float WEAPON_DISABLE_SCALE = 1.5F;
@@ -52,18 +50,25 @@ public final class ShieldWeapons {
         DefaultItemComponentEvents.MODIFY.register(context -> {
             context.modify(ShieldWeapons::isShield, (builder, item) ->
                 builder.set(DataComponents.ATTRIBUTE_MODIFIERS, stats(item)));
-            // Weapons WeaponTuning gives blocking are weakened there, from their material's shield.
-            context.modify(item -> isBlockingWeapon(item) && !info.mudbourn.mmsweapons.WeaponTuning.blocksAttacks(item), (builder, item) ->
-                builder.set(DataComponents.BLOCKS_ATTACKS, weakerGuard(item.components().get(DataComponents.BLOCKS_ATTACKS))));
-            // Paladin kite shields (Paladins' own and the pack-material ones) block like their
-            // material's round shield instead of Spell Engine's full vanilla block.
-            context.modify(ShieldWeapons::isKiteShield, (builder, item) -> {
-                BlocksAttacks guard = materialGuard(item);
+            context.modify(item -> isBlockingWeapon(item) && !WeaponTuning.blocksAttacks(item), (builder, item) ->
+                builder.set(DataComponents.BLOCKS_ATTACKS, weaponGuard(item, item.components().get(DataComponents.BLOCKS_ATTACKS))));
+            context.modify(ShieldWeapons::isShield, (builder, item) -> {
+                BlocksAttacks guard = shieldGuard(item);
                 if (guard != null) {
                     builder.set(DataComponents.BLOCKS_ATTACKS, guard);
                 }
             });
         });
+    }
+
+    // A shield's guard with its material's share; a kite shield takes its round shield's guard first.
+    private static BlocksAttacks shieldGuard(Item item) {
+        boolean kite = isKiteShield(item);
+        BlocksAttacks base = kite ? materialGuard(item) : null;
+        if (base == null) {
+            base = item.components().get(DataComponents.BLOCKS_ATTACKS);
+        }
+        return base == null ? null : withShare(base, ShieldGuards.shieldShare(item, kite), 1.0F, 0.0F, 1.0F);
     }
 
     // Paladins tiers with no round shield of their own, matched to the nearest vanilla tier.
@@ -80,9 +85,7 @@ public final class ShieldWeapons {
             && (id.getNamespace().equals("paladins") || id.getNamespace().equals("mms_weapons"));
     }
 
-    // The blocking of the round shield in the item's material: Expanded Weaponry's wooden to
-    // netherite shields, or the pack-material shields. The material is the longest leading run of
-    // the item's id that names a round shield; null when none does.
+    // The guard of the round shield in the item's material, or null when its id names none.
     public static BlocksAttacks materialGuard(Item item) {
         String[] parts = BuiltInRegistries.ITEM.getKey(item).getPath().split("_");
         for (int end = parts.length - 1; end >= 1; end--) {
@@ -105,7 +108,8 @@ public final class ShieldWeapons {
     // A blocking weapon: its material's round shield, weakened; the fallback guard when it has no material.
     public static BlocksAttacks weaponGuard(Item item, BlocksAttacks fallback) {
         BlocksAttacks guard = materialGuard(item);
-        return weakerGuard(guard != null ? guard : fallback);
+        return withShare(guard != null ? guard : fallback, ShieldGuards.weaponShare(item),
+            WEAPON_GUARD_ARC, WEAPON_EXTRA_RAISE_SECONDS, WEAPON_DISABLE_SCALE);
     }
 
     // A weapon that blocks on its own: it has attack damage and blocks, but is not a shield.
@@ -113,14 +117,12 @@ public final class ShieldWeapons {
         return item.components().has(DataComponents.BLOCKS_ATTACKS) && !isShield(item);
     }
 
-    private static BlocksAttacks weakerGuard(BlocksAttacks guard) {
+    private static BlocksAttacks withShare(BlocksAttacks guard, float share, float arc, float extraRaise, float disableScale) {
         List<BlocksAttacks.DamageReduction> reductions = guard.damageReductions().stream()
-            .map(r -> new BlocksAttacks.DamageReduction(r.horizontalBlockingAngle() * WEAPON_GUARD_ARC, r.type(),
-                r.base() * WEAPON_BLOCK_SHARE, r.factor() * WEAPON_BLOCK_SHARE))
+            .map(r -> new BlocksAttacks.DamageReduction(r.horizontalBlockingAngle() * arc, r.type(), 0.0F, share))
             .toList();
-        return new BlocksAttacks(guard.blockDelaySeconds() + WEAPON_EXTRA_RAISE_SECONDS,
-            guard.disableCooldownScale() * WEAPON_DISABLE_SCALE, reductions, guard.itemDamage(),
-            guard.bypassedBy(), guard.blockSound(), guard.disableSound());
+        return new BlocksAttacks(guard.blockDelaySeconds() + extraRaise, guard.disableCooldownScale() * disableScale,
+            reductions, guard.itemDamage(), guard.bypassedBy(), guard.blockSound(), guard.disableSound());
     }
 
     // A ShieldItem, or any item that blocks attacks without being a weapon already.

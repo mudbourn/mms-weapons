@@ -6,7 +6,7 @@
       "required": false
     },
     {
-      "id": "mms_weapons:arsonist_morningstar",
+      "id": "mms_weapons:phoenix_morningstar",
       "required": false
     },
     {
@@ -42,7 +42,7 @@
       "required": false
     },
     {
-      "id": "mms_weapons:arsonist_warhammer",
+      "id": "mms_weapons:phoenix_warhammer",
       "required": false
     },
     {

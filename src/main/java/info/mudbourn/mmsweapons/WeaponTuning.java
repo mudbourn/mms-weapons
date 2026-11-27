@@ -184,17 +184,9 @@ public final class WeaponTuning {
                                                     AttributeModifier.Operation.ADD_VALUE),
                                             EquipmentSlotGroup.HAND))));
 
-            // Glaives and the large tuna block. Lifted from the vanilla shield
-            // rather than hand-rolled so the delay, damage reduction and sounds
-            // match what players already expect from blocking.
-            //
-            // The tuna shipped a blocking *model* (large_tuna_blocking.json in the
-            // bountifulfish-tuna-3d pack) and Better Combat plays the blocking pose
-            // for it, but without this component nothing intercepts the damage —
-            // it was purely cosmetic until 0.9.56.
+            // Glaives, swords and the large tuna block like their material's shield, weakened.
             BlocksAttacks shieldBlocking = Items.SHIELD.components().get(DataComponents.BLOCKS_ATTACKS);
             if (shieldBlocking != null) {
-                // Each weapon blocks like its material's round shield, weakened (ShieldWeapons.weaponGuard).
                 context.modify(WeaponTuning::blocksAttacks,
                         (builder, item) -> builder.set(DataComponents.BLOCKS_ATTACKS,
                                 info.mudbourn.mmsweapons.shieldbash.ShieldWeapons.weaponGuard(item, shieldBlocking)));

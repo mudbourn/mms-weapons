@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": "aerialhell:arsonist_upgrade_smithing_template",
+  "base": "paladins:netherite_prior_robe_chest",
+  "addition": "aerialhell:arsonist_ingot",
+  "result": {
+    "id": "mms_weapons:phoenix_bishop_robe_chest"
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:all_mods_loaded",
+      "values": [
+        "aerialhell",
+        "paladins"
+      ]
+    }
+  ]
+}

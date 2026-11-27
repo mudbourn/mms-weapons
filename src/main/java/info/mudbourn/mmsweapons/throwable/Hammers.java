@@ -1,6 +1,7 @@
 package info.mudbourn.mmsweapons.throwable;
 
 import info.mudbourn.mmsweapons.aerial.AerialGear;
+import info.mudbourn.mmsweapons.material.PhoenixNames;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -139,7 +140,7 @@ public final class Hammers {
     }
 
     private static Stat stat(Item item) {
-        String path = BuiltInRegistries.ITEM.getKey(item).getPath();
+        String path = PhoenixNames.legacy(BuiltInRegistries.ITEM.getKey(item).getPath());
         String material = path.endsWith("_hammer") ? path.substring(0, path.length() - "_hammer".length()) : path;
         return STATS.getOrDefault(material, DEFAULT);
     }

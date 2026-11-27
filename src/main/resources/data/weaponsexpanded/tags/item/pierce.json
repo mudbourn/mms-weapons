@@ -6,7 +6,7 @@
       "required": false
     },
     {
-      "id": "mms_weapons:arsonist_rapier",
+      "id": "mms_weapons:phoenix_rapier",
       "required": false
     },
     {
@@ -42,7 +42,7 @@
       "required": false
     },
     {
-      "id": "mms_weapons:arsonist_halberd",
+      "id": "mms_weapons:phoenix_halberd",
       "required": false
     },
     {

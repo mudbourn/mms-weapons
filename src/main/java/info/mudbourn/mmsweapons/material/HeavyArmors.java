@@ -2,8 +2,6 @@ package info.mudbourn.mmsweapons.material;
 
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -147,14 +145,9 @@ public final class HeavyArmors {
 
     private static void set(String material, ArmorMaterial armor) {
         for (ArmorType type : List.of(ArmorType.HELMET, ArmorType.CHESTPLATE, ArmorType.LEGGINGS, ArmorType.BOOTS)) {
-            ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id("heavy_" + material + "_" + type.getName()));
-            Item.Properties properties = new Item.Properties()
-                .setId(key)
-                .humanoidArmor(armor, type)
-                .attributes(attributes(armor, type));
-            Item item = Registry.register(BuiltInRegistries.ITEM, key, AERIAL_HELL_ITEMS.contains(material)
+            Item item = PhoenixNames.register("heavy_" + material + "_" + type.getName(), key -> AERIAL_HELL_ITEMS.contains(material)
                 ? AerialHellHeavy.create(material, armor, type, key, (float) SLOWNESS)
-                : new Item(properties));
+                : new Item(new Item.Properties().setId(key).humanoidArmor(armor, type).attributes(attributes(armor, type))));
             ITEMS.add(item);
             if (type == ArmorType.HELMET) {
                 HELMETS.put(item, material);

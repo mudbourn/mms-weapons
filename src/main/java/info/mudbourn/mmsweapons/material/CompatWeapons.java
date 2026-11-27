@@ -2,8 +2,6 @@ package info.mudbourn.mmsweapons.material;
 
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -90,8 +88,7 @@ public final class CompatWeapons {
     }
 
     static void add(ResourceKey<CreativeModeTab> tab, String name, Function<Item.Properties, Item> factory) {
-        ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("mms_weapons", name));
-        Item item = Registry.register(BuiltInRegistries.ITEM, key, factory.apply(name.startsWith("shadoline_") ? NebuliteFuel.fueled(new Item.Properties().setId(key)) : new Item.Properties().setId(key)));
+        Item item = PhoenixNames.register(name, key -> factory.apply(name.startsWith("shadoline_") ? NebuliteFuel.fueled(new Item.Properties().setId(key)) : new Item.Properties().setId(key)));
         TABS.computeIfAbsent(tab, t -> new ArrayList<>()).add(item);
         CompatOrigin.record(item, source(name));
     }
