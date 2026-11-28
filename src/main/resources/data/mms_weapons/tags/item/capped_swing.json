@@ -2,6 +2,13 @@
   "replace": false,
   "values": [
     { "id": "bountiful-fish:anchor", "required": false },
-    { "id": "bountiful-fish:large_tuna", "required": false }
+    { "id": "bountiful-fish:large_tuna", "required": false },
+    { "id": "mms_weapons:heavy_battleaxe", "required": false },
+    { "id": "mms_weapons:heavy_halberd", "required": false },
+    { "id": "mms_weapons:heavy_longsword", "required": false },
+    { "id": "mms_weapons:heavy_greatsword", "required": false },
+    { "id": "mms_weapons:heavy_hammer", "required": false },
+    { "id": "aerialhell:heavy_axe", "required": false },
+    { "id": "aerialhell:heavy_sword", "required": false }
   ]
 }
